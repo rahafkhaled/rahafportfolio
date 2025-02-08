@@ -1,6 +1,5 @@
-import React from "react";
+import Webcam from "react-webcam";
 import { format } from "date-fns";
-import { useState } from "react";
 
 interface SidebarProps {
   state: FaceTimeState;
@@ -107,23 +106,24 @@ const Sidebar = ({ state, onTake, onSave, onSelect }: SidebarProps) => {
 };
 
 const FaceTime = () => {
+  const webcamRef = useRef<Webcam>(null);
+  const { addImage } = useStore((state) => ({
+    addImage: state.addFaceTimeImage
+  }));
   const [state, setState] = useState<FaceTimeState>({
     canSave: false,
     curImage: null
   });
-
-  const { addImage } = useStore((state) => ({
-    addImage: state.addFaceTimeImage
-  }));
 
   return (
     <div className="relative h-full">
       <Sidebar
         state={state}
         onTake={() => {
-          // Placeholder functionality
-          const mockImage = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCI+PC9zdmc+";
-          setState({ curImage: mockImage, canSave: true });
+          if (!state.curImage) {
+            const src = webcamRef.current?.getScreenshot() || "";
+            setState({ curImage: src, canSave: true });
+          } else setState({ curImage: null, canSave: false });
         }}
         onSave={() => {
           addImage(state.curImage!);
@@ -134,14 +134,20 @@ const FaceTime = () => {
         }}
       />
 
-      <div className="h-full bg-zinc-800 flex items-center justify-center">
+      <div className="h-full bg-zinc-800">
         {!state.curImage ? (
-          <div className="text-white/60 flex flex-col items-center">
-            <span className="i-ion:ios-videocam text-4xl mb-2" />
-            <span>Camera not available</span>
-          </div>
+          <Webcam
+            mirrored={true}
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            videoConstraints={{
+              facingMode: "user",
+              aspectRatio: 1.7
+            }}
+          />
         ) : (
-          state.curImage && <img className="size-full object-contain" src={state.curImage} alt="your-image" />
+          state.curImage && <img size-full src={state.curImage} alt="your-image" />
         )}
       </div>
     </div>

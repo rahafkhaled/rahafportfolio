@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { apps, wallpapers } from "~/configs";
-import files from "~/configs/files";
 import { minMarginY } from "~/utils";
-import { motion } from "framer-motion";
-import { Rnd } from "react-rnd";
+import type { MacActions } from "~/types";
 import { useStore } from "~/stores";
 import TopBar from "~/components/menus/TopBar";
 import AppWindow from "~/components/AppWindow";
@@ -30,37 +28,23 @@ interface DesktopState {
   currentTitle: string;
   hideDockAndTopbar: boolean;
   spotlight: boolean;
-  files: {
-    id: string;
-    title: string;
-    icon: string;
-    type: string;
-  }[];
 }
 
-interface DesktopProps {
-  setLogin: (value: boolean) => void;
-  shutMac: () => void;
-  sleepMac: () => void;
-  restartMac: () => void;
-}
-
-export default function Desktop(props: DesktopProps) {
-  const [state, setState] = useState<DesktopState>({
+export default function Desktop(props: MacActions) {
+  const [state, setState] = useState({
     showApps: {},
     appsZ: {},
     maxApps: {},
     minApps: {},
     maxZ: 2,
     showLaunchpad: false,
-    currentTitle: "",
+    currentTitle: "Finder",
     hideDockAndTopbar: false,
-    spotlight: false,
-    files: files
-  });
+    spotlight: false
+  } as DesktopState);
 
   const [spotlightBtnRef, setSpotlightBtnRef] =
-    useState(React.createRef());
+    useState<React.RefObject<HTMLDivElement> | null>(null);
 
   const { dark, brightness } = useStore((state) => ({
     dark: state.dark,
@@ -247,7 +231,11 @@ export default function Desktop(props: DesktopProps) {
           focus: openApp
         };
 
-        return <AppWindow key={`desktop-app-${app.id}`} {...props}>{app.content}</AppWindow>;
+        return (
+          <AppWindow key={`desktop-app-${app.id}`} {...props}>
+            {app.content}
+          </AppWindow>
+        );
       } else {
         return <div key={`desktop-app-${app.id}`} />;
       }
@@ -256,37 +244,44 @@ export default function Desktop(props: DesktopProps) {
 
   return (
     <div
-      className="size-full overflow-hidden bg-center bg-cover relative"
+      className="size-full overflow-hidden bg-center bg-cover"
       style={{
         backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`,
-        filter: `brightness(${(brightness as number) * 0.7 + 50}%)`
+        filter: `brightness( ${(brightness as number) * 0.7 + 50}% )`
       }}
     >
+      {/* Top Menu Bar */}
       <TopBar
         title={state.currentTitle}
+        setLogin={props.setLogin}
         shutMac={props.shutMac}
         sleepMac={props.sleepMac}
         restartMac={props.restartMac}
         toggleSpotlight={toggleSpotlight}
         hide={state.hideDockAndTopbar}
         setSpotlightBtnRef={setSpotlightBtnRef}
-        setLogin={props.setLogin}
       />
-      
-      <FileIcons openApp={openApp} />
 
-      <div className="window-bound z-10 absolute" style={{ top: minMarginY }}>
+      {/* App Windows Layer */}
+      <div className="window-bound absolute z-10" style={{ top: minMarginY }}>
         {renderAppWindows()}
+        <FileIcons openApp={openApp} />
       </div>
+
+      {/* Spotlight */}
       {state.spotlight && (
         <Spotlight
           openApp={openApp}
           toggleLaunchpad={toggleLaunchpad}
           toggleSpotlight={toggleSpotlight}
-          btnRef={spotlightBtnRef}
+          btnRef={spotlightBtnRef as React.RefObject<HTMLDivElement>}
         />
       )}
+
+      {/* Launchpad */}
       <Launchpad show={state.showLaunchpad} toggleLaunchpad={toggleLaunchpad} />
+
+      {/* Dock */}
       <Dock
         open={openApp}
         showApps={state.showApps}

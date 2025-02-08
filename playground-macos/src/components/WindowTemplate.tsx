@@ -6,19 +6,17 @@ interface WindowTemplateProps {
 
 function WindowTemplate({ children }: WindowTemplateProps) {
   return (
-    <div 
+    <div
       className="h-full w-full"
       style={{
-        backgroundImage: "url('/img/Window/windowbg.png')",
+        backgroundImage: "url('/img/windowbg.png')",
         backgroundSize: "cover",
         backgroundPosition: "center"
       }}
     >
-      <div className="flex flex-col h-full p-6">
-        {children}
-      </div>
+      <div className="flex flex-col h-full p-6">{children}</div>
     </div>
   );
 }
 
-export default WindowTemplate; 
+export default WindowTemplate;

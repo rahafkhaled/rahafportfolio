@@ -3,3 +3,6 @@
 .cache/
 node_modules/
 dist/
+playground-macos/dist/
+playground-macos/node_modules/
+playground-macos-old

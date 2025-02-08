@@ -1,15 +1,9 @@
 import React, { useState } from "react";
 import { wallpapers, user } from "~/configs";
+import type { MacActions } from "~/types";
 import { useStore } from "~/stores";
 
-interface LoginProps {
-  setLogin: (value: boolean) => void;
-  shutMac: () => void;
-  sleepMac: () => void;
-  restartMac: () => void;
-}
-
-export default function Login(props: LoginProps) {
+export default function Login(props: MacActions) {
   const [password, setPassword] = useState("");
   const [sign, setSign] = useState("Click to enter");
   const dark = useStore((state) => state.dark);
@@ -37,7 +31,9 @@ export default function Login(props: LoginProps) {
     <div
       className="size-full login text-center"
       style={{
-        background: `url(${dark ? wallpapers.night : wallpapers.day}) center/cover no-repeat`
+        background: `url(${
+          dark ? wallpapers.night : wallpapers.day
+        }) center/cover no-repeat`
       }}
       onClick={() => loginHandle()}
     >
@@ -71,7 +67,7 @@ export default function Login(props: LoginProps) {
       <div className="text-sm fixed bottom-16 inset-x-0 mx-auto flex flex-row space-x-4 w-max">
         <div
           className="hstack flex-col text-white w-24 cursor-pointer"
-          onClick={(e) => props.sleepMac()}
+          onClick={(e) => props.sleepMac(e)}
         >
           <div className="flex-center size-10 bg-gray-700 rounded-full">
             <span className="i-gg:sleep text-[40px]" />
@@ -80,7 +76,7 @@ export default function Login(props: LoginProps) {
         </div>
         <div
           className="hstack flex-col text-white w-24 cursor-pointer"
-          onClick={(e) => props.restartMac()}
+          onClick={(e) => props.restartMac(e)}
         >
           <div className="flex-center size-10 bg-gray-700 rounded-full">
             <span className="i-ri:restart-line text-4xl" />
@@ -89,7 +85,7 @@ export default function Login(props: LoginProps) {
         </div>
         <div
           className="hstack flex-col text-white w-24 cursor-pointer"
-          onClick={(e) => props.shutMac()}
+          onClick={(e) => props.shutMac(e)}
         >
           <div className="flex-center size-10 bg-gray-700 rounded-full">
             <span className="i-ri:shut-down-line text-4xl" />

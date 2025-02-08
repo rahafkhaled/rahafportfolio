@@ -4,8 +4,6 @@ import { commonmark } from "@milkdown/preset-commonmark";
 import { gfm } from "@milkdown/preset-gfm";
 import { history } from "@milkdown/plugin-history";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
-import React from "react";
-import WindowTemplate from "../WindowTemplate";
 
 const MilkdownEditor = () => {
   const { typoraMd, setTyporaMd } = useStore((state) => ({
@@ -43,10 +41,8 @@ const MilkdownEditor = () => {
 
 export default function Typora() {
   return (
-    <WindowTemplate>
-      <MilkdownProvider>
-        <MilkdownEditor />
-      </MilkdownProvider>
-    </WindowTemplate>
+    <MilkdownProvider>
+      <MilkdownEditor />
+    </MilkdownProvider>
   );
 }

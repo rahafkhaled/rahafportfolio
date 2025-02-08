@@ -1,85 +1,72 @@
 import React from "react";
-import { motion, useMotionValue, useTransform, MotionValue } from "framer-motion";
-import { useStore } from "~/stores";
+import FileIcon from "./FileIcon";
+
+interface File {
+  id: string;
+  title: string;
+  icon: string;
+  type: string;
+  appId?: string; // app to open when double clicked
+  position?: {
+    x: number;
+    y: number;
+  };
+}
 
 interface FileIconsProps {
   openApp: (id: string) => void;
 }
 
-interface FileIconItemProps {
-  id: string;
-  title: string;
-  icon: string;
-  mouseY: MotionValue<number>;
-  openApp: (id: string) => void;
-}
-
-const folders = [
+const files: File[] = [
   {
-    id: "artwork-gallery",
-    title: "Documents",
-    icon: "/logo/thisfolder.svg"
+    id: "about",
+    title: "About Me",
+    icon: "img/icons/folder.svg",
+    type: "text",
+    appId: "terminal", // specify which app to open
+    position: { x: 40, y: 40 }
   },
   {
-    id: "downloads",
-    title: "Downloads",
-    icon: "/logo/thisfolder.svg"
+    id: "projects",
+    title: "Projects",
+    icon: "img/icons/folder.svg",
+    type: "folder",
+    appId: "vscode", // will open VSCode
+    position: { x: 40, y: 160 }
   },
   {
-    id: "pictures",
-    title: "Pictures",
-    icon: "/logo/thisfolder.svg"
+    id: "resume",
+    title: "Resume",
+    icon: "img/icons/folder.svg",
+    type: "pdf",
+    appId: "safari", // will open in Safari
+    position: { x: 40, y: 280 }
   }
+  // Add more files as needed
 ];
 
-function FileIconItem({ id, title, icon, mouseY, openApp }: FileIconItemProps) {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const { dockMag } = useStore((state) => ({ dockMag: state.dockMag }));
-
-  const scale = useTransform(mouseY, (value: number) => {
-    if (!ref.current) return 1;
-    const rect = ref.current.getBoundingClientRect();
-    const centerY = rect.top + rect.height / 2;
-    return Math.max(1, dockMag - Math.abs(value - centerY) / 50);
-  });
+const FileIcons: React.FC<FileIconsProps> = ({ openApp }) => {
+  const handleOpen = (file: File) => {
+    if (file.appId) {
+      openApp(file.appId);
+    }
+  };
 
   return (
-    <motion.div
-      ref={ref}
-      className="flex flex-col items-center justify-center cursor-pointer w-20"
-      onClick={() => openApp(id)}
-      style={{ scale }}
-    >
-      <img
-        className="w-16 h-16"
-        src={icon}
-        alt={title}
-        draggable={false}
-      />
-      <span className="text-white text-sm mt-1 px-2 py-0.5 rounded bg-black/0 hover:bg-black/20">
-        {title}
-      </span>
-    </motion.div>
-  );
-}
-
-export default function FileIcons({ openApp }: FileIconsProps) {
-  const mouseY = useMotionValue(0);
-
-  return (
-    <div 
-      className="absolute top-6 left-6 flex flex-col gap-6"
-      onMouseMove={(e) => mouseY.set(e.clientY)}
-      onMouseLeave={() => mouseY.set(0)}
-    >
-      {folders.map((folder) => (
-        <FileIconItem
-          key={folder.id}
-          {...folder}
-          mouseY={mouseY}
-          openApp={openApp}
+    <div className="fixed inset-0 z-0" style={{ pointerEvents: "auto" }}>
+      {files.map((file) => (
+        <FileIcon
+          key={file.id}
+          id={file.id}
+          title={file.title}
+          icon={file.icon}
+          x={file.position?.x}
+          y={file.position?.y}
+          onOpen={() => handleOpen(file)}
         />
       ))}
     </div>
   );
-} 
+};
+
+export default FileIcons;

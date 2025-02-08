@@ -2,6 +2,7 @@ import React from "react";
 import { format } from "date-fns";
 import { isFullScreen } from "~/utils";
 import { music } from "~/configs";
+import type { MacActions } from "~/types";
 
 interface TopBarItemProps {
   hideOnMobile?: boolean;
@@ -48,15 +49,11 @@ const CCMIcon = ({ size }: { size: number }) => {
   );
 };
 
-interface TopBarProps {
+interface TopBarProps extends MacActions {
   title: string;
   setSpotlightBtnRef: (value: React.RefObject<HTMLDivElement>) => void;
   hide: boolean;
   toggleSpotlight: () => void;
-  setLogin: (value: boolean) => void;
-  shutMac: () => void;
-  sleepMac: () => void;
-  restartMac: () => void;
 }
 
 interface TopBarState {
@@ -150,17 +147,17 @@ const TopBar = (props: TopBarProps) => {
 
   const shut = (e: React.MouseEvent<HTMLLIElement>): void => {
     controls.pause();
-    props.shutMac();
+    props.shutMac(e);
   };
 
   const restart = (e: React.MouseEvent<HTMLLIElement>): void => {
     controls.pause();
-    props.restartMac();
+    props.restartMac(e);
   };
 
   const sleep = (e: React.MouseEvent<HTMLLIElement>): void => {
     controls.pause();
-    props.sleepMac();
+    props.sleepMac(e);
   };
 
   return (

@@ -1,4 +1,3 @@
-import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -8,7 +7,6 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula, prism } from "react-syntax-highlighter/dist/esm/styles/prism";
 import bear from "~/configs/bear";
 import type { BearMdData } from "~/types";
-import WindowTemplate from "../WindowTemplate";
 
 interface ContentProps {
   contentID: string;
@@ -218,23 +216,21 @@ const Bear = () => {
   };
 
   return (
-    <WindowTemplate>
-      <div className="bear font-avenir flex h-full">
-        <div className="w-44 overflow-auto bg-gray-700">
-          <Sidebar cur={state.curSidebar} setMidBar={setMidBar} />
-        </div>
-        <div className="w-60 overflow-auto" bg="gray-50 dark:gray-800" border="r c-300">
-          <Middlebar
-            items={state.midbarList}
-            cur={state.curMidbar}
-            setContent={setContent}
-          />
-        </div>
-        <div className="flex-1 overflow-auto" bg="gray-50 dark:gray-800">
-          <Content contentID={state.contentID} contentURL={state.contentURL} />
-        </div>
+    <div className="bear font-avenir flex h-full">
+      <div className="w-44 overflow-auto bg-gray-700">
+        <Sidebar cur={state.curSidebar} setMidBar={setMidBar} />
       </div>
-    </WindowTemplate>
+      <div className="w-60 overflow-auto" bg="gray-50 dark:gray-800" border="r c-300">
+        <Middlebar
+          items={state.midbarList}
+          cur={state.curMidbar}
+          setContent={setContent}
+        />
+      </div>
+      <div className="flex-1 overflow-auto" bg="gray-50 dark:gray-800">
+        <Content contentID={state.contentID} contentURL={state.contentURL} />
+      </div>
+    </div>
   );
 };
 

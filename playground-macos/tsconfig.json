@@ -5,7 +5,7 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": false,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -17,11 +17,7 @@
     "jsx": "react-jsx",
     "paths": {
       "~/*": ["./src/*"]
-    },
-    "types": ["react/jsx-runtime"],
-    "typeRoots": ["./node_modules/@types", "./src/types"],
-    "baseUrl": "."
+    }
   },
-  "include": ["src/**/*", "src/react-app-env.d.ts", "src/types.d.ts", "src/types"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["./src"]
 }
