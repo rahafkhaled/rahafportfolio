@@ -281,7 +281,7 @@ export default function Desktop(props: MacActions) {
       {/* Launchpad */}
       <Launchpad show={state.showLaunchpad} toggleLaunchpad={toggleLaunchpad} />
 
-      {/* Dock */}
+      {/* Dock 
       <Dock
         open={openApp}
         showApps={state.showApps}
@@ -289,6 +289,8 @@ export default function Desktop(props: MacActions) {
         toggleLaunchpad={toggleLaunchpad}
         hide={state.hideDockAndTopbar}
       />
+      */}
     </div>
+
   );
 }

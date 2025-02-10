@@ -1,5 +1,13 @@
+import React from "react";
 import { appBarHeight } from "~/utils";
-import type { AppsData } from "~/types";
+import type { AppsData } from "~/types/configs/apps";
+import ArtworkGallery from "~/components/apps/ArtworkGallery";
+import Terminal from "~/components/apps/Terminal";
+import VSCode from "~/components/apps/VSCode";
+import Safari from "~/components/apps/Safari";
+import News from "~/components/apps/News";
+import Typora from "~/components/apps/Typora";
+import FaceTime from "~/components/apps/FaceTime";
 
 const apps: AppsData[] = [
   {
@@ -12,33 +20,26 @@ const apps: AppsData[] = [
     id: "news",
     title: "News",
     desktop: true,
+    width: 1200,
+    height: 800,
     img: "img/icons/news-logo.svg",
     content: <News />
-  },
-  {
-    id: "bear",
-    title: "Bear",
-    desktop: true,
-    width: 860,
-    height: 500,
-    show: true,
-    y: -40,
-    img: "img/icons/bear.png",
-    content: <Bear />
   },
   {
     id: "artwork-gallery",
     title: "Artwork Gallery",
     desktop: true,
-    img: "img/icons/gallery.svg",
+    width: 1200,
+    height: 800,
+    img: "img/icons/folder.svg",
     content: <ArtworkGallery />
   },
   {
     id: "typora",
     title: "Typora",
     desktop: true,
-    width: 600,
-    height: 580,
+    width: 1000,
+    height: 700,
     y: -20,
     img: "img/icons/typora.png",
     content: <Typora />
@@ -47,10 +48,10 @@ const apps: AppsData[] = [
     id: "safari",
     title: "Safari",
     desktop: true,
-    width: 1024,
+    width: 1200,
+    height: 800,
     minWidth: 375,
     minHeight: 200,
-    x: -20,
     img: "img/icons/safari.png",
     content: <Safari />
   },
@@ -58,10 +59,8 @@ const apps: AppsData[] = [
     id: "vscode",
     title: "VSCode",
     desktop: true,
-    width: 900,
-    height: 600,
-    x: 80,
-    y: -30,
+    width: 1200,
+    height: 800,
     img: "img/icons/vscode.png",
     content: <VSCode />
   },
@@ -70,8 +69,8 @@ const apps: AppsData[] = [
     title: "FaceTime",
     desktop: true,
     img: "img/icons/facetime.png",
-    width: 500 * 1.7,
-    height: 500 + appBarHeight,
+    width: 900,
+    height: 700,
     minWidth: 350 * 1.7,
     minHeight: 350 + appBarHeight,
     aspectRatio: 1.7,
@@ -83,6 +82,8 @@ const apps: AppsData[] = [
     id: "terminal",
     title: "Terminal",
     desktop: true,
+    width: 900,
+    height: 600,
     img: "img/icons/terminal.png",
     content: <Terminal />
   },

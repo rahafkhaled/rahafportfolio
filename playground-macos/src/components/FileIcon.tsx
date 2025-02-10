@@ -23,6 +23,7 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
   const { winWidth, winHeight } = useWindowSize();
   const dockSize = useStore((state) => state.dockSize);
   const [isDragging, setIsDragging] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const [state, setState] = useState<IconState>({
     x: x,
@@ -33,11 +34,20 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
     setState({ x, y });
   }, [x, y]);
 
+  const getIconSrc = () => {
+    if (isHovered) {
+      return icon.replace('folder.svg', 'openfolder.svg');
+    }
+    return icon;
+  };
+
   return (
     <Rnd
       default={{
-        width: 90,
-        height: 110
+        x: state.x,
+        y: state.y,
+        width: 150,
+        height: 170
       }}
       position={{
         x: Math.min(winWidth - minMarginX, Math.max(minMarginX, state.x)),
@@ -68,20 +78,25 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
           }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.95 }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           onDoubleClick={(e) => {
             e.stopPropagation();
             if (!isDragging) onOpen();
           }}
         >
           <motion.img
-            src={icon}
+            src={getIconSrc()}
             alt={title}
-            className="w-14 h-14 mb-1 pointer-events-none"
+            className="w-28 h-28 mb-3"
             draggable={false}
-            animate={{ rotate: isDragging ? 5 : 0 }}
+            animate={{ 
+              rotate: isDragging ? 5 : 0,
+              scale: isHovered ? 1.1 : 1
+            }}
             transition={{ type: "spring", stiffness: 200 }}
           />
-          <span className="text-white text-sm text-center line-clamp-2 px-1 pointer-events-none">
+          <span className="text-white text-lg text-center line-clamp-2 px-2 pointer-events-none">
             {title}
           </span>
         </motion.div>
