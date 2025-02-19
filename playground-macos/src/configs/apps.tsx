@@ -9,12 +9,23 @@ import News from "~/components/apps/News";
 import Typora from "~/components/apps/Typora";
 import FaceTime from "~/components/apps/FaceTime";
 import Projects from "~/components/apps/Projects";
+import Preview from "~/components/apps/Preview";
+
 const apps: AppsData[] = [
   {
     id: "launchpad",
     title: "Launchpad",
     desktop: false,
     img: "img/icons/launchpad.png"
+  },
+  {
+    id: "preview",
+    title: "My Resume",
+    desktop: true,
+    width: 800,
+    height: 1000,
+    img: "img/icons/preview.png",
+    content: <Preview />
   },
   {
     id: "projects",

@@ -11,10 +11,11 @@ interface File {
     x: number;
     y: number;
   };
+  link?: string; // Optional link to the PDF
 }
 
 interface FileIconsProps {
-  openApp: (id: string) => void;
+  openApp: (id: string, url?: string) => void;
 }
 
 const files: File[] = [
@@ -55,7 +56,8 @@ const files: File[] = [
     title: "Resume",
     icon: "img/icons/folder.svg",
     type: "pdf",
-    appId: "safari", // will open in Safari
+    appId: "preview",
+    link: "img/ui/Rahaf-Abutarbush-Resume.pdf",
     position: { x: 40, y: 840 }
   }
   // Add more files as needed
@@ -64,7 +66,11 @@ const files: File[] = [
 const FileIcons: React.FC<FileIconsProps> = ({ openApp }) => {
   const handleOpen = (file: File) => {
     if (file.appId) {
-      openApp(file.appId);
+      if (file.type === 'pdf' && file.link) {
+        openApp(file.appId, file.link);
+      } else {
+        openApp(file.appId);
+      }
     }
   };
 

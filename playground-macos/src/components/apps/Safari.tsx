@@ -139,6 +139,15 @@ const Safari = ({ width }: SafariProps) => {
   });
 
   const setGoURL = (url: string) => {
+    // If it's a local PDF file, use it directly
+    if (url.endsWith('.pdf')) {
+      setState({
+        goURL: url,
+        currentURL: url
+      });
+      return;
+    }
+
     const isValid = checkURL(url);
 
     if (isValid) {

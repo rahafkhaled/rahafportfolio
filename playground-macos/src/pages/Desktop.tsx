@@ -9,6 +9,7 @@ import Spotlight from "~/components/Spotlight";
 import Launchpad from "~/components/Launchpad";
 import Dock from "~/components/dock/Dock";
 import FileIcons from "~/components/FileIcons";
+import Preview from "~/components/apps/Preview";
 
 interface DesktopState {
   showApps: {
@@ -28,6 +29,7 @@ interface DesktopState {
   currentTitle: string;
   hideDockAndTopbar: boolean;
   spotlight: boolean;
+  previewURL?: string;
 }
 
 export default function Desktop(props: MacActions) {
@@ -40,7 +42,8 @@ export default function Desktop(props: MacActions) {
     showLaunchpad: false,
     currentTitle: "Finder",
     hideDockAndTopbar: false,
-    spotlight: false
+    spotlight: false,
+    previewURL: ""
   } as DesktopState);
 
   const [spotlightBtnRef, setSpotlightBtnRef] =
@@ -168,17 +171,13 @@ export default function Desktop(props: MacActions) {
     });
   };
 
-  const openApp = (id: string): void => {
-    // add it to the shown app list
+  const openApp = (id: string, url?: string): void => {
     const showApps = state.showApps;
     showApps[id] = true;
-
-    // move to the top (use a maximum z-index)
     const appsZ = state.appsZ;
     const maxZ = state.maxZ + 1;
     appsZ[id] = maxZ;
 
-    // get the title of the currently opened app
     const currentApp = apps.find((app) => {
       return app.id === id;
     });
@@ -186,24 +185,34 @@ export default function Desktop(props: MacActions) {
       throw new TypeError(`App ${id} is undefined.`);
     }
 
+    // If it's Preview and we have a URL, set it in the state
+    if (id === 'preview' && url) {
+      setState({
+        ...state,
+        showApps,
+        appsZ,
+        maxZ,
+        currentTitle: currentApp.title,
+        previewURL: url
+      });
+      return;
+    }
+
     setState({
       ...state,
-      showApps: showApps,
-      appsZ: appsZ,
-      maxZ: maxZ,
+      showApps,
+      appsZ,
+      maxZ,
       currentTitle: currentApp.title
     });
 
     const minApps = state.minApps;
-    // if the app has already been shown but minimized
     if (minApps[id]) {
-      // move to window's last position
       const r = document.querySelector(`#window-${id}`) as HTMLElement;
       r.style.transform = `translate(${r.style.getPropertyValue(
         "--window-transform-x"
       )}, ${r.style.getPropertyValue("--window-transform-y")}) scale(1)`;
       r.style.transition = "ease-in 0.3s";
-      // remove it from the minimized app list
       minApps[id] = false;
       setState({ ...state, minApps });
     }
@@ -230,6 +239,15 @@ export default function Desktop(props: MacActions) {
           setMin: minimizeApp,
           focus: openApp
         };
+
+        // If it's Preview, pass the URL from the state
+        if (app.id === 'preview') {
+          return (
+            <AppWindow key={`desktop-app-${app.id}`} {...props}>
+              <Preview url={state.previewURL} />
+            </AppWindow>
+          );
+        }
 
         return (
           <AppWindow key={`desktop-app-${app.id}`} {...props}>
