@@ -36,7 +36,7 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
 
   const getIconSrc = () => {
     if (isHovered) {
-      return icon.replace('folder.svg', 'openfolder.svg');
+      return icon.replace("folder.svg", "openfolder.svg");
     }
     return icon;
   };
@@ -90,7 +90,7 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
             alt={title}
             className="w-28 h-28 mb-3"
             draggable={false}
-            animate={{ 
+            animate={{
               rotate: isDragging ? 5 : 0,
               scale: isHovered ? 1.1 : 1
             }}

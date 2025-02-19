@@ -32,7 +32,7 @@ const files: File[] = [
     icon: "img/icons/folder.svg",
     type: "folder",
     appId: "artwork-gallery",
-    position: { x: 40, y: 220 }
+    position: { x: 40, y: 240 }
   },
   {
     id: "news",
@@ -40,15 +40,15 @@ const files: File[] = [
     icon: "img/icons/folder.svg",
     type: "folder",
     appId: "news",
-    position: { x: 40, y: 310 }
+    position: { x: 40, y: 440 }
   },
   {
     id: "projects",
     title: "Projects",
     icon: "img/icons/folder.svg",
     type: "folder",
-    appId: "vscode", // will open VSCode
-    position: { x: 40, y: 400 }
+    appId: "projects",
+    position: { x: 40, y: 640 }
   },
   {
     id: "resume",
@@ -56,7 +56,7 @@ const files: File[] = [
     icon: "img/icons/folder.svg",
     type: "pdf",
     appId: "safari", // will open in Safari
-    position: { x: 40, y: 580 }
+    position: { x: 40, y: 840 }
   }
   // Add more files as needed
 ];

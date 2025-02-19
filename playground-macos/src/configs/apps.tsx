@@ -8,13 +8,20 @@ import Safari from "~/components/apps/Safari";
 import News from "~/components/apps/News";
 import Typora from "~/components/apps/Typora";
 import FaceTime from "~/components/apps/FaceTime";
-
+import Projects from "~/components/apps/Projects";
 const apps: AppsData[] = [
   {
     id: "launchpad",
     title: "Launchpad",
     desktop: false,
     img: "img/icons/launchpad.png"
+  },
+  {
+    id: "projects",
+    title: "Projects",
+    desktop: true,
+    img: "img/icons/folder.svg",
+    content: <Projects />
   },
   {
     id: "news",
