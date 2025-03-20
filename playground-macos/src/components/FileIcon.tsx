@@ -36,6 +36,9 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
 
   const getIconSrc = () => {
     if (isHovered) {
+      if (id === "resume") {
+        return icon.replace("resume1.png", "resume2.png");
+      }
       return icon.replace("folder.svg", "openfolder.svg");
     }
     return icon;
@@ -46,7 +49,7 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
       default={{
         x: state.x,
         y: state.y,
-        width: 150,
+        width: 100,
         height: 170
       }}
       position={{
@@ -88,7 +91,7 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
           <motion.img
             src={getIconSrc()}
             alt={title}
-            className="w-28 h-28 mb-3"
+            className="w-24 h-28 mb-3"
             draggable={false}
             animate={{
               rotate: isDragging ? 5 : 0,

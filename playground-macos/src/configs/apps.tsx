@@ -10,6 +10,7 @@ import Typora from "~/components/apps/Typora";
 import FaceTime from "~/components/apps/FaceTime";
 import Projects from "~/components/apps/Projects";
 import Preview from "~/components/apps/Preview";
+import About from "~/components/apps/About";
 
 const apps: AppsData[] = [
   {
@@ -19,11 +20,21 @@ const apps: AppsData[] = [
     img: "img/icons/launchpad.png"
   },
   {
+    id: "about",
+    title: "About Me",
+    desktop: true,
+    width: 1400,
+    height: 900,
+    img: "img/icons/safari.png",
+    content: <About />,
+    show: true
+  },
+  {
     id: "preview",
     title: "My Resume",
     desktop: true,
-    width: 800,
-    height: 1000,
+    width: 1200,
+    height: 800,
     img: "img/icons/preview.png",
     content: <Preview />
   },
@@ -31,6 +42,8 @@ const apps: AppsData[] = [
     id: "projects",
     title: "Projects",
     desktop: true,
+    width: 1200,
+    height: 800,
     img: "img/icons/folder.svg",
     content: <Projects />
   },
@@ -45,7 +58,7 @@ const apps: AppsData[] = [
   },
   {
     id: "artwork-gallery",
-    title: "Artwork Gallery",
+    title: "Events & Engagements",
     desktop: true,
     width: 1200,
     height: 800,
@@ -56,9 +69,8 @@ const apps: AppsData[] = [
     id: "typora",
     title: "Typora",
     desktop: true,
-    width: 1000,
-    height: 700,
-    y: -20,
+    width: 1200,
+    height: 800,
     img: "img/icons/typora.png",
     content: <Typora />
   },
@@ -86,22 +98,20 @@ const apps: AppsData[] = [
     id: "facetime",
     title: "FaceTime",
     desktop: true,
-    img: "img/icons/facetime.png",
-    width: 900,
-    height: 700,
+    width: 1200,
+    height: 800,
     minWidth: 350 * 1.7,
     minHeight: 350 + appBarHeight,
     aspectRatio: 1.7,
-    x: -80,
-    y: 20,
+    img: "img/icons/facetime.png",
     content: <FaceTime />
   },
   {
     id: "terminal",
     title: "Terminal",
     desktop: true,
-    width: 900,
-    height: 600,
+    width: 1200,
+    height: 800,
     img: "img/icons/terminal.png",
     content: <Terminal />
   },

@@ -86,6 +86,15 @@ export default function Desktop(props: MacActions) {
     getAppsData();
   }, []);
 
+  // Auto-open About Me on launch
+  useEffect(() => {
+    // Only run once on initial render when apps are loaded
+    if (Object.keys(state.showApps).length > 0 && state.currentTitle === "Finder") {
+      // Open About Me
+      openApp("about");
+    }
+  }, [state.showApps]);
+
   const toggleLaunchpad = (target: boolean): void => {
     const r = document.querySelector(`#launchpad`) as HTMLElement;
     if (target) {

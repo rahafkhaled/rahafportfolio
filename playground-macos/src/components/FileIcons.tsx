@@ -24,12 +24,12 @@ const files: File[] = [
     title: "About Me",
     icon: "img/icons/folder.svg",
     type: "text",
-    appId: "terminal", // specify which app to open
+    appId: "about", // changed from terminal to about 
     position: { x: 40, y: 40 }
   },
   {
-    id: "gallery",
-    title: "Gallery",
+    id: "Events & Engagements",
+    title: "Events & Engagements",
     icon: "img/icons/folder.svg",
     type: "folder",
     appId: "artwork-gallery",
@@ -54,7 +54,7 @@ const files: File[] = [
   {
     id: "resume",
     title: "Resume",
-    icon: "img/icons/folder.svg",
+    icon: "img/icons/resume1.png",
     type: "pdf",
     appId: "preview",
     link: "img/ui/Rahaf-Abutarbush-Resume.pdf",
