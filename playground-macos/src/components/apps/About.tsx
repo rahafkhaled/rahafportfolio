@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useMotionValue, useTransform, useAnimation } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform, useAnimation, easeOut } from "framer-motion";
 import WindowTemplate from "../WindowTemplate";
 
 const About: React.FC = () => {
@@ -94,7 +94,7 @@ const About: React.FC = () => {
     return () => contentElement.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Scroll to section function - updated to scroll within the container
+  // Scroll to section function - updated for faster scrolling
   const scrollToSection = (sectionRef: React.RefObject<HTMLElement>) => {
     const contentElement = contentRef.current;
     const sectionElement = sectionRef.current;
@@ -102,14 +102,15 @@ const About: React.FC = () => {
     if (contentElement && sectionElement) {
       const containerRect = contentElement.getBoundingClientRect();
       const sectionRect = sectionElement.getBoundingClientRect();
-      
-      // Calculate the scroll position relative to the container
       const scrollPosition = sectionRect.top - containerRect.top + contentElement.scrollTop;
       
-      // Smooth scroll to the section
       contentElement.scrollTo({
         top: scrollPosition,
-        behavior: "smooth"
+        behavior: "smooth",
+        // @ts-ignore - Adding custom scroll timing
+        scrollBehavior: {
+          duration: 500 // Reduced from default ~1000ms
+        }
       });
     }
   };
@@ -118,7 +119,7 @@ const About: React.FC = () => {
   const rotateX = useTransform(mouseY, [0, 1], [5, -5]);
   const rotateY = useTransform(mouseX, [0, 1], [-5, 5]);
 
-  const name = "RAHAF";
+  const name = "Hi, I'm Rahaf∆";
   const letters = name.split('');
   const numLetters = letters.length;
 
@@ -188,13 +189,21 @@ const About: React.FC = () => {
     <WindowTemplate>
       <div 
         ref={contentRef} 
-        className="h-full w-full overflow-y-auto relative"
+        className="h-full w-full overflow-y-auto relative scroll-smooth"
         style={{
-          background: "linear-gradient(45deg, #09041e 0%, #180538 50%, #220450 100%)"
+          background: "linear-gradient(45deg, #09041e 0%, #180538 50%, #220450 100%)",
+          perspective: "1000px"
         }}
       >
         {/* Sparkly star background */}
-        <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
+        <motion.div 
+          className="fixed inset-0 overflow-hidden z-0 pointer-events-none"
+          style={{
+            y: useTransform(mouseY, [0, 1], [0, -10], {
+              ease: easeOut
+            })
+          }}
+        >
           {/* Small sparkling stars */}
           {smallStars.map((star) => (
             <motion.div
@@ -295,7 +304,7 @@ const About: React.FC = () => {
               repeatType: "reverse"
             }}
           />
-        </div>
+        </motion.div>
         
         {/* macOS-style Navigation Bar */}
         <motion.nav 
@@ -341,42 +350,42 @@ const About: React.FC = () => {
         </motion.nav>
 
         {/* Hero Section */}
-        <section ref={heroRef} className="relative min-h-screen text-white">
-          {/* Monogram/Logo with hover effect */}
+        <section 
+          ref={heroRef} 
+          className="relative h-[800px] text-white"
+        >
+          {/* Profile picture */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="absolute top-12 right-12 w-12 h-12 z-10"
-            whileHover={{ scale: 1.2, rotate: 5 }}
+            transition={{ duration: 1 }}
+            className="absolute right-24 top-32"
+            style={{ 
+              translateX: useTransform(mouseX, [0, 1], [-10, 10], {
+                ease: easeOut
+              }),
+              translateY: useTransform(mouseY, [0, 1], [-10, 10], {
+                ease: easeOut
+              })
+            }}
           >
-            <div className="text-white/80 text-2xl font-light tracking-wider">RA</div>
+            <motion.div
+              className="relative w-[400px] h-[400px]"
+              style={{ rotateX, rotateY, perspective: 1000 }}
+            >
+              <div className="absolute inset-0 overflow-hidden rounded-full">
+                <motion.img
+                  src="img/ui/me3.svg"
+                  alt="Rahaf Abutarbush"
+                  className="w-full h-full object-cover"
+                  animate={controls}
+                />
+              </div>
+            </motion.div>
           </motion.div>
 
-          {/* Full-height rectangle image on right */}
-          <div className="absolute top-0 right-0 h-full w-[480px] overflow-hidden border-l border-white/10">
-            {/* Photo with parallax effect */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-              className="absolute inset-0 flex items-center justify-center"
-              style={{ 
-                translateX: useTransform(mouseX, [0, 1], [-8, 8]),
-                translateY: useTransform(mouseY, [0, 1], [-8, 8]) 
-              }}
-            >
-              <motion.img
-                src="img/ui/me3.svg"
-                alt="Rahaf Abutarbush"
-                className="w-full h-full object-cover"
-                animate={controls}
-              />
-            </motion.div>
-          </div>
-
-          {/* Text Elements with interactive letters - adjusted for new photo layout */}
-          <div className="absolute left-24 right-[480px] top-1/2 -translate-y-1/2 flex justify-center">
+          {/* Text Elements with interactive letters */}
+          <div className="absolute left-24 top-1/4">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -416,41 +425,63 @@ const About: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* Title at Bottom with typing effect */}
+          {/* About Me Text */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6 }}
-            className="absolute bottom-24 left-24"
+            transition={{ duration: 1, delay: 0.8 }}
+            className="absolute left-24 top-[45%] max-w-xl"
           >
-            <motion.h3 
-              className="text-xl font-extralight tracking-[0.15em] text-purple-200/70"
-              whileHover={{ 
-                color: "#EC4899",
-                transition: { duration: 0.3 }
-              }}
-            >
-              Emerging Technology Innovation Lead
-            </motion.h3>
+            <motion.p 
+              className="text-lg font-light leading-relaxed text-purple-200/90"
+              whileHover={{ color: "#d8b4fe" }}
+            > 
+I’ve always been drawn to the intersection of technology and human experience.
+ Working in emerging tech, I’ve realized that the real challenge isn’t how fast technology moves—it’s cutting
+  through the noise to find what’s relevant, impactful, and worth paying attention to 
+  - all while answering the fundamental question: ‘What’s in it for us?’
+            </motion.p>
           </motion.div>
-          
-          {/* Animated arrow indicator */}
-          <motion.div 
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/50"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
+
+          {/* Scroll indicator arrow */}
+          <motion.div
+            className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/50 cursor-pointer"
+            animate={{ 
+              y: [0, 10, 0],
+              opacity: [0.5, 1, 0.5]
+            }}
+            transition={{ 
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
             onClick={() => scrollToSection(servicesRef)}
-            whileHover={{ scale: 1.2, color: "#FFFFFF" }}
-            style={{ cursor: "pointer" }}
+            whileHover={{ scale: 1.2, color: "#fff" }}
           >
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 5V19M12 19L19 12M12 19L5 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg 
+              width="40" 
+              height="40" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              className="rotate-180"
+            >
+              <path 
+                d="M12 5L12 19M12 19L5 12M12 19L19 12" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
             </svg>
           </motion.div>
         </section>
 
         {/* Services Section */}
-        <section ref={servicesRef} className="py-24 px-8 relative text-white">
+        <section 
+          ref={servicesRef} 
+          className="py-4 px-8 relative text-white"
+        >
           <div className="container mx-auto">
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
