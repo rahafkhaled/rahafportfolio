@@ -132,20 +132,20 @@ const About: React.FC = () => {
 
   const services = [
     {
-      title: "AI Solutions",
-      description: "Custom AI development and implementation",
+      title: "Ideation and Design Thinking",
+      description: "We can come up with high-impact ideas that stem from real-world problems",
       deliverables: ["Strategy Planning", "Model Development", "Integration", "Training"],
       icon: "💡"
     },
     {
-      title: "XR Experiences",
-      description: "Immersive virtual and augmented reality",
+      title: "Product management",
+      description: " From zero to MVP, I manage the full arc - connecting user needs, business goals, and technical feasibility to shape products that actually make sense. Tech moves fast, but the real challenge isn’t keeping up - it’s making it matter.",
       deliverables: ["VR Training", "AR Applications", "3D Modeling", "Interactive Design"],
       icon: "🥽"
     },
     {
-      title: "Innovation Consulting",
-      description: "Digital transformation and strategy",
+      title: "Public speaking & Storytelling",
+      description: "Being a national debate champion, whether it’s a keynote, client pitch, demo, or presentation, I translate complex ideas into compelling narratives that people remember.",
       deliverables: ["Tech Assessment", "Roadmap Creation", "Implementation", "Training"],
       icon: "🚀"
     }
@@ -153,20 +153,31 @@ const About: React.FC = () => {
 
   const portfolio = [
     {
-      title: "Virtual Humans",
+      title: "Emerging Technolgies in the Middle East 2025",
       category: "AI Development",
       image: "img/gallery/project1.jpg"
     },
     {
-      title: "VR Training",
+      title: "Ideation Workshops",
       category: "Extended Reality",
       image: "img/gallery/project2.jpg"
     },
     {
-      title: "Future Cities",
+      title: "Smart Cities and Emerging Technologies",
+      category: "Innovation",
+      image: "img/gallery/project3.jpg"
+    },
+    {
+      title: "National Debates",
+      category: "Innovation",
+      image: "img/gallery/project3.jpg"
+    },
+    {
+      title: "Executive producer and host of TEDx",
       category: "Innovation",
       image: "img/gallery/project3.jpg"
     }
+
   ];
 
   // Generate sparkly stars for the background
@@ -352,100 +363,100 @@ const About: React.FC = () => {
         {/* Hero Section */}
         <section 
           ref={heroRef} 
-          className="relative h-[800px] text-white"
+          className="relative min-h-screen text-white"
         >
-          {/* Profile picture */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="absolute right-24 top-32"
-            style={{ 
-              translateX: useTransform(mouseX, [0, 1], [-10, 10], {
-                ease: easeOut
-              }),
-              translateY: useTransform(mouseY, [0, 1], [-10, 10], {
-                ease: easeOut
-              })
-            }}
-          >
-            <motion.div
-              className="relative w-[400px] h-[400px]"
-              style={{ rotateX, rotateY, perspective: 1000 }}
-            >
-              <div className="absolute inset-0 overflow-hidden rounded-full">
-                <motion.img
-                  src="img/ui/me3.svg"
-                  alt="Rahaf Abutarbush"
-                  className="w-full h-full object-cover"
-                  animate={controls}
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Text Elements with interactive letters */}
-          <div className="absolute left-24 top-1/4">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="space-y-8"
-            >
-              <div className="flex">
-                {letters.map((letter, index) => (
-                  <motion.span
-                    key={`name-${index}`}
-                    className="text-8xl font-extralight tracking-[0.2em] leading-none cursor-default"
-                    onMouseEnter={() => setHoveredLetter(index)}
-                    onMouseLeave={() => setHoveredLetter(null)}
-                    animate={hoveredLetter === index ? { 
-                      y: -20, 
-                      color: "#EC4899",
-                      scale: 1.1,
-                      textShadow: "0 0 15px rgba(236, 72, 153, 0.5)"
-                    } : { 
-                      y: 0, 
-                      color: "#FFFFFF",
-                      scale: 1,
-                      textShadow: "none" 
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+          {/* Background gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-pink-900/20" />
+          
+          {/* Content container */}
+          <div className="relative h-screen flex items-center">
+            <div className="container mx-auto px-8">
+              <div className="grid grid-cols-12 gap-8 items-center">
+                {/* Left content - spans 5 columns */}
+                <div className="col-span-5 space-y-8">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="space-y-4"
                   >
-                    {letter}
-                  </motion.span>
-                ))}
+                    <h1 className="text-6xl font-light tracking-tight">
+                      Hi, I'm <span className="text-purple-300">Rahaf</span>
+                    </h1>
+                    <h2 className="text-2xl font-light text-purple-200/80">
+                      Emerging Technology Innovation Lead
+                    </h2>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="space-y-4"
+                  >
+                    <p className="text-lg font-light leading-relaxed text-purple-100/90">
+                      I've always been drawn to the intersection of technology and human experience.
+                      Working in emerging tech, I've realized that the real challenge isn't how fast technology moves—it's cutting
+                      through the noise to find what's relevant, impactful, and worth paying attention to 
+                      - all while answering the fundamental question: 'What's in it for us?'
+                    </p>
+                    <div className="flex gap-4">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-6 py-3 bg-purple-500/20 hover:bg-purple-500/30 rounded-full text-sm font-light transition-colors"
+                      >
+                        View My Work
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-6 py-3 border border-purple-500/30 hover:border-purple-500/50 rounded-full text-sm font-light transition-colors"
+                      >
+                        Contact Me
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Right content - spans 7 columns */}
+                <div className="col-span-7 relative">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    className="relative"
+                    style={{ 
+                      translateX: useTransform(mouseX, [0, 1], [-20, 20], {
+                        ease: easeOut
+                      }),
+                      translateY: useTransform(mouseY, [0, 1], [-20, 20], {
+                        ease: easeOut
+                      })
+                    }}
+                  >
+                    <div className="relative w-full aspect-square max-w-[600px] mx-auto">
+                      <div className="absolute inset-0 rounded-full overflow-hidden">
+                        <motion.img
+                          src="img/ui/me3.svg"
+                          alt="Rahaf Abutarbush"
+                          className="w-full h-full object-cover"
+                          animate={controls}
+                        />
+                      </div>
+                      {/* Decorative elements */}
+                      <div className="absolute inset-0 rounded-full border border-purple-500/20" />
+                      <div className="absolute inset-4 rounded-full border border-purple-500/10" />
+                    </div>
+                  </motion.div>
+                </div>
               </div>
-              <motion.h2 
-                className="text-3xl font-extralight tracking-[0.3em] text-purple-300/70"
-                whileHover={{ letterSpacing: "0.35em", color: "#d8b4fe" }}
-              >
-                PORTFOLIO
-              </motion.h2>
-            </motion.div>
+            </div>
           </div>
 
-          {/* About Me Text */}
+          {/* Scroll indicator */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="absolute left-24 top-[45%] max-w-xl"
-          >
-            <motion.p 
-              className="text-lg font-light leading-relaxed text-purple-200/90"
-              whileHover={{ color: "#d8b4fe" }}
-            > 
-I’ve always been drawn to the intersection of technology and human experience.
- Working in emerging tech, I’ve realized that the real challenge isn’t how fast technology moves—it’s cutting
-  through the noise to find what’s relevant, impactful, and worth paying attention to 
-  - all while answering the fundamental question: ‘What’s in it for us?’
-            </motion.p>
-          </motion.div>
-
-          {/* Scroll indicator arrow */}
-          <motion.div
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/50 cursor-pointer"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 cursor-pointer"
             animate={{ 
               y: [0, 10, 0],
               opacity: [0.5, 1, 0.5]
@@ -480,16 +491,16 @@ I’ve always been drawn to the intersection of technology and human experience.
         {/* Services Section */}
         <section 
           ref={servicesRef} 
-          className="py-4 px-8 relative text-white"
+          className="py-32 px-8 relative text-white"
         >
           <div className="container mx-auto">
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl font-light mb-16"
+              className="text-4xl font-light mb-16 text-center"
             >
-              What I Do
+              My Areas of Expertise
             </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {services.map((service, index) => (
