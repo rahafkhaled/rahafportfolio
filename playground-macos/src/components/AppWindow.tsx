@@ -185,10 +185,19 @@ const Window = (props: WindowProps) => {
       enableResizing={!props.max}
       lockAspectRatio={props.aspectRatio}
       lockAspectRatioExtraHeight={props.aspectRatio ? appBarHeight : undefined}
-      style={{ zIndex: props.z }}
+      style={{
+        zIndex: props.z,
+        willChange: "transform"
+        // transform: "translate3d(0,0,0)"
+      }}
       onMouseDown={() => props.focus(props.id)}
       className={`overflow-hidden ${round} ${border} shadow-lg shadow-black/50 bg-gray-800/30 backdrop-blur-sm ${minimized}`}
       id={`window-${props.id}`}
+      dragGrid={[1, 1]}
+      dragAxis="both"
+      enableUserSelectHack={false}
+      dragMomentum={false}
+      dragElastic={0}
     >
       <div
         className="window-bar relative h-6 text-center text-white bg-[#1a1625]/80 dark:bg-[#1a1625]/80 backdrop-blur-lg"
