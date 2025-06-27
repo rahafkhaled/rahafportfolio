@@ -66,44 +66,39 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
       }}
       enableResizing={false}
       bounds="parent"
-      dragGrid={[10, 10]}
+      dragGrid={[1, 1]}
+      dragAxis="both"
+      enableUserSelectHack={false}
+      dragMomentum={false}
+      dragElastic={0}
       className="select-none"
+      style={{ willChange: "transform" }}
     >
-      <AnimatePresence>
-        <motion.div
-          className={`flex flex-col items-center w-full h-full p-1 rounded-lg 
-            ${!isDragging ? "hover:bg-white/10" : "bg-white/10"} 
-            transition-all duration-200 ease-out cursor-move`}
-          initial={{ scale: 1 }}
-          animate={{
-            scale: isDragging ? 1.05 : 1,
-            transition: { duration: 0.2 }
+      <div
+        className={`flex flex-col items-center w-full h-full p-1 rounded-lg 
+          ${!isDragging ? "hover:bg-white/10" : "bg-white/10"} 
+          transition-colors duration-200 ease-out cursor-move`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onDoubleClick={(e) => {
+          e.stopPropagation();
+          if (!isDragging) onOpen();
+        }}
+      >
+        <img
+          src={getIconSrc()}
+          alt={title}
+          className="w-24 h-28 mb-3 transition-transform duration-200"
+          draggable={false}
+          style={{
+            transform: isDragging ? "rotate(5deg)" : "rotate(0deg)",
+            scale: isHovered ? 1.1 : 1
           }}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.95 }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onDoubleClick={(e) => {
-            e.stopPropagation();
-            if (!isDragging) onOpen();
-          }}
-        >
-          <motion.img
-            src={getIconSrc()}
-            alt={title}
-            className="w-24 h-28 mb-3"
-            draggable={false}
-            animate={{
-              rotate: isDragging ? 5 : 0,
-              scale: isHovered ? 1.1 : 1
-            }}
-            transition={{ type: "spring", stiffness: 200 }}
-          />
-          <span className="text-white text-lg text-center line-clamp-2 px-2 pointer-events-none">
-            {title}
-          </span>
-        </motion.div>
-      </AnimatePresence>
+        />
+        <span className="text-white text-lg text-center line-clamp-2 px-2 pointer-events-none">
+          {title}
+        </span>
+      </div>
     </Rnd>
   );
 };
