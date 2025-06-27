@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 
 import Desktop from "~/pages/Desktop";
-import Login from "~/pages/Login";
 import Boot from "~/pages/Boot";
 
 import "@unocss/reset/tailwind.css";
@@ -11,7 +10,6 @@ import "katex/dist/katex.min.css";
 import "~/styles/index.css";
 
 export default function App() {
-  const [login, setLogin] = useState<boolean>(false);
   const [booting, setBooting] = useState<boolean>(false);
   const [restart, setRestart] = useState<boolean>(false);
   const [sleep, setSleep] = useState<boolean>(false);
@@ -20,7 +18,6 @@ export default function App() {
     e.stopPropagation();
     setRestart(false);
     setSleep(false);
-    setLogin(false);
     setBooting(true);
   };
 
@@ -28,7 +25,6 @@ export default function App() {
     e.stopPropagation();
     setRestart(true);
     setSleep(false);
-    setLogin(false);
     setBooting(true);
   };
 
@@ -36,25 +32,15 @@ export default function App() {
     e.stopPropagation();
     setRestart(false);
     setSleep(true);
-    setLogin(false);
     setBooting(true);
   };
 
   if (booting) {
     return <Boot restart={restart} sleep={sleep} setBooting={setBooting} />;
-  } else if (login) {
-    return (
-      <Desktop
-        setLogin={setLogin}
-        shutMac={shutMac}
-        sleepMac={sleepMac}
-        restartMac={restartMac}
-      />
-    );
   } else {
     return (
-      <Login
-        setLogin={setLogin}
+      <Desktop
+        setLogin={() => {}} // Dummy function since login is removed
         shutMac={shutMac}
         sleepMac={sleepMac}
         restartMac={restartMac}

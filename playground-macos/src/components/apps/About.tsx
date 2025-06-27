@@ -139,13 +139,13 @@ const About: React.FC = () => {
     },
     {
       title: "Product management",
-      description: " From zero to MVP, I manage the full arc - connecting user needs, business goals, and technical feasibility to shape products that actually make sense. Tech moves fast, but the real challenge isn’t keeping up - it’s making it matter.",
+      description: " From zero to MVP, I manage the full arc - connecting user needs, business goals, and technical feasibility to shape products that actually make sense. Tech moves fast, but the real challenge isn't keeping up - it's making it matter.",
       deliverables: ["VR Training", "AR Applications", "3D Modeling", "Interactive Design"],
       icon: "🥽"
     },
     {
       title: "Public speaking & Storytelling",
-      description: "Being a national debate champion, whether it’s a keynote, client pitch, demo, or presentation, I translate complex ideas into compelling narratives that people remember.",
+      description: "Being a national debate champion, whether it's a keynote, client pitch, demo, or presentation, I translate complex ideas into compelling narratives that people remember.",
       deliverables: ["Tech Assessment", "Roadmap Creation", "Implementation", "Training"],
       icon: "🚀"
     }
@@ -200,160 +200,74 @@ const About: React.FC = () => {
     <WindowTemplate>
       <div 
         ref={contentRef} 
-        className="h-full w-full overflow-y-auto relative scroll-smooth"
+        className="h-full w-full overflow-y-auto relative scroll-smooth bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950"
         style={{
-          background: "linear-gradient(45deg, #09041e 0%, #180538 50%, #220450 100%)",
           perspective: "1000px"
         }}
       >
-        {/* Sparkly star background */}
-        <motion.div 
-          className="fixed inset-0 overflow-hidden z-0 pointer-events-none"
-          style={{
-            y: useTransform(mouseY, [0, 1], [0, -10], {
-              ease: easeOut
-            })
-          }}
-        >
-          {/* Small sparkling stars */}
-          {smallStars.map((star) => (
-            <motion.div
-              key={`small-star-${star.id}`}
-              className="absolute rounded-full bg-white"
-              style={{
-                width: star.size,
-                height: star.size,
-                left: `${star.x}%`,
-                top: `${star.y}%`,
-                opacity: star.alpha
-              }}
-              animate={{
-                opacity: [star.alpha, star.alpha * 0.3, star.alpha],
-                scale: [1, 1.2, 1]
-              }}
-              transition={{
-                duration: star.duration,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            />
-          ))}
-          
-          {/* Medium stars with glow */}
-          {mediumStars.map((star) => (
-            <motion.div
-              key={`medium-star-${star.id}`}
-              className="absolute rounded-full bg-purple-300"
-              style={{
-                width: star.size + 1,
-                height: star.size + 1,
-                left: `${star.x}%`,
-                top: `${star.y}%`,
-                boxShadow: "0 0 4px 1px rgba(216, 180, 254, 0.4)",
-                opacity: star.alpha
-              }}
-              animate={{
-                opacity: [star.alpha, star.alpha * 0.5, star.alpha],
-                boxShadow: [
-                  "0 0 4px 1px rgba(216, 180, 254, 0.4)",
-                  "0 0 6px 2px rgba(216, 180, 254, 0.6)",
-                  "0 0 4px 1px rgba(216, 180, 254, 0.4)"
-                ]
-              }}
-              transition={{
-                duration: star.duration * 1.5,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            />
-          ))}
-          
-          {/* Large glowing stars */}
-          {largeStars.map((star) => (
-            <motion.div
-              key={`large-star-${star.id}`}
-              className="absolute rounded-full bg-pink-200"
-              style={{
-                width: star.size + 2,
-                height: star.size + 2,
-                left: `${star.x}%`,
-                top: `${star.y}%`,
-                boxShadow: "0 0 8px 2px rgba(244, 114, 182, 0.6)",
-                opacity: star.alpha
-              }}
-              animate={{
-                opacity: [star.alpha, star.alpha * 0.6, star.alpha],
-                boxShadow: [
-                  "0 0 8px 2px rgba(244, 114, 182, 0.6)",
-                  "0 0 12px 4px rgba(244, 114, 182, 0.8)",
-                  "0 0 8px 2px rgba(244, 114, 182, 0.6)"
-                ],
-                scale: [1, 1.3, 1]
-              }}
-              transition={{
-                duration: star.duration * 2,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            />
-          ))}
-          
-          {/* Subtle nebula clouds */}
-          <motion.div
-            className="absolute opacity-20 inset-0"
-            style={{
-              background: "radial-gradient(circle at 30% 70%, rgba(142, 45, 226, 0.2), transparent 40%), radial-gradient(circle at 70% 30%, rgba(86, 26, 170, 0.2), transparent 50%)",
-              filter: "blur(40px)"
-            }}
-            animate={{ 
-              opacity: [0.2, 0.15, 0.2],
-              rotate: [0, 5, 0]
-            }}
-            transition={{ 
-              duration: 30, 
-              repeat: Infinity,
-              repeatType: "reverse"
-            }}
-          />
-        </motion.div>
-        
         {/* macOS-style Navigation Bar */}
         <motion.nav 
-          className="sticky top-0 z-50 flex justify-center w-full bg-black/40 backdrop-blur-md py-2 border-b border-white/5"
+          className="sticky top-0 z-50 flex justify-center w-full bg-black/40 backdrop-blur-md py-6 border-b border-white/5 relative overflow-visible"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="flex justify-center gap-12">
+          {/* Sparkly stars overlay for nav bar */}
+          <div className="absolute inset-0 pointer-events-none z-0">
+            {generateStars(18).map((star) => (
+              <motion.div
+                key={`nav-star-${star.id}`}
+                className="absolute rounded-full bg-white"
+                style={{
+                  width: star.size + 0.5,
+                  height: star.size + 0.5,
+                  left: `${star.x}%`,
+                  top: `${star.y}%`,
+                  opacity: star.alpha,
+                  filter: 'drop-shadow(0 0 6px #a855f7)'
+                }}
+                animate={{
+                  opacity: [star.alpha, star.alpha * 0.3, star.alpha],
+                  scale: [1, 1.2, 1]
+                }}
+                transition={{
+                  duration: star.duration * 0.7,
+                  repeat: Infinity,
+                  repeatType: "reverse"
+                }}
+              />
+            ))}
+          </div>
+          <div className="flex justify-center gap-16 z-10">
             <motion.button 
               onClick={() => scrollToSection(heroRef)}
-              className={`px-4 py-2 text-sm transition-colors ${activeSection === "hero" ? "text-white" : "text-gray-400 hover:text-white"}`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className={`px-6 py-3 text-lg font-medium transition-colors ${activeSection === "hero" ? "text-white" : "text-gray-400 hover:text-white"}`}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.96 }}
             >
               About
             </motion.button>
             <motion.button 
               onClick={() => scrollToSection(servicesRef)}
-              className={`px-4 py-2 text-sm transition-colors ${activeSection === "services" ? "text-white" : "text-gray-400 hover:text-white"}`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className={`px-6 py-3 text-lg font-medium transition-colors ${activeSection === "services" ? "text-white" : "text-gray-400 hover:text-white"}`}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.96 }}
             >
               Services
             </motion.button>
             <motion.button 
               onClick={() => scrollToSection(portfolioRef)}
-              className={`px-4 py-2 text-sm transition-colors ${activeSection === "portfolio" ? "text-white" : "text-gray-400 hover:text-white"}`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className={`px-6 py-3 text-lg font-medium transition-colors ${activeSection === "portfolio" ? "text-white" : "text-gray-400 hover:text-white"}`}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.96 }}
             >
               Work
             </motion.button>
             <motion.button 
               onClick={() => scrollToSection(contactRef)}
-              className={`px-4 py-2 text-sm transition-colors ${activeSection === "contact" ? "text-white" : "text-gray-400 hover:text-white"}`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className={`px-6 py-3 text-lg font-medium transition-colors ${activeSection === "contact" ? "text-white" : "text-gray-400 hover:text-white"}`}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.96 }}
             >
               Contact
             </motion.button>
@@ -363,93 +277,56 @@ const About: React.FC = () => {
         {/* Hero Section */}
         <section 
           ref={heroRef} 
-          className="relative min-h-screen text-white"
+          className="relative text-white flex items-center justify-center py-20"
         >
           {/* Background gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-pink-900/20" />
-          
           {/* Content container */}
-          <div className="relative h-screen flex items-center">
+          <div className="relative flex items-center justify-center w-full">
             <div className="container mx-auto px-8">
-              <div className="grid grid-cols-12 gap-8 items-center">
-                {/* Left content - spans 5 columns */}
-                <div className="col-span-5 space-y-8">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="space-y-4"
-                  >
-                    <h1 className="text-6xl font-light tracking-tight">
-                      Hi, I'm <span className="text-purple-300">Rahaf</span>
-                    </h1>
-                    <h2 className="text-2xl font-light text-purple-200/80">
-                      Emerging Technology Innovation Lead
-                    </h2>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    className="space-y-4"
-                  >
-                    <p className="text-lg font-light leading-relaxed text-purple-100/90">
-                      I've always been drawn to the intersection of technology and human experience.
-                      Working in emerging tech, I've realized that the real challenge isn't how fast technology moves—it's cutting
-                      through the noise to find what's relevant, impactful, and worth paying attention to 
-                      - all while answering the fundamental question: 'What's in it for us?'
-                    </p>
-                    <div className="flex gap-4">
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="px-6 py-3 bg-purple-500/20 hover:bg-purple-500/30 rounded-full text-sm font-light transition-colors"
-                      >
-                        View My Work
-                      </motion.button>
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="px-6 py-3 border border-purple-500/30 hover:border-purple-500/50 rounded-full text-sm font-light transition-colors"
-                      >
-                        Contact Me
-                      </motion.button>
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* Right content - spans 7 columns */}
-                <div className="col-span-7 relative">
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                    className="relative"
-                    style={{ 
-                      translateX: useTransform(mouseX, [0, 1], [-20, 20], {
-                        ease: easeOut
-                      }),
-                      translateY: useTransform(mouseY, [0, 1], [-20, 20], {
-                        ease: easeOut
-                      })
-                    }}
-                  >
-                    <div className="relative w-full aspect-square max-w-[600px] mx-auto">
-                      <div className="absolute inset-0 rounded-full overflow-hidden">
-                        <motion.img
-                          src="img/ui/me3.svg"
-                          alt="Rahaf Abutarbush"
-                          className="w-full h-full object-cover"
-                          animate={controls}
-                        />
-                      </div>
-                      {/* Decorative elements */}
-                      <div className="absolute inset-0 rounded-full border border-purple-500/20" />
-                      <div className="absolute inset-4 rounded-full border border-purple-500/10" />
-                    </div>
-                  </motion.div>
-                </div>
+              <div className="flex flex-col items-center justify-center text-center space-y-8 w-full">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="space-y-4"
+                >
+                  <h1 className="text-6xl font-light tracking-tight">
+                    Hi, I'm <span className="text-purple-300">Rahaf</span>
+                  </h1>
+                  <h2 className="text-2xl font-light text-purple-200/80">
+                    Emerging Technology Innovation Lead
+                  </h2>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="space-y-4"
+                >
+                  <p className="text-lg font-light leading-relaxed text-purple-100/90">
+                    I've always been drawn to the intersection of technology and human experience.
+                    Working in emerging tech, I've realized that the real challenge isn't how fast technology moves—it's cutting
+                    through the noise to find what's relevant, impactful, and worth paying attention to 
+                    - all while answering the fundamental question: 'What's in it for us?'
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-6 py-3 bg-purple-500/20 hover:bg-purple-500/30 rounded-full text-sm font-light transition-colors"
+                    >
+                      View My Work
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-6 py-3 border border-purple-500/30 hover:border-purple-500/50 rounded-full text-sm font-light transition-colors"
+                    >
+                      Contact Me
+                    </motion.button>
+                  </div>
+                </motion.div>
               </div>
             </div>
           </div>
