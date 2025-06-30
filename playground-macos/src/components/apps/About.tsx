@@ -2,7 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, useAnimation, easeOut } from "framer-motion";
 import WindowTemplate from "../WindowTemplate";
 
-const About: React.FC = () => {
+interface AboutProps {
+  openApp?: (id: string) => void;
+}
+
+const About: React.FC<AboutProps> = ({ openApp }) => {
   const [activeSection, setActiveSection] = useState("hero");
   const [hoveredLetter, setHoveredLetter] = useState<number | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -13,7 +17,6 @@ const About: React.FC = () => {
   // Refs for each section
   const heroRef = useRef<HTMLElement>(null);
   const servicesRef = useRef<HTMLElement>(null);
-  const portfolioRef = useRef<HTMLElement>(null);
   const contactRef = useRef<HTMLElement>(null);
 
   // Motion values for the parallax effect
@@ -72,7 +75,6 @@ const About: React.FC = () => {
       const sections = [
         { ref: heroRef, id: "hero" },
         { ref: servicesRef, id: "services" },
-        { ref: portfolioRef, id: "portfolio" },
         { ref: contactRef, id: "contact" }
       ];
       
@@ -123,12 +125,6 @@ const About: React.FC = () => {
   const letters = name.split('');
   const numLetters = letters.length;
 
-  const stats = [
-    { number: "5+", label: "Years Experience" },
-    { number: "50+", label: "Projects Delivered" },
-    { number: "3", label: "Countries" },
-    { number: "1000+", label: "People Impacted" }
-  ];
 
   const services = [
     {
@@ -149,35 +145,6 @@ const About: React.FC = () => {
       deliverables: ["Tech Assessment", "Roadmap Creation", "Implementation", "Training"],
       icon: "🚀"
     }
-  ];
-
-  const portfolio = [
-    {
-      title: "Emerging Technolgies in the Middle East 2025",
-      category: "AI Development",
-      image: "img/gallery/project1.jpg"
-    },
-    {
-      title: "Ideation Workshops",
-      category: "Extended Reality",
-      image: "img/gallery/project2.jpg"
-    },
-    {
-      title: "Smart Cities and Emerging Technologies",
-      category: "Innovation",
-      image: "img/gallery/project3.jpg"
-    },
-    {
-      title: "National Debates",
-      category: "Innovation",
-      image: "img/gallery/project3.jpg"
-    },
-    {
-      title: "Executive producer and host of TEDx",
-      category: "Innovation",
-      image: "img/gallery/project3.jpg"
-    }
-
   ];
 
   // Generate sparkly stars for the background
@@ -248,28 +215,28 @@ const About: React.FC = () => {
               About
             </motion.button>
             <motion.button 
-              onClick={() => scrollToSection(servicesRef)}
-              className={`px-6 py-3 text-lg font-medium transition-colors ${activeSection === "services" ? "text-white" : "text-gray-400 hover:text-white"}`}
+              onClick={() => openApp && openApp("artwork-gallery")}
+              className="px-6 py-3 text-lg font-medium transition-colors text-gray-400 hover:text-white"
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.96 }}
             >
-              Services
+              Events & Engagements
             </motion.button>
             <motion.button 
-              onClick={() => scrollToSection(portfolioRef)}
-              className={`px-6 py-3 text-lg font-medium transition-colors ${activeSection === "portfolio" ? "text-white" : "text-gray-400 hover:text-white"}`}
+              onClick={() => openApp && openApp("news")}
+              className="px-6 py-3 text-lg font-medium transition-colors text-gray-400 hover:text-white"
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.96 }}
             >
-              Work
+             News Features
             </motion.button>
             <motion.button 
-              onClick={() => scrollToSection(contactRef)}
-              className={`px-6 py-3 text-lg font-medium transition-colors ${activeSection === "contact" ? "text-white" : "text-gray-400 hover:text-white"}`}
+              onClick={() => openApp && openApp("projects")}
+              className="px-6 py-3 text-lg font-medium transition-colors text-gray-400 hover:text-white"
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.96 }}
             >
-              Contact
+             Projects
             </motion.button>
           </div>
         </motion.nav>
@@ -281,6 +248,8 @@ const About: React.FC = () => {
         >
           {/* Background gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-pink-900/20" />
+          {/* Soft gradient fade at bottom to blend sections */}
+          <div className="pointer-events-none absolute bottom-0 left-0 w-full h-32 z-20" style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, #1a1333 100%)'}} />
           {/* Content container */}
           <div className="relative flex items-center justify-center w-full">
             <div className="container mx-auto px-8">
@@ -292,10 +261,10 @@ const About: React.FC = () => {
                   className="space-y-4"
                 >
                   <h1 className="text-6xl font-light tracking-tight">
-                    Hi, I'm <span className="text-purple-300">Rahaf</span>
+                  Rahaf Abutarbush
                   </h1>
                   <h2 className="text-2xl font-light text-purple-200/80">
-                    Emerging Technology Innovation Lead
+                    Emerging Technology <span className="square-separator">▪</span> Instinct-led Innovation <span className="square-separator">▪</span> Market Relevance
                   </h2>
                 </motion.div>
                 <motion.div
@@ -305,64 +274,26 @@ const About: React.FC = () => {
                   className="space-y-4"
                 >
                   <p className="text-lg font-light leading-relaxed text-purple-100/90">
-                    I've always been drawn to the intersection of technology and human experience.
-                    Working in emerging tech, I've realized that the real challenge isn't how fast technology moves—it's cutting
-                    through the noise to find what's relevant, impactful, and worth paying attention to 
-                    - all while answering the fundamental question: 'What's in it for us?'
+                    I have always been all about innovation that is lead by instincts, the intersection of technology and human experience.
+                    The real challenge isn't how fast technology moves, it's cutting
+                    through the noise to find what's relevant, impactful, and worth paying attention to – all while answering the fundamental question:
+                    <br />
+                    <span>
+                      {"What's in it for us?".split('').map((char, i) => (
+                        <span
+                          key={i}
+                          className="shine-letter"
+                          style={{ animationDelay: `${i * 0.07}s` }}
+                        >
+                          {char === ' ' ? '\u00A0' : char}
+                        </span>
+                      ))}
+                    </span>
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-6 py-3 bg-purple-500/20 hover:bg-purple-500/30 rounded-full text-sm font-light transition-colors"
-                    >
-                      View My Work
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-6 py-3 border border-purple-500/30 hover:border-purple-500/50 rounded-full text-sm font-light transition-colors"
-                    >
-                      Contact Me
-                    </motion.button>
-                  </div>
                 </motion.div>
               </div>
             </div>
           </div>
-
-          {/* Scroll indicator */}
-          <motion.div
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 cursor-pointer"
-            animate={{ 
-              y: [0, 10, 0],
-              opacity: [0.5, 1, 0.5]
-            }}
-            transition={{ 
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            onClick={() => scrollToSection(servicesRef)}
-            whileHover={{ scale: 1.2, color: "#fff" }}
-          >
-            <svg 
-              width="40" 
-              height="40" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-              className="rotate-180"
-            >
-              <path 
-                d="M12 5L12 19M12 19L5 12M12 19L19 12" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              />
-            </svg>
-          </motion.div>
         </section>
 
         {/* Services Section */}
@@ -387,26 +318,22 @@ const About: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white/5 backdrop-blur-lg rounded-xl p-8 border border-purple-500/20 relative overflow-hidden group"
+                  className="bg-white/5 backdrop-blur-lg rounded-xl p-8 border border-purple-500/20 relative overflow-hidden group hover:bg-white/10 transition-all duration-300"
                   whileHover={{ 
                     y: -5,
                     boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
                   }}
                 >
-                  {/* Background gradient that moves on hover */}
+                  {/* Simplified background gradient overlay */}
                   <motion.div 
-                    className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-transparent to-pink-900/30 opacity-0 group-hover:opacity-100"
-                    style={{ 
-                      translateX: useTransform(mouseX, [0, 1], [-20, 20]),
-                      translateY: useTransform(mouseY, [0, 1], [-20, 20])
-                    }}
+                    className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-pink-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   />
                   
                   {/* Service icon */}
                   <motion.div 
-                    className="text-4xl mb-4"
-                    initial={{ scale: 1 }}
-                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    className="text-4xl mb-4 relative z-10"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ duration: 0.2 }}
                   >
                     {service.icon}
                   </motion.div>
@@ -415,90 +342,18 @@ const About: React.FC = () => {
                   <p className="text-purple-200/70 mb-6 relative z-10">{service.description}</p>
                   <ul className="space-y-2 relative z-10">
                     {service.deliverables.map((item, i) => (
-                      <motion.li 
+                      <li 
                         key={i} 
-                        className="text-sm text-blue-300"
-                        initial={{ x: 0 }}
-                        whileHover={{ x: 5 }}
+                        className="text-sm text-blue-300 transition-transform duration-200 group-hover:translate-x-1"
                       >
                         • {item}
-                      </motion.li>
+                      </li>
                     ))}
                   </ul>
                   
                   {/* Decorative corner */}
                   <motion.div 
-                    className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-pink-500/30 to-transparent"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                  />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Portfolio Section */}
-        <section ref={portfolioRef} className="py-24 px-8 bg-purple-950/30 backdrop-blur-sm relative text-white">
-          <div className="container mx-auto">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-3xl font-light mb-16"
-            >
-              Featured Work
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {portfolio.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="group relative aspect-[4/3] rounded-xl overflow-hidden"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-t from-purple-950/80 via-black/40 to-transparent z-10"
-                    whileHover={{ opacity: 0.7 }}
-                    transition={{ duration: 0.2 }}
-                  />
-                  <motion.img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover"
-                    initial={{ scale: 1 }}
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.6 }}
-                  />
-                  <motion.div 
-                    className="absolute bottom-0 left-0 p-6 z-20"
-                    initial={{ y: 0 }}
-                    whileHover={{ y: -5 }}
-                  >
-                    <motion.div 
-                      className="text-sm text-purple-300 mb-2"
-                      initial={{ x: 0 }}
-                      whileHover={{ x: 3 }}
-                    >
-                      {item.category}
-                    </motion.div>
-                    <motion.h3 
-                      className="text-xl"
-                      initial={{ x: 0 }}
-                      whileHover={{ x: 3 }}
-                    >
-                      {item.title}
-                    </motion.h3>
-                  </motion.div>
-                  
-                  {/* Animated overlay on hover */}
-                  <motion.div 
-                    className="absolute inset-0 border-2 border-purple-500/0 rounded-xl z-10"
-                    whileHover={{ borderColor: "rgba(168, 85, 247, 0.3)" }}
-                    transition={{ duration: 0.2 }}
+                    className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-pink-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   />
                 </motion.div>
               ))}

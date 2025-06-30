@@ -118,3 +118,144 @@
 .switch-toggle input:focus + .slider-toggle {
   box-shadow: 0 0 1px #3b82f6;
 }
+
+.neon-yellow {
+  color: #fff700;
+  font-family: 'Avenir Next LT Pro', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  text-shadow:
+    0 0 5px #fff700,
+    0 0 10px #fff700,
+    0 0 20px #fff700,
+    0 0 40px #fff700,
+    0 0 80px #fff700;
+  transition: text-shadow 0.2s, color 0.2s;
+}
+.neon-yellow:hover {
+  animation: neon-flicker-yellow 0.7s infinite;
+}
+@keyframes neon-flicker-yellow {
+  0%, 100% { opacity: 1; text-shadow: 0 0 5px #fff700, 0 0 10px #fff700, 0 0 20px #fff700, 0 0 40px #fff700, 0 0 80px #fff700; }
+  10% { opacity: 0.8; text-shadow: 0 0 2px #fff700, 0 0 4px #fff700, 0 0 8px #fff700; }
+  20% { opacity: 0.6; text-shadow: 0 0 1px #fff700, 0 0 2px #fff700; }
+  30%, 50%, 70% { opacity: 1; text-shadow: 0 0 5px #fff700, 0 0 10px #fff700, 0 0 20px #fff700, 0 0 40px #fff700, 0 0 80px #fff700; }
+  40%, 60% { opacity: 0.7; text-shadow: 0 0 2px #fff700, 0 0 4px #fff700; }
+  80% { opacity: 0.9; text-shadow: 0 0 3px #fff700, 0 0 6px #fff700; }
+}
+
+.neon-blue {
+  color: #00eaff;
+  font-family: 'Avenir Next LT Pro', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  text-shadow:
+    0 0 5px #00eaff,
+    0 0 10px #00eaff,
+    0 0 20px #00eaff,
+    0 0 40px #00eaff,
+    0 0 80px #00eaff;
+  transition: text-shadow 0.2s, color 0.2s;
+}
+.neon-blue:hover {
+  animation: neon-flicker-blue 0.7s infinite;
+}
+@keyframes neon-flicker-blue {
+  0%, 100% { opacity: 1; text-shadow: 0 0 5px #00eaff, 0 0 10px #00eaff, 0 0 20px #00eaff, 0 0 40px #00eaff, 0 0 80px #00eaff; }
+  10% { opacity: 0.8; text-shadow: 0 0 2px #00eaff, 0 0 4px #00eaff, 0 0 8px #00eaff; }
+  20% { opacity: 0.6; text-shadow: 0 0 1px #00eaff, 0 0 2px #00eaff; }
+  30%, 50%, 70% { opacity: 1; text-shadow: 0 0 5px #00eaff, 0 0 10px #00eaff, 0 0 20px #00eaff, 0 0 40px #00eaff, 0 0 80px #00eaff; }
+  40%, 60% { opacity: 0.7; text-shadow: 0 0 2px #00eaff, 0 0 4px #00eaff; }
+  80% { opacity: 0.9; text-shadow: 0 0 3px #00eaff, 0 0 6px #00eaff; }
+}
+
+.neon-pink {
+  color: #ff00cc;
+  font-family: 'Avenir Next LT Pro', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  text-shadow:
+    0 0 5px #ff00cc,
+    0 0 10px #ff00cc,
+    0 0 20px #ff00cc,
+    0 0 40px #ff00cc,
+    0 0 80px #ff00cc;
+  transition: text-shadow 0.2s, color 0.2s;
+}
+.neon-pink:hover {
+  animation: neon-flicker-pink 0.7s infinite;
+}
+@keyframes neon-flicker-pink {
+  0%, 100% { opacity: 1; text-shadow: 0 0 5px #ff00cc, 0 0 10px #ff00cc, 0 0 20px #ff00cc, 0 0 40px #ff00cc, 0 0 80px #ff00cc; }
+  10% { opacity: 0.8; text-shadow: 0 0 2px #ff00cc, 0 0 4px #ff00cc, 0 0 8px #ff00cc; }
+  20% { opacity: 0.6; text-shadow: 0 0 1px #ff00cc, 0 0 2px #ff00cc; }
+  30%, 50%, 70% { opacity: 1; text-shadow: 0 0 5px #ff00cc, 0 0 10px #ff00cc, 0 0 20px #ff00cc, 0 0 40px #ff00cc, 0 0 80px #ff00cc; }
+  40%, 60% { opacity: 0.7; text-shadow: 0 0 2px #ff00cc, 0 0 4px #ff00cc; }
+  80% { opacity: 0.9; text-shadow: 0 0 3px #ff00cc, 0 0 6px #ff00cc; }
+}
+
+.square-separator {
+  color: #b6b6b6;
+  opacity: 0.6;
+  font-size: 1em;
+  vertical-align: middle;
+  margin: 0 0.3em;
+}
+
+.highlight-question {
+  color: #fff;
+  font-weight: 700;
+  font-style: italic;
+  padding: 0.1em 0.4em;
+  border-radius: 0.3em;
+  display: inline-block;
+  margin-top: 0.5em;
+  text-shadow: 0 0 1px #fff;
+}
+
+.shine-text {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+.shine-text::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%);
+  transform: skewX(-20deg);
+  animation: shine-move 2.5s infinite;
+}
+@keyframes shine-move {
+  0% {
+    left: -75%;
+  }
+  60% {
+    left: 125%;
+  }
+  100% {
+    left: 125%;
+  }
+}
+
+.shine-letter {
+  display: inline-block;
+  animation: shine-letter-wave 1.5s infinite;
+  color: #fff;
+  font-weight: 700;
+  font-style: italic;
+}
+@keyframes shine-letter-wave {
+  0%, 100% {
+    filter: brightness(1);
+    text-shadow: none;
+  }
+  20% {
+    filter: brightness(2.2);
+    text-shadow: 0 0 6px #fff, 0 0 12px #fff;
+  }
+  40% {
+    filter: brightness(1);
+    text-shadow: none;
+  }
+}

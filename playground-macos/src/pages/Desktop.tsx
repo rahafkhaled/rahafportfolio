@@ -258,6 +258,15 @@ export default function Desktop(props: MacActions) {
           );
         }
 
+        // If it's About, pass the openApp function
+        if (app.id === 'about') {
+          return (
+            <AppWindow key={`desktop-app-${app.id}`} {...props}>
+              {React.cloneElement(app.content as React.ReactElement, { openApp })}
+            </AppWindow>
+          );
+        }
+
         return (
           <AppWindow key={`desktop-app-${app.id}`} {...props}>
             {app.content}
