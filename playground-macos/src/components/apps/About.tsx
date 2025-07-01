@@ -129,20 +129,15 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
   const services = [
     {
       title: "Ideation and Design Thinking",
-      description: "We can come up with high-impact ideas that stem from real-world problems",
-      deliverables: ["Strategy Planning", "Model Development", "Integration", "Training"],
-      icon: "💡"
-    },
+      description: "I run ideation sessions and shape concepts to explore what new tech can actually do designing with intent. Always human-centered. Always aiming for impact."},
     {
       title: "Product management",
       description: " From zero to MVP, I manage the full arc - connecting user needs, business goals, and technical feasibility to shape products that actually make sense. Tech moves fast, but the real challenge isn't keeping up - it's making it matter.",
-      deliverables: ["VR Training", "AR Applications", "3D Modeling", "Interactive Design"],
       icon: "🥽"
     },
     {
       title: "Public speaking & Storytelling",
       description: "Being a national debate champion, whether it's a keynote, client pitch, demo, or presentation, I translate complex ideas into compelling narratives that people remember.",
-      deliverables: ["Tech Assessment", "Roadmap Creation", "Implementation", "Training"],
       icon: "🚀"
     }
   ];
@@ -163,6 +158,8 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
   const mediumStars = generateStars(30);
   const largeStars = generateStars(10);
 
+  const navStars = generateStars(8);
+
   return (
     <WindowTemplate>
       <div 
@@ -174,14 +171,14 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
       >
         {/* macOS-style Navigation Bar */}
         <motion.nav 
-          className="sticky top-0 z-50 flex justify-center w-full bg-black/40 backdrop-blur-md py-6 border-b border-white/5 relative overflow-visible"
+          className="sticky top-0 z-50 flex justify-center w-full bg-black/70 backdrop-blur-md py-6 border-b border-white/10 relative overflow-visible"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
           {/* Sparkly stars overlay for nav bar */}
           <div className="absolute inset-0 pointer-events-none z-0">
-            {generateStars(18).map((star) => (
+            {navStars.map((star) => (
               <motion.div
                 key={`nav-star-${star.id}`}
                 className="absolute rounded-full bg-white"
@@ -194,11 +191,11 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
                   filter: 'drop-shadow(0 0 6px #a855f7)'
                 }}
                 animate={{
-                  opacity: [star.alpha, star.alpha * 0.3, star.alpha],
-                  scale: [1, 1.2, 1]
+                  opacity: [star.alpha, star.alpha * 0.6, star.alpha],
+                  scale: [1, 1.1, 1]
                 }}
                 transition={{
-                  duration: star.duration * 0.7,
+                  duration: star.duration * 1.2,
                   repeat: Infinity,
                   repeatType: "reverse"
                 }}
@@ -238,6 +235,14 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
             >
              Projects
             </motion.button>
+            <motion.button 
+              onClick={() => openApp && openApp("contact")}
+              className="px-6 py-3 text-lg font-medium transition-colors text-gray-400 hover:text-white"
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.96 }}
+            >
+             Contact Me
+            </motion.button>
           </div>
         </motion.nav>
 
@@ -260,12 +265,51 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
                   transition={{ duration: 0.8 }}
                   className="space-y-4"
                 >
-                  <h1 className="text-6xl font-light tracking-tight">
-                  Rahaf Abutarbush
-                  </h1>
-                  <h2 className="text-2xl font-light text-purple-200/80">
-                    Emerging Technology <span className="square-separator">▪</span> Instinct-led Innovation <span className="square-separator">▪</span> Market Relevance
-                  </h2>
+<h1
+  style={{
+    color: '#f4f0ff',
+    textShadow: `
+      0 0 6px rgba(180, 140, 255, 0.3),
+      0 0 12px rgba(180, 140, 255, 0.25),
+      0 0 24px rgba(180, 140, 255, 0.2)
+    `,
+    fontWeight: 300,
+    letterSpacing: '-0.01em',
+    fontSize: '3.75rem'
+  }}
+>
+  Rahaf Abutarbush
+</h1>
+
+
+<div style={{
+  color: '#f4f0ff',
+  fontSize: '1.3rem',
+  fontWeight: 300,
+  display: 'flex',
+  gap: '0.5rem',
+  alignItems: 'center',
+  flexWrap: 'wrap'
+}}>
+  <span>Emerging Technology</span>
+  <span style={{
+    color: '#caa6ff',
+    textShadow: `
+      0 0 4px rgba(200, 160, 255, 0.4),
+      0 0 8px rgba(200, 160, 255, 0.3)
+    `
+  }}>▪</span>
+  <span>Instinct-led Innovation</span>
+  <span style={{
+    color: '#caa6ff',
+    textShadow: `
+      0 0 4px rgba(200, 160, 255, 0.4),
+      0 0 8px rgba(200, 160, 255, 0.3)
+    `
+  }}>▪</span>
+  <span>Market Relevance</span>
+</div>
+
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -274,9 +318,9 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
                   className="space-y-4"
                 >
                   <p className="text-lg font-light leading-relaxed text-purple-100/90">
-                    I have always been all about innovation that is lead by instincts, the intersection of technology and human experience.
+                    I have always been all about innovation that is lead by instincts, the intersection of technology and human experience. <br></br>
                     The real challenge isn't how fast technology moves, it's cutting
-                    through the noise to find what's relevant, impactful, and worth paying attention to – all while answering the fundamental question:
+                    through the noise to find what's relevant, impactful, and answering the fundamental question:
                     <br />
                     <span>
                       {"What's in it for us?".split('').map((char, i) => (
@@ -299,17 +343,22 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
         {/* Services Section */}
         <section 
           ref={servicesRef} 
-          className="py-32 px-8 relative text-white"
+          className="py-5 px-8 relative text-white"
         >
           <div className="container mx-auto">
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-4xl font-light mb-16 text-center"
-            >
-              My Areas of Expertise
-            </motion.h2>
+          <h2   style={{
+    color: '#f4f0ff',
+    textShadow: `
+      0 0 6px rgba(180, 140, 255, 0.3),
+      0 0 12px rgba(180, 140, 255, 0.25),
+      0 0 24px rgba(180, 140, 255, 0.2)
+    `,
+    fontWeight: 200,
+    letterSpacing: '-0.01em',
+    fontSize: ' 2rem',
+    textAlign: 'center'
+  }} >My Areas of Expertise</h2>
+  <br></br>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {services.map((service, index) => (
                 <motion.div
@@ -324,37 +373,21 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
                     boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
                   }}
                 >
-                  {/* Simplified background gradient overlay */}
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-pink-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  />
-                  
-                  {/* Service icon */}
-                  <motion.div 
-                    className="text-4xl mb-4 relative z-10"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {service.icon}
-                  </motion.div>
-                  
-                  <h3 className="text-xl mb-4 relative z-10">{service.title}</h3>
+                  {/* Only show title and description */}
+                  <h3   style={{
+    color: '#f4f0ff',
+    textShadow: `
+      0 0 6px rgba(180, 140, 255, 0.3),
+      0 0 12px rgba(180, 140, 255, 0.25),
+      0 0 24px rgba(180, 140, 255, 0.2)
+    `,
+    fontWeight: 200,
+    letterSpacing: '-0.01em',
+    fontSize: ' 1.55rem'
+  }} >{service.title}</h3>
+  <br></br>
+
                   <p className="text-purple-200/70 mb-6 relative z-10">{service.description}</p>
-                  <ul className="space-y-2 relative z-10">
-                    {service.deliverables.map((item, i) => (
-                      <li 
-                        key={i} 
-                        className="text-sm text-blue-300 transition-transform duration-200 group-hover:translate-x-1"
-                      >
-                        • {item}
-                      </li>
-                    ))}
-                  </ul>
-                  
-                  {/* Decorative corner */}
-                  <motion.div 
-                    className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-pink-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  />
                 </motion.div>
               ))}
             </div>

@@ -11,6 +11,7 @@ import FaceTime from "~/components/apps/FaceTime";
 import Projects from "~/components/apps/Projects";
 import Preview from "~/components/apps/Preview";
 import About from "~/components/apps/About";
+import Contact from "~/components/apps/Contact";
 
 const apps: AppsData[] = [
   {
@@ -121,6 +122,15 @@ const apps: AppsData[] = [
     desktop: false,
     img: "img/icons/github.png",
     link: "https://github.com/Renovamen/playground-macos"
+  },
+  {
+    id: "contact",
+    title: "Contact Me",
+    desktop: true,
+    width: 600,
+    height: 500,
+    img: "img/icons/mail.png",
+    content: <Contact />
   }
 ];
 

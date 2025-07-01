@@ -11,6 +11,7 @@ declare global {
   const ArtworkGallery: typeof import('./components/apps/ArtworkGallery')['default']
   const Battery: typeof import('./components/menus/Battery')['default']
   const Bear: typeof import('./components/apps/Bear')['default']
+  const Contact: typeof import('./components/apps/Contact')['default']
   const ControlCenterMenu: typeof import('./components/menus/ControlCenterMenu')['default']
   const Dock: typeof import('./components/dock/Dock')['default']
   const DockItem: typeof import('./components/dock/DockItem')['default']

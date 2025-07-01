@@ -209,7 +209,7 @@ function ArtworkGallery() {
 
   return (
     <WindowTemplate>
-      <div className="h-full w-full bg-black/30 backdrop-blur-md p-6 overflow-hidden flex flex-col">
+      <div className="h-full w-full  p-6 overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex flex-col items-center mb-4">
           <h2 className="text-3xl font-bold text-white mb-3">On Stage & In Action</h2>
@@ -258,6 +258,7 @@ function ArtworkGallery() {
                           src={artwork.image} 
                           alt={artwork.title}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       </div>
 

@@ -191,6 +191,28 @@
   80% { opacity: 0.9; text-shadow: 0 0 3px #ff00cc, 0 0 6px #ff00cc; }
 }
 
+.neon-white {
+  color: #fff;
+  font-family: 'Avenir Next LT Pro', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 8px #fff,
+    0 0 16px #fff;
+  transition: text-shadow 0.2s, color 0.2s;
+}
+.neon-white:hover {
+  animation: neon-flicker-white 0.7s infinite;
+}
+@keyframes neon-flicker-white {
+  0%, 100% { opacity: 1; text-shadow: 0 0 4px #fff, 0 0 8px #fff, 0 0 16px #fff; }
+  10% { opacity: 0.85; text-shadow: 0 0 2px #fff, 0 0 4px #fff; }
+  20% { opacity: 0.7; text-shadow: 0 0 1px #fff; }
+  30%, 50%, 70% { opacity: 1; text-shadow: 0 0 4px #fff, 0 0 8px #fff, 0 0 16px #fff; }
+  40%, 60% { opacity: 0.8; text-shadow: 0 0 2px #fff, 0 0 4px #fff; }
+  80% { opacity: 0.95; text-shadow: 0 0 3px #fff, 0 0 6px #fff; }
+}
+
 .square-separator {
   color: #b6b6b6;
   opacity: 0.6;
