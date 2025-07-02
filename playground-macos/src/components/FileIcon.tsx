@@ -88,7 +88,7 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
         <img
           src={getIconSrc()}
           alt={title}
-          className="w-24 h-28 mb-3 transition-transform duration-200"
+          className="w-24 h-28 mb-0 transition-transform duration-200"
           draggable={false}
           style={{
             transform: isDragging ? "rotate(5deg)" : "rotate(0deg)",

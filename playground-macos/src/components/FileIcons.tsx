@@ -24,7 +24,7 @@ const files: File[] = [
     title: "About Me",
     icon: "img/icons/folder.svg",
     type: "text",
-    appId: "about", // changed from terminal to about 
+    appId: "about", // changed from terminal to about
     position: { x: 40, y: 40 }
   },
   {
@@ -33,7 +33,7 @@ const files: File[] = [
     icon: "img/icons/folder.svg",
     type: "folder",
     appId: "artwork-gallery",
-    position: { x: 40, y: 240 }
+    position: { x: 200, y: 40 }
   },
   {
     id: "news",
@@ -41,7 +41,7 @@ const files: File[] = [
     icon: "img/icons/folder.svg",
     type: "folder",
     appId: "news",
-    position: { x: 40, y: 440 }
+    position: { x: 40, y: 200 }
   },
   {
     id: "projects",
@@ -49,7 +49,7 @@ const files: File[] = [
     icon: "img/icons/folder.svg",
     type: "folder",
     appId: "projects",
-    position: { x: 40, y: 640 }
+    position: { x: 200, y: 200 }
   },
   {
     id: "resume",
@@ -58,7 +58,7 @@ const files: File[] = [
     type: "pdf",
     appId: "preview",
     link: "img/ui/Rahaf-Abutarbush-Resume.pdf",
-    position: { x: 40, y: 840 }
+    position: { x: 40, y: 360 }
   }
   // Add more files as needed
 ];
@@ -66,7 +66,7 @@ const files: File[] = [
 const FileIcons: React.FC<FileIconsProps> = ({ openApp }) => {
   const handleOpen = (file: File) => {
     if (file.appId) {
-      if (file.type === 'pdf' && file.link) {
+      if (file.type === "pdf" && file.link) {
         openApp(file.appId, file.link);
       } else {
         openApp(file.appId);

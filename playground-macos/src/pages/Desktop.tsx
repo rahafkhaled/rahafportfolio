@@ -10,6 +10,7 @@ import Launchpad from "~/components/Launchpad";
 import Dock from "~/components/dock/Dock";
 import FileIcons from "~/components/FileIcons";
 import Preview from "~/components/apps/Preview";
+import AppleNotification from "~/components/AppleNotification";
 
 interface DesktopState {
   showApps: {
@@ -30,6 +31,7 @@ interface DesktopState {
   hideDockAndTopbar: boolean;
   spotlight: boolean;
   previewURL?: string;
+  showNotif: boolean;
 }
 
 export default function Desktop(props: MacActions) {
@@ -43,7 +45,8 @@ export default function Desktop(props: MacActions) {
     currentTitle: "Finder",
     hideDockAndTopbar: false,
     spotlight: false,
-    previewURL: ""
+    previewURL: "",
+    showNotif: false
   } as DesktopState);
 
   const [spotlightBtnRef, setSpotlightBtnRef] =
@@ -90,7 +93,6 @@ export default function Desktop(props: MacActions) {
   useEffect(() => {
     // Only run once on initial render when apps are loaded
     if (Object.keys(state.showApps).length > 0 && state.currentTitle === "Finder") {
-      // Open About Me
       openApp("about");
     }
   }, [state.showApps]);
@@ -195,7 +197,7 @@ export default function Desktop(props: MacActions) {
     }
 
     // If it's Preview and we have a URL, set it in the state
-    if (id === 'preview' && url) {
+    if (id === "preview" && url) {
       setState({
         ...state,
         showApps,
@@ -250,7 +252,7 @@ export default function Desktop(props: MacActions) {
         };
 
         // If it's Preview, pass the URL from the state
-        if (app.id === 'preview') {
+        if (app.id === "preview") {
           return (
             <AppWindow key={`desktop-app-${app.id}`} {...props}>
               <Preview url={state.previewURL} />
@@ -268,6 +270,16 @@ export default function Desktop(props: MacActions) {
       }
     });
   };
+
+  const openResume = () => {
+    setState({ ...state, showNotif: false });
+    openApp("preview", "img/ui/Rahaf-Abutarbush-Resume.pdf");
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => setState({ ...state, showNotif: true }), 25000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div
@@ -288,11 +300,18 @@ export default function Desktop(props: MacActions) {
         hide={state.hideDockAndTopbar}
         setSpotlightBtnRef={setSpotlightBtnRef}
       />
-
       {/* App Windows Layer */}
       <div className="window-bound absolute z-10" style={{ top: minMarginY }}>
         {renderAppWindows()}
         <FileIcons openApp={openApp} />
+        <AppleNotification
+          show={state.showNotif}
+          onClick={openResume}
+          onClose={() => setState({ ...state, showNotif: false })}
+          title="Thought Leadership"
+          message="Time to log your 3:10 AM medications"
+          icon="img/icons/typora.png"
+        />
       </div>
 
       {/* Spotlight */}
@@ -304,10 +323,8 @@ export default function Desktop(props: MacActions) {
           btnRef={spotlightBtnRef as React.RefObject<HTMLDivElement>}
         />
       )}
-
       {/* Launchpad */}
       <Launchpad show={state.showLaunchpad} toggleLaunchpad={toggleLaunchpad} />
-
       {/* Dock 
       <Dock
         open={openApp}
@@ -318,6 +335,5 @@ export default function Desktop(props: MacActions) {
       />
       */}
     </div>
-
   );
 }

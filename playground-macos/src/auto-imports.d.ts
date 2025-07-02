@@ -8,6 +8,7 @@ declare global {
   const About: typeof import('./components/apps/About')['default']
   const AppWindow: typeof import('./components/AppWindow')['default']
   const AppleMenu: typeof import('./components/menus/AppleMenu')['default']
+  const AppleNotification: typeof import('./components/AppleNotification')['default']
   const ArtworkGallery: typeof import('./components/apps/ArtworkGallery')['default']
   const Battery: typeof import('./components/menus/Battery')['default']
   const Bear: typeof import('./components/apps/Bear')['default']
