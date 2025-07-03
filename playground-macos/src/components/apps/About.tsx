@@ -128,17 +128,19 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
 
   const services = [
     {
-      title: "Ideation and Design Thinking",
-      description: "I run ideation sessions and shape concepts to explore what new tech can actually do designing with intent. Always human-centered. Always aiming for impact."},
-    {
-      title: "Product management",
-      description: " From zero to MVP, I manage the full arc - connecting user needs, business goals, and technical feasibility to shape products that actually make sense. Tech moves fast, but the real challenge isn't keeping up - it's making it matter.",
-      icon: "🥽"
+      title: "Design Thinking",
+      description: "I lead ideation sessions that push technology beyond the buzzwords. It's not just about using the latest tools, it's about applying them with intent.",
+      img: "/img/gallery/Ru'ya 4.jpg"
     },
     {
-      title: "Public speaking & Storytelling",
-      description: "Being a national debate champion, whether it's a keynote, client pitch, demo, or presentation, I translate complex ideas into compelling narratives that people remember.",
-      icon: "🚀"
+      title: "Product management",
+      description: "I thrive in leading product strategy and management in fast-moving spaces like emerging tech, where success isn't about racing to keep up, it's about building with purpose.",
+      img: "/img/gallery/metaverse_assembly.jpeg"
+    },
+    {
+      title: "Public speaking",
+      description: "I've always been drawn to what makes someone pay attention, or remember something after the meeting is over. Storytelling is about clarity and answering the core question: 'What's in it for us?'",
+      img: "/img/gallery/cmu_talking.jpeg"
     }
   ];
 
@@ -164,7 +166,7 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
     <WindowTemplate>
       <div 
         ref={contentRef} 
-        className="h-full w-full overflow-y-auto relative scroll-smooth bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950"
+        className="h-full w-full overflow-y-auto custom-scrollbar relative scroll-smooth bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950"
         style={{
           perspective: "1000px"
         }}
@@ -228,14 +230,6 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
              News Features
             </motion.button>
             <motion.button 
-              onClick={() => openApp && openApp("projects")}
-              className="px-6 py-3 text-lg font-medium transition-colors text-gray-400 hover:text-white"
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.96 }}
-            >
-             Projects
-            </motion.button>
-            <motion.button 
               onClick={() => openApp && openApp("contact")}
               className="px-6 py-3 text-lg font-medium transition-colors text-gray-400 hover:text-white"
               whileHover={{ scale: 1.08 }}
@@ -273,7 +267,7 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
       0 0 12px rgba(180, 140, 255, 0.25),
       0 0 24px rgba(180, 140, 255, 0.2)
     `,
-    fontWeight: 300,
+    fontWeight: 400,
     letterSpacing: '-0.01em',
     fontSize: '3.75rem'
   }}
@@ -285,7 +279,7 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
 <div style={{
   color: '#f4f0ff',
   fontSize: '1.3rem',
-  fontWeight: 300,
+  fontWeight: 400,
   display: 'flex',
   gap: '0.5rem',
   alignItems: 'center',
@@ -317,7 +311,7 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="space-y-4"
                 >
-                  <p className="text-lg font-light leading-relaxed text-purple-100/90">
+                  <p className="text-lg font-normal leading-relaxed text-purple-100/90">
                     I have always been all about innovation that is lead by instincts, the intersection of technology and human experience. <br></br>
                     The real challenge isn't how fast technology moves, it's cutting
                     through the noise to find what's relevant, impactful, and answering the fundamental question:
@@ -343,23 +337,23 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
         {/* Services Section */}
         <section 
           ref={servicesRef} 
-          className="py-5 px-8 relative text-white"
+          className="py-5 px-8 relative text-white mb-14"
         >
           <div className="container mx-auto">
-          <h2   style={{
-    color: '#f4f0ff',
-    textShadow: `
-      0 0 6px rgba(180, 140, 255, 0.3),
-      0 0 12px rgba(180, 140, 255, 0.25),
-      0 0 24px rgba(180, 140, 255, 0.2)
-    `,
-    fontWeight: 200,
-    letterSpacing: '-0.01em',
-    fontSize: ' 2rem',
-    textAlign: 'center'
-  }} >My Areas of Expertise</h2>
-  <br></br>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <h2   style={{
+              color: '#f4f0ff',
+              textShadow: `
+                0 0 6px rgba(180, 140, 255, 0.3),
+                0 0 12px rgba(180, 140, 255, 0.25),
+                0 0 24px rgba(180, 140, 255, 0.2)
+              `,
+              fontWeight: 400,
+              letterSpacing: '-0.01em',
+              fontSize: '2rem',
+              textAlign: 'center'
+            }} >Expertise</h2>
+            <br />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {services.map((service, index) => (
                 <motion.div
                   key={index}
@@ -367,110 +361,164 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white/5 backdrop-blur-lg rounded-xl p-8 border border-purple-500/20 relative overflow-hidden group hover:bg-white/10 transition-all duration-300"
-                  whileHover={{ 
+                  className="bg-white/10 shadow-lg backdrop-blur-lg rounded-xl p-10 border border-purple-400/20 relative overflow-hidden group hover:bg-white/20 transition-all duration-300"
+                  whileHover={{
                     y: -5,
                     boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
                   }}
                 >
-                  {/* Only show title and description */}
-                  <h3   style={{
-    color: '#f4f0ff',
-    textShadow: `
-      0 0 6px rgba(180, 140, 255, 0.3),
-      0 0 12px rgba(180, 140, 255, 0.25),
-      0 0 24px rgba(180, 140, 255, 0.2)
-    `,
-    fontWeight: 200,
-    letterSpacing: '-0.01em',
-    fontSize: ' 1.55rem'
-  }} >{service.title}</h3>
-  <br></br>
-
-                  <p className="text-purple-200/70 mb-6 relative z-10">{service.description}</p>
+                  <h3 className="text-xl font-semibold mb-6 text-center" style={{
+                    color: '#f4f0ff',
+                    textShadow: `
+                      0 0 6px rgba(180, 140, 255, 0.3),
+                      0 0 12px rgba(180, 140, 255, 0.25),
+                      0 0 24px rgba(180, 140, 255, 0.2)
+                    `                  }}>
+                    {service.title}
+                  </h3>
+                  <img src={service.img} alt={service.title} className="w-full h-40 object-cover rounded-lg shadow mb-4" />
+                  <p className="text-purple-200/80 text-lg leading-[2]">{service.description}</p>
                 </motion.div>
               ))}
             </div>
           </div>
         </section>
 
+        {/* Latest Release Section */}
+        <section className="py-12 px-6 relative text-white mb-14">
+          <div className="container mx-auto flex flex-col items-center justify-center text-center">
+            <h2
+              style={{
+                color: '#f4f0ff',
+                textShadow: `
+                  0 0 6px rgba(180, 140, 255, 0.3),
+                  0 0 12px rgba(180, 140, 255, 0.25),
+                  0 0 24px rgba(180, 140, 255, 0.2)
+                `,
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
+                fontSize: '2rem',
+                textAlign: 'center'
+              }}
+              className="mb-4"
+            >
+              Latest Release
+            </h2>
+            <div className="w-full max-w-4xl mx-auto mb-12">
+              <div className="bg-white/10 shadow-lg backdrop-blur-lg rounded-2xl border border-purple-400/20 flex flex-col md:flex-row overflow-hidden hover:bg-white/20 transition-all duration-300">
+                {/* Image */}
+                <div className="md:w-1/3 w-full h-60 md:h-auto flex-shrink-0">
+                  <img
+                    src="/img/gallery/ai-release-cover.jpg"
+                    alt="The evolving AI landscape"
+                    className="object-cover w-full h-full md:rounded-l-2xl"
+                  />
+                </div>
+                {/* Content */}
+                <div className="flex-1 flex flex-col justify-between p-8 text-left relative">
+                  <div>
+                    <h3 className="text-2xl font-bold mb-4 text-white" style={{
+                      color: '#f4f0ff',
+                      textShadow: `
+                        0 0 6px rgba(180, 140, 255, 0.3),
+                        0 0 12px rgba(180, 140, 255, 0.25),
+                        0 0 24px rgba(180, 140, 255, 0.2)
+                      `
+                    }}>
+                      Emerging Technology Trends in the Middle East 2025
+                    </h3>
+                    <p className="text-purple-100 text-lg leading-relaxed mb-8">
+                      The research and writing I did for the Emerging Technology Trends in the Middle East 2025 report sharpened how I think about tech's velocity in the Middle East. Not just <span className="font-semibold text-purple-200">where</span> it's heading, but what it demands from strategy today. It pushed <span className="font-semibold text-purple-200">me</span> to think critically about how trends like AI, immersive tech, and quantum translate into tangible strategies for governments and businesses navigating real transformation.
+                    </p>
+                  </div>
+                  <div className="flex justify-end items-end w-full mt-auto">
+                    <motion.a
+                      href="https://www.pwc.com/m1/en/publications/2025/docs/emerging-technology-trends-in-the-middle-east-2025.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.08, boxShadow: '0 0 24px #a855f7' }}
+                      className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-white/10 border border-purple-400/40 text-purple-200 font-semibold shadow-lg hover:bg-white/20 transition-all text-base"
+                    >
+                      <span className="i-fa-solid:download text-lg" />
+                      Download Report
+                    </motion.a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Contact Section */}
-        <section ref={contactRef} className="py-24 px-8 relative text-white">
-          <div className="container mx-auto text-center">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-3xl font-light mb-8"
+        <section ref={contactRef} className="pt-8 pb-14 px-8 relative text-white">
+          <div className="container mx-auto flex flex-col items-center justify-center text-center">
+            <h2
+              className="mb-4"
+              style={{
+                color: '#f4f0ff',
+                textShadow: `
+                  0 0 6px rgba(180, 140, 255, 0.3),
+                  0 0 12px rgba(180, 140, 255, 0.25),
+                  0 0 24px rgba(180, 140, 255, 0.2)
+                `,
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
+                fontSize: '2rem',
+                textAlign: 'center'
+              }}
             >
               Let's Connect
-            </motion.h2>
+            </h2>
             <motion.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="text-purple-200/70 mb-12 max-w-2xl mx-auto"
+              className="text-purple-200/80 mb-4 max-w-2xl mx-auto text-lg font-light"
             >
-              Interested in collaborating or learning more about my work in emerging technologies?
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="flex justify-center space-x-6"
+              className="flex justify-center space-x-8 mb-8"
             >
               <motion.a
-                href="#"
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                className="size-12 flex items-center justify-center rounded-full bg-white/5 border border-purple-500/30 text-purple-300 hover:bg-white/10 transition-colors relative"
+                href="https://www.linkedin.com/in/rahaf-abutarbush/"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.15, boxShadow: "0 0 24px #a855f7" }}
+                className="size-14 flex items-center justify-center rounded-full bg-white/10 border border-purple-400/40 text-purple-200 hover:bg-white/20 transition-all shadow-lg backdrop-blur-lg relative"
               >
-                {/* Animated glow effect on hover */}
-                <motion.div 
-                  className="absolute inset-0 rounded-full"
-                  initial={{ opacity: 0 }}
-                  whileHover={{ 
-                    opacity: 1,
-                    boxShadow: '0 0 15px 5px rgba(168, 85, 247, 0.3)'
-                  }}
-                />
-                <span className="i-fa-brands:linkedin text-xl relative z-10" />
+                <span className="i-fa-brands:linkedin text-2xl z-10" />
+                {/* Always-on subtle glow */}
+                <span className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: '0 0 12px 2px #a855f744', opacity: 0.5 }} />
               </motion.a>
               <motion.a
-                href="#"
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                className="size-12 flex items-center justify-center rounded-full bg-white/5 border border-purple-500/30 text-purple-300 hover:bg-white/10 transition-colors relative"
+                href="https://substack.com/@rahaf906630/posts"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.15, boxShadow: "0 0 24px #a855f7" }}
+                className="size-14 flex items-center justify-center rounded-full bg-white/10 border border-purple-400/40 text-purple-200 hover:bg-white/20 transition-all shadow-lg backdrop-blur-lg relative"
               >
-                {/* Animated glow effect on hover */}
-                <motion.div 
-                  className="absolute inset-0 rounded-full"
-                  initial={{ opacity: 0 }}
-                  whileHover={{ 
-                    opacity: 1,
-                    boxShadow: '0 0 15px 5px rgba(168, 85, 247, 0.3)'
-                  }}
-                />
-                <span className="i-fa-brands:github text-xl relative z-10" />
+                <span className="i-simple-icons:substack text-2xl z-10" />
+                <span className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: '0 0 12px 2px #a855f744', opacity: 0.5 }} />
               </motion.a>
               <motion.a
-                href="#"
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                className="size-12 flex items-center justify-center rounded-full bg-white/5 border border-purple-500/30 text-purple-300 hover:bg-white/10 transition-colors relative"
+                href="mailto:rahaf.k.abutarbush@gmail.com"
+                whileHover={{ scale: 1.15, boxShadow: "0 0 24px #a855f7" }}
+                className="size-14 flex items-center justify-center rounded-full bg-white/10 border border-purple-400/40 text-purple-200 hover:bg-white/20 transition-all shadow-lg backdrop-blur-lg relative"
               >
-                {/* Animated glow effect on hover */}
-                <motion.div 
-                  className="absolute inset-0 rounded-full"
-                  initial={{ opacity: 0 }}
-                  whileHover={{ 
-                    opacity: 1,
-                    boxShadow: '0 0 15px 5px rgba(168, 85, 247, 0.3)'
-                  }}
-                />
-                <span className="i-fa-solid:envelope text-xl relative z-10" />
+                <span className="i-fa-solid:envelope text-2xl z-10" />
+                <span className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: '0 0 12px 2px #a855f744', opacity: 0.5 }} />
               </motion.a>
             </motion.div>
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: '0 0 15px 5px rgba(168, 85, 247, 0.3)' }}
+              className="mt-4 px-8 py-3 rounded-full bg-white/10 border border-purple-400/20 text-purple-200 font-semibold shadow-lg hover:bg-white/20 transition"
+              onClick={() => openApp && openApp('contact')}
+            >
+              Send me a message
+            </motion.button>
           </div>
         </section>
       </div>
@@ -478,4 +526,4 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
   );
 };
 
-export default About; 
+export default About;

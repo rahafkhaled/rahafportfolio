@@ -40,15 +40,6 @@ const apps: AppsData[] = [
     content: <Preview />
   },
   {
-    id: "projects",
-    title: "Projects",
-    desktop: true,
-    width: 1200,
-    height: 800,
-    img: "img/icons/folder.svg",
-    content: <Projects />
-  },
-  {
     id: "news",
     title: "News",
     desktop: true,
