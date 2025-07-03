@@ -214,6 +214,9 @@ const Window = (props: WindowProps) => {
         <span className="font-semibold text-white">{props.title}</span>
       </div>
       <div className="innner-window w-full overflow-y-hidden">{children}</div>
+      <footer className="w-full text-center py-4 text-purple-300 text-sm opacity-70">
+        &copy; {new Date().getFullYear()} Rahaf Abutarbush. All rights reserved.
+      </footer>
     </Rnd>
   );
 };

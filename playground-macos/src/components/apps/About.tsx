@@ -2,7 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, useAnimation, easeOut } from "framer-motion";
 import WindowTemplate from "../WindowTemplate";
 
-const About: React.FC = () => {
+interface AboutProps {
+  openApp?: (id: string) => void;
+}
+
+const About: React.FC<AboutProps> = ({ openApp }) => {
   const [activeSection, setActiveSection] = useState("hero");
   const [hoveredLetter, setHoveredLetter] = useState<number | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -13,7 +17,6 @@ const About: React.FC = () => {
   // Refs for each section
   const heroRef = useRef<HTMLElement>(null);
   const servicesRef = useRef<HTMLElement>(null);
-  const portfolioRef = useRef<HTMLElement>(null);
   const contactRef = useRef<HTMLElement>(null);
 
   // Motion values for the parallax effect
@@ -72,7 +75,6 @@ const About: React.FC = () => {
       const sections = [
         { ref: heroRef, id: "hero" },
         { ref: servicesRef, id: "services" },
-        { ref: portfolioRef, id: "portfolio" },
         { ref: contactRef, id: "contact" }
       ];
       
@@ -123,61 +125,23 @@ const About: React.FC = () => {
   const letters = name.split('');
   const numLetters = letters.length;
 
-  const stats = [
-    { number: "5+", label: "Years Experience" },
-    { number: "50+", label: "Projects Delivered" },
-    { number: "3", label: "Countries" },
-    { number: "1000+", label: "People Impacted" }
-  ];
 
   const services = [
     {
-      title: "Ideation and Design Thinking",
-      description: "We can come up with high-impact ideas that stem from real-world problems",
-      deliverables: ["Strategy Planning", "Model Development", "Integration", "Training"],
-      icon: "💡"
+      title: "Design Thinking",
+      description: "I lead ideation sessions that push technology beyond the buzzwords. It's not just about using the latest tools, it's about applying them with intent.",
+      img: "/img/gallery/Ru'ya 4.jpg"
     },
     {
       title: "Product management",
-      description: " From zero to MVP, I manage the full arc - connecting user needs, business goals, and technical feasibility to shape products that actually make sense. Tech moves fast, but the real challenge isn't keeping up - it's making it matter.",
-      deliverables: ["VR Training", "AR Applications", "3D Modeling", "Interactive Design"],
-      icon: "🥽"
+      description: "I thrive in leading product strategy and management in fast-moving spaces like emerging tech, where success isn't about racing to keep up, it's about building with purpose.",
+      img: "/img/gallery/metaverse_assembly.jpeg"
     },
     {
-      title: "Public speaking & Storytelling",
-      description: "Being a national debate champion, whether it's a keynote, client pitch, demo, or presentation, I translate complex ideas into compelling narratives that people remember.",
-      deliverables: ["Tech Assessment", "Roadmap Creation", "Implementation", "Training"],
-      icon: "🚀"
+      title: "Public speaking",
+      description: "I've always been drawn to what makes someone pay attention, or remember something after the meeting is over. Storytelling is about clarity and answering the core question: 'What's in it for us?'",
+      img: "/img/gallery/cmu_talking.jpeg"
     }
-  ];
-
-  const portfolio = [
-    {
-      title: "Emerging Technolgies in the Middle East 2025",
-      category: "AI Development",
-      image: "img/gallery/project1.jpg"
-    },
-    {
-      title: "Ideation Workshops",
-      category: "Extended Reality",
-      image: "img/gallery/project2.jpg"
-    },
-    {
-      title: "Smart Cities and Emerging Technologies",
-      category: "Innovation",
-      image: "img/gallery/project3.jpg"
-    },
-    {
-      title: "National Debates",
-      category: "Innovation",
-      image: "img/gallery/project3.jpg"
-    },
-    {
-      title: "Executive producer and host of TEDx",
-      category: "Innovation",
-      image: "img/gallery/project3.jpg"
-    }
-
   ];
 
   // Generate sparkly stars for the background
@@ -196,25 +160,27 @@ const About: React.FC = () => {
   const mediumStars = generateStars(30);
   const largeStars = generateStars(10);
 
+  const navStars = generateStars(8);
+
   return (
     <WindowTemplate>
       <div 
         ref={contentRef} 
-        className="h-full w-full overflow-y-auto relative scroll-smooth bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950"
+        className="h-full w-full overflow-y-auto custom-scrollbar relative scroll-smooth bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950"
         style={{
           perspective: "1000px"
         }}
       >
         {/* macOS-style Navigation Bar */}
         <motion.nav 
-          className="sticky top-0 z-50 flex justify-center w-full bg-black/40 backdrop-blur-md py-6 border-b border-white/5 relative overflow-visible"
+          className="sticky top-0 z-50 flex justify-center w-full bg-black/70 backdrop-blur-md py-6 border-b border-white/10 relative overflow-visible"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
           {/* Sparkly stars overlay for nav bar */}
           <div className="absolute inset-0 pointer-events-none z-0">
-            {generateStars(18).map((star) => (
+            {navStars.map((star) => (
               <motion.div
                 key={`nav-star-${star.id}`}
                 className="absolute rounded-full bg-white"
@@ -227,11 +193,11 @@ const About: React.FC = () => {
                   filter: 'drop-shadow(0 0 6px #a855f7)'
                 }}
                 animate={{
-                  opacity: [star.alpha, star.alpha * 0.3, star.alpha],
-                  scale: [1, 1.2, 1]
+                  opacity: [star.alpha, star.alpha * 0.6, star.alpha],
+                  scale: [1, 1.1, 1]
                 }}
                 transition={{
-                  duration: star.duration * 0.7,
+                  duration: star.duration * 1.2,
                   repeat: Infinity,
                   repeatType: "reverse"
                 }}
@@ -248,28 +214,28 @@ const About: React.FC = () => {
               About
             </motion.button>
             <motion.button 
-              onClick={() => scrollToSection(servicesRef)}
-              className={`px-6 py-3 text-lg font-medium transition-colors ${activeSection === "services" ? "text-white" : "text-gray-400 hover:text-white"}`}
+              onClick={() => openApp && openApp("artwork-gallery")}
+              className="px-6 py-3 text-lg font-medium transition-colors text-gray-400 hover:text-white"
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.96 }}
             >
-              Services
+              Events & Engagements
             </motion.button>
             <motion.button 
-              onClick={() => scrollToSection(portfolioRef)}
-              className={`px-6 py-3 text-lg font-medium transition-colors ${activeSection === "portfolio" ? "text-white" : "text-gray-400 hover:text-white"}`}
+              onClick={() => openApp && openApp("news")}
+              className="px-6 py-3 text-lg font-medium transition-colors text-gray-400 hover:text-white"
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.96 }}
             >
-              Work
+             News Features
             </motion.button>
             <motion.button 
-              onClick={() => scrollToSection(contactRef)}
-              className={`px-6 py-3 text-lg font-medium transition-colors ${activeSection === "contact" ? "text-white" : "text-gray-400 hover:text-white"}`}
+              onClick={() => openApp && openApp("contact")}
+              className="px-6 py-3 text-lg font-medium transition-colors text-gray-400 hover:text-white"
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.96 }}
             >
-              Contact
+             Contact Me
             </motion.button>
           </div>
         </motion.nav>
@@ -281,6 +247,8 @@ const About: React.FC = () => {
         >
           {/* Background gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-pink-900/20" />
+          {/* Soft gradient fade at bottom to blend sections */}
+          <div className="pointer-events-none absolute bottom-0 left-0 w-full h-32 z-20" style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, #1a1333 100%)'}} />
           {/* Content container */}
           <div className="relative flex items-center justify-center w-full">
             <div className="container mx-auto px-8">
@@ -291,12 +259,51 @@ const About: React.FC = () => {
                   transition={{ duration: 0.8 }}
                   className="space-y-4"
                 >
-                  <h1 className="text-6xl font-light tracking-tight">
-                    Hi, I'm <span className="text-purple-300">Rahaf</span>
-                  </h1>
-                  <h2 className="text-2xl font-light text-purple-200/80">
-                    Emerging Technology Innovation Lead
-                  </h2>
+<h1
+  style={{
+    color: '#f4f0ff',
+    textShadow: `
+      0 0 6px rgba(180, 140, 255, 0.3),
+      0 0 12px rgba(180, 140, 255, 0.25),
+      0 0 24px rgba(180, 140, 255, 0.2)
+    `,
+    fontWeight: 400,
+    letterSpacing: '-0.01em',
+    fontSize: '3.75rem'
+  }}
+>
+  Rahaf Abutarbush
+</h1>
+
+
+<div style={{
+  color: '#f4f0ff',
+  fontSize: '1.3rem',
+  fontWeight: 400,
+  display: 'flex',
+  gap: '0.5rem',
+  alignItems: 'center',
+  flexWrap: 'wrap'
+}}>
+  <span>Emerging Technology</span>
+  <span style={{
+    color: '#caa6ff',
+    textShadow: `
+      0 0 4px rgba(200, 160, 255, 0.4),
+      0 0 8px rgba(200, 160, 255, 0.3)
+    `
+  }}>▪</span>
+  <span>Instinct-led Innovation</span>
+  <span style={{
+    color: '#caa6ff',
+    textShadow: `
+      0 0 4px rgba(200, 160, 255, 0.4),
+      0 0 8px rgba(200, 160, 255, 0.3)
+    `
+  }}>▪</span>
+  <span>Market Relevance</span>
+</div>
+
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -304,82 +311,49 @@ const About: React.FC = () => {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="space-y-4"
                 >
-                  <p className="text-lg font-light leading-relaxed text-purple-100/90">
-                    I've always been drawn to the intersection of technology and human experience.
-                    Working in emerging tech, I've realized that the real challenge isn't how fast technology moves—it's cutting
-                    through the noise to find what's relevant, impactful, and worth paying attention to 
-                    - all while answering the fundamental question: 'What's in it for us?'
+                  <p className="text-lg font-normal leading-relaxed text-purple-100/90">
+                    I have always been all about innovation that is lead by instincts, the intersection of technology and human experience. <br></br>
+                    The real challenge isn't how fast technology moves, it's cutting
+                    through the noise to find what's relevant, impactful, and answering the fundamental question:
+                    <br />
+                    <span>
+                      {"What's in it for us?".split('').map((char, i) => (
+                        <span
+                          key={i}
+                          className="shine-letter"
+                          style={{ animationDelay: `${i * 0.07}s` }}
+                        >
+                          {char === ' ' ? '\u00A0' : char}
+                        </span>
+                      ))}
+                    </span>
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-6 py-3 bg-purple-500/20 hover:bg-purple-500/30 rounded-full text-sm font-light transition-colors"
-                    >
-                      View My Work
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-6 py-3 border border-purple-500/30 hover:border-purple-500/50 rounded-full text-sm font-light transition-colors"
-                    >
-                      Contact Me
-                    </motion.button>
-                  </div>
                 </motion.div>
               </div>
             </div>
           </div>
-
-          {/* Scroll indicator */}
-          <motion.div
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 cursor-pointer"
-            animate={{ 
-              y: [0, 10, 0],
-              opacity: [0.5, 1, 0.5]
-            }}
-            transition={{ 
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            onClick={() => scrollToSection(servicesRef)}
-            whileHover={{ scale: 1.2, color: "#fff" }}
-          >
-            <svg 
-              width="40" 
-              height="40" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-              className="rotate-180"
-            >
-              <path 
-                d="M12 5L12 19M12 19L5 12M12 19L19 12" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              />
-            </svg>
-          </motion.div>
         </section>
 
         {/* Services Section */}
         <section 
           ref={servicesRef} 
-          className="py-32 px-8 relative text-white"
+          className="py-5 px-8 relative text-white mb-14"
         >
           <div className="container mx-auto">
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-4xl font-light mb-16 text-center"
-            >
-              My Areas of Expertise
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <h2   style={{
+              color: '#f4f0ff',
+              textShadow: `
+                0 0 6px rgba(180, 140, 255, 0.3),
+                0 0 12px rgba(180, 140, 255, 0.25),
+                0 0 24px rgba(180, 140, 255, 0.2)
+              `,
+              fontWeight: 400,
+              letterSpacing: '-0.01em',
+              fontSize: '2rem',
+              textAlign: 'center'
+            }} >Expertise</h2>
+            <br />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {services.map((service, index) => (
                 <motion.div
                   key={index}
@@ -387,202 +361,164 @@ const About: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white/5 backdrop-blur-lg rounded-xl p-8 border border-purple-500/20 relative overflow-hidden group"
-                  whileHover={{ 
+                  className="bg-white/10 shadow-lg backdrop-blur-lg rounded-xl p-10 border border-purple-400/20 relative overflow-hidden group hover:bg-white/20 transition-all duration-300"
+                  whileHover={{
                     y: -5,
                     boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
                   }}
                 >
-                  {/* Background gradient that moves on hover */}
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-transparent to-pink-900/30 opacity-0 group-hover:opacity-100"
-                    style={{ 
-                      translateX: useTransform(mouseX, [0, 1], [-20, 20]),
-                      translateY: useTransform(mouseY, [0, 1], [-20, 20])
-                    }}
-                  />
-                  
-                  {/* Service icon */}
-                  <motion.div 
-                    className="text-4xl mb-4"
-                    initial={{ scale: 1 }}
-                    whileHover={{ scale: 1.2, rotate: 5 }}
-                  >
-                    {service.icon}
-                  </motion.div>
-                  
-                  <h3 className="text-xl mb-4 relative z-10">{service.title}</h3>
-                  <p className="text-purple-200/70 mb-6 relative z-10">{service.description}</p>
-                  <ul className="space-y-2 relative z-10">
-                    {service.deliverables.map((item, i) => (
-                      <motion.li 
-                        key={i} 
-                        className="text-sm text-blue-300"
-                        initial={{ x: 0 }}
-                        whileHover={{ x: 5 }}
-                      >
-                        • {item}
-                      </motion.li>
-                    ))}
-                  </ul>
-                  
-                  {/* Decorative corner */}
-                  <motion.div 
-                    className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-pink-500/30 to-transparent"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                  />
+                  <h3 className="text-xl font-semibold mb-6 text-center" style={{
+                    color: '#f4f0ff',
+                    textShadow: `
+                      0 0 6px rgba(180, 140, 255, 0.3),
+                      0 0 12px rgba(180, 140, 255, 0.25),
+                      0 0 24px rgba(180, 140, 255, 0.2)
+                    `                  }}>
+                    {service.title}
+                  </h3>
+                  <img src={service.img} alt={service.title} className="w-full h-40 object-cover rounded-lg shadow mb-4" />
+                  <p className="text-purple-200/80 text-lg leading-[2]">{service.description}</p>
                 </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Portfolio Section */}
-        <section ref={portfolioRef} className="py-24 px-8 bg-purple-950/30 backdrop-blur-sm relative text-white">
-          <div className="container mx-auto">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-3xl font-light mb-16"
+        {/* Latest Release Section */}
+        <section className="py-12 px-6 relative text-white mb-14">
+          <div className="container mx-auto flex flex-col items-center justify-center text-center">
+            <h2
+              style={{
+                color: '#f4f0ff',
+                textShadow: `
+                  0 0 6px rgba(180, 140, 255, 0.3),
+                  0 0 12px rgba(180, 140, 255, 0.25),
+                  0 0 24px rgba(180, 140, 255, 0.2)
+                `,
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
+                fontSize: '2rem',
+                textAlign: 'center'
+              }}
+              className="mb-4"
             >
-              Featured Work
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {portfolio.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="group relative aspect-[4/3] rounded-xl overflow-hidden"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-t from-purple-950/80 via-black/40 to-transparent z-10"
-                    whileHover={{ opacity: 0.7 }}
-                    transition={{ duration: 0.2 }}
+              Latest Release
+            </h2>
+            <div className="w-full max-w-4xl mx-auto mb-12">
+              <div className="bg-white/10 shadow-lg backdrop-blur-lg rounded-2xl border border-purple-400/20 flex flex-col md:flex-row overflow-hidden hover:bg-white/20 transition-all duration-300">
+                {/* Image */}
+                <div className="md:w-1/3 w-full h-60 md:h-auto flex-shrink-0">
+                  <img
+                    src="/img/gallery/ai-release-cover.jpg"
+                    alt="The evolving AI landscape"
+                    className="object-cover w-full h-full md:rounded-l-2xl"
                   />
-                  <motion.img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover"
-                    initial={{ scale: 1 }}
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.6 }}
-                  />
-                  <motion.div 
-                    className="absolute bottom-0 left-0 p-6 z-20"
-                    initial={{ y: 0 }}
-                    whileHover={{ y: -5 }}
-                  >
-                    <motion.div 
-                      className="text-sm text-purple-300 mb-2"
-                      initial={{ x: 0 }}
-                      whileHover={{ x: 3 }}
+                </div>
+                {/* Content */}
+                <div className="flex-1 flex flex-col justify-between p-8 text-left relative">
+                  <div>
+                    <h3 className="text-2xl font-bold mb-4 text-white" style={{
+                      color: '#f4f0ff',
+                      textShadow: `
+                        0 0 6px rgba(180, 140, 255, 0.3),
+                        0 0 12px rgba(180, 140, 255, 0.25),
+                        0 0 24px rgba(180, 140, 255, 0.2)
+                      `
+                    }}>
+                      Emerging Technology Trends in the Middle East 2025
+                    </h3>
+                    <p className="text-purple-100 text-lg leading-relaxed mb-8">
+                      The research and writing I did for the Emerging Technology Trends in the Middle East 2025 report sharpened how I think about tech's velocity in the Middle East. Not just <span className="font-semibold text-purple-200">where</span> it's heading, but what it demands from strategy today. It pushed <span className="font-semibold text-purple-200">me</span> to think critically about how trends like AI, immersive tech, and quantum translate into tangible strategies for governments and businesses navigating real transformation.
+                    </p>
+                  </div>
+                  <div className="flex justify-end items-end w-full mt-auto">
+                    <motion.a
+                      href="https://www.pwc.com/m1/en/publications/2025/docs/emerging-technology-trends-in-the-middle-east-2025.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.08, boxShadow: '0 0 24px #a855f7' }}
+                      className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-white/10 border border-purple-400/40 text-purple-200 font-semibold shadow-lg hover:bg-white/20 transition-all text-base"
                     >
-                      {item.category}
-                    </motion.div>
-                    <motion.h3 
-                      className="text-xl"
-                      initial={{ x: 0 }}
-                      whileHover={{ x: 3 }}
-                    >
-                      {item.title}
-                    </motion.h3>
-                  </motion.div>
-                  
-                  {/* Animated overlay on hover */}
-                  <motion.div 
-                    className="absolute inset-0 border-2 border-purple-500/0 rounded-xl z-10"
-                    whileHover={{ borderColor: "rgba(168, 85, 247, 0.3)" }}
-                    transition={{ duration: 0.2 }}
-                  />
-                </motion.div>
-              ))}
+                      <span className="i-fa-solid:download text-lg" />
+                      Download Report
+                    </motion.a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Contact Section */}
-        <section ref={contactRef} className="py-24 px-8 relative text-white">
-          <div className="container mx-auto text-center">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-3xl font-light mb-8"
+        <section ref={contactRef} className="pt-8 pb-14 px-8 relative text-white">
+          <div className="container mx-auto flex flex-col items-center justify-center text-center">
+            <h2
+              className="mb-4"
+              style={{
+                color: '#f4f0ff',
+                textShadow: `
+                  0 0 6px rgba(180, 140, 255, 0.3),
+                  0 0 12px rgba(180, 140, 255, 0.25),
+                  0 0 24px rgba(180, 140, 255, 0.2)
+                `,
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
+                fontSize: '2rem',
+                textAlign: 'center'
+              }}
             >
               Let's Connect
-            </motion.h2>
+            </h2>
             <motion.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="text-purple-200/70 mb-12 max-w-2xl mx-auto"
+              className="text-purple-200/80 mb-4 max-w-2xl mx-auto text-lg font-light"
             >
-              Interested in collaborating or learning more about my work in emerging technologies?
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="flex justify-center space-x-6"
+              className="flex justify-center space-x-8 mb-8"
             >
               <motion.a
-                href="#"
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                className="size-12 flex items-center justify-center rounded-full bg-white/5 border border-purple-500/30 text-purple-300 hover:bg-white/10 transition-colors relative"
+                href="https://www.linkedin.com/in/rahaf-abutarbush/"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.15, boxShadow: "0 0 24px #a855f7" }}
+                className="size-14 flex items-center justify-center rounded-full bg-white/10 border border-purple-400/40 text-purple-200 hover:bg-white/20 transition-all shadow-lg backdrop-blur-lg relative"
               >
-                {/* Animated glow effect on hover */}
-                <motion.div 
-                  className="absolute inset-0 rounded-full"
-                  initial={{ opacity: 0 }}
-                  whileHover={{ 
-                    opacity: 1,
-                    boxShadow: '0 0 15px 5px rgba(168, 85, 247, 0.3)'
-                  }}
-                />
-                <span className="i-fa-brands:linkedin text-xl relative z-10" />
+                <span className="i-fa-brands:linkedin text-2xl z-10" />
+                {/* Always-on subtle glow */}
+                <span className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: '0 0 12px 2px #a855f744', opacity: 0.5 }} />
               </motion.a>
               <motion.a
-                href="#"
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                className="size-12 flex items-center justify-center rounded-full bg-white/5 border border-purple-500/30 text-purple-300 hover:bg-white/10 transition-colors relative"
+                href="https://substack.com/@rahaf906630/posts"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.15, boxShadow: "0 0 24px #a855f7" }}
+                className="size-14 flex items-center justify-center rounded-full bg-white/10 border border-purple-400/40 text-purple-200 hover:bg-white/20 transition-all shadow-lg backdrop-blur-lg relative"
               >
-                {/* Animated glow effect on hover */}
-                <motion.div 
-                  className="absolute inset-0 rounded-full"
-                  initial={{ opacity: 0 }}
-                  whileHover={{ 
-                    opacity: 1,
-                    boxShadow: '0 0 15px 5px rgba(168, 85, 247, 0.3)'
-                  }}
-                />
-                <span className="i-fa-brands:github text-xl relative z-10" />
+                <span className="i-simple-icons:substack text-2xl z-10" />
+                <span className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: '0 0 12px 2px #a855f744', opacity: 0.5 }} />
               </motion.a>
               <motion.a
-                href="#"
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                className="size-12 flex items-center justify-center rounded-full bg-white/5 border border-purple-500/30 text-purple-300 hover:bg-white/10 transition-colors relative"
+                href="mailto:rahaf.k.abutarbush@gmail.com"
+                whileHover={{ scale: 1.15, boxShadow: "0 0 24px #a855f7" }}
+                className="size-14 flex items-center justify-center rounded-full bg-white/10 border border-purple-400/40 text-purple-200 hover:bg-white/20 transition-all shadow-lg backdrop-blur-lg relative"
               >
-                {/* Animated glow effect on hover */}
-                <motion.div 
-                  className="absolute inset-0 rounded-full"
-                  initial={{ opacity: 0 }}
-                  whileHover={{ 
-                    opacity: 1,
-                    boxShadow: '0 0 15px 5px rgba(168, 85, 247, 0.3)'
-                  }}
-                />
-                <span className="i-fa-solid:envelope text-xl relative z-10" />
+                <span className="i-fa-solid:envelope text-2xl z-10" />
+                <span className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: '0 0 12px 2px #a855f744', opacity: 0.5 }} />
               </motion.a>
             </motion.div>
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: '0 0 15px 5px rgba(168, 85, 247, 0.3)' }}
+              className="mt-4 px-8 py-3 rounded-full bg-white/10 border border-purple-400/20 text-purple-200 font-semibold shadow-lg hover:bg-white/20 transition"
+              onClick={() => openApp && openApp('contact')}
+            >
+              Send me a message
+            </motion.button>
           </div>
         </section>
       </div>
@@ -590,4 +526,4 @@ const About: React.FC = () => {
   );
 };
 
-export default About; 
+export default About;

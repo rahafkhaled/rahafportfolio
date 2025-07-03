@@ -173,7 +173,7 @@ const TopBar = (props: TopBarProps) => {
           onClick={toggleAppleMenu}
           ref={appleBtnRef}
         >
-          <span className="i-ri:apple-fill text-base" />
+          <img src="/img/ui/rk-logo.png" alt="RK Logo" style={{ height: 20, width: 24, objectFit: 'contain', display: 'block' }} />
         </TopBarItem>
         <TopBarItem
           className="font-semibold px-2"

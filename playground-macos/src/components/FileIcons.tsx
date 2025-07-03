@@ -44,21 +44,13 @@ const files: File[] = [
     position: { x: 40, y: 200 }
   },
   {
-    id: "projects",
-    title: "Projects",
-    icon: "img/icons/folder.svg",
-    type: "folder",
-    appId: "projects",
-    position: { x: 200, y: 200 }
-  },
-  {
     id: "resume",
     title: "Resume",
     icon: "img/icons/resume1.png",
     type: "pdf",
     appId: "preview",
     link: "img/ui/Rahaf-Abutarbush-Resume.pdf",
-    position: { x: 40, y: 360 }
+    position: { x: 40, y: 640 }
   }
   // Add more files as needed
 ];

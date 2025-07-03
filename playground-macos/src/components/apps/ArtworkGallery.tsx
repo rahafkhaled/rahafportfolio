@@ -1,11 +1,16 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import React, { useRef, useState, useEffect, LegacyRef } from "react";
+import React, { useRef, useState, useEffect, LegacyRef, useCallback } from "react";
 import { appBarHeight } from "~/utils";
 import type { AppsData } from "~/types/index";
 
 import { useMeasure } from "react-use";
 import { animate } from "framer-motion";
 import WindowTemplate from "~/components/WindowTemplate";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import useEmblaCarousel from 'embla-carousel-react';
 
 // Add the ArtworkGallery component
 function ArtworkGallery() {
@@ -207,118 +212,97 @@ function ArtworkGallery() {
     }
   ];
 
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: 'center',
+    skipSnaps: false,
+    dragFree: false,
+  });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on('select', onSelect);
+    onSelect();
+  }, [emblaApi, onSelect]);
+
   return (
     <WindowTemplate>
-      <div className="h-full w-full bg-black/30 backdrop-blur-md p-6 overflow-hidden flex flex-col">
+      <div className="h-full w-full p-6 overflow-y-auto custom-scrollbar flex flex-col bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950">
         {/* Header */}
-        <div className="flex flex-col items-center mb-4">
-          <h2 className="text-3xl font-bold text-white mb-3">On Stage & In Action</h2>
-          <p className="text-lg text-white/80 text-center max-w-3xl">
+        <div className="flex flex-col items-center mb-8">
+        <h2
+            className="text-3xl md:text-4xl font-bold text-center mb-2"
+            style={{
+              color: '#f4f0ff',
+              textShadow: `
+                0 0 6px rgba(180, 140, 255, 0.5),
+                0 0 12px rgba(180, 140, 255, 0.35),
+                0 0 24px rgba(180, 140, 255, 0.25)
+              `,
+              fontWeight: 400,
+              letterSpacing: '-0.01em'
+            }}
+          >
+            Events & Engagements
+          </h2>
+          <p className="text-base text-purple-200/80 text-center mt-2 max-w-2xl mb-2">
             Speaking at events, leading discussions, and sharing insights on AI, innovation, and the future of technology.
           </p>
         </div>
-
-        {/* Gallery */}
-        <main className="relative flex-1 overflow-hidden">
-          <div className="absolute inset-0 flex items-center">
-            <div
-              className="absolute left-0 flex gap-4 px-[100px]"
-              ref={ref as LegacyRef<HTMLDivElement>}
-            >
-              <motion.div className="flex gap-4" style={{ x: xTranslation }}>
-                {[...artworks, ...artworks, ...artworks, ...artworks].map((artwork, idx) => (
-                  <motion.div
-                    key={idx}
-                    className="relative flex-shrink-0 group"
-                    style={{
-                      width: "min(500px, 40vw)",
-                      aspectRatio: "16/9",
-                      marginRight: "24px",
-                      filter: "drop-shadow(0 0 20px rgba(62,184,255,0.3))",
-                      zIndex: hoveredCard === idx ? 10 : 1
-                    }}
-                    whileHover={{
-                      scale: 1.05,
-                      zIndex: 20,
-                      transition: { duration: 0.3 }
-                    }}
-                  >
-                    <motion.div
-                      className="absolute inset-0 rounded-lg overflow-hidden
-                        before:absolute before:inset-0 
-                        before:shadow-[inset_0_0_30px_rgba(62,184,255,0.3)]
-                        group-hover:before:shadow-[inset_0_0_50px_rgba(62,184,255,0.5)]
-                        before:transition-all before:duration-300"
-                      onHoverStart={() => handleHoverStart(idx)}
-                      onHoverEnd={handleHoverEnd}
-                    >
-                      {/* Image */}
-                      <div className="w-full h-full">
-                        <img 
-                          src={artwork.image} 
-                          alt={artwork.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-
-                      {/* Overlay */}
-                      <motion.div
-                        className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-4
-                          backdrop-blur-sm"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{
-                          opacity: hoveredCard === idx ? 1 : 0,
-                          y: hoveredCard === idx ? 0 : 20
-                        }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <h4 className="text-2xl font-bold mb-3 text-white">
-                          {artwork.title}
-                        </h4>
-                        <p className="text-lg text-gray-200 text-center">
-                          {artwork.description}
-                        </p>
-                      </motion.div>
-                    </motion.div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </main>
-
-        {/* Controls at bottom */}
-        <div className="flex justify-center mt-3">
-          <div className="flex items-center gap-6">
-            {/* Pause/Play Button */}
-            <button
-              onClick={() => setIsPaused(!isPaused)}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-            >
-              <span className={`text-xl text-white ${isPaused ? 'i-ph:play-fill' : 'i-ph:pause-fill'}`} />
-            </button>
-
-            {/* Speed Control Slider */}
-            <div className="flex items-center gap-3 bg-white/10 px-3 py-2 rounded-full">
-              <span className="text-white/70 text-sm">Speed</span>
-              <div className="relative w-32 h-6 flex items-center">
-                <div className="absolute w-full h-1 bg-white/20 rounded-full" />
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  defaultValue="50"
-                  onChange={(e) => handleSpeedChange(Number(e.target.value))}
-                  className="absolute w-full h-full opacity-0 cursor-pointer"
-                />
-                <motion.div
-                  className="absolute h-3 w-3 bg-white rounded-full"
-                  style={{
-                    left: `${((7200 - speed) / 54)}%`,
-                    transform: 'translateX(-50%)'
-                  }}
-                />
-              </div>
+        {/* Embla Carousel */}
+        <div className="relative w-full max-w-5xl mx-auto">
+          {/* Arrows */}
+          <button
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-white/80 text-gray-900 rounded-full w-12 h-12 flex items-center justify-center text-3xl shadow-xl border border-gray-300 hover:bg-white"
+            onClick={() => emblaApi && emblaApi.scrollPrev()}
+            aria-label="Previous"
+            style={{ pointerEvents: 'auto' }}
+            disabled={!canScrollPrev}
+          >
+            <span className="i-ph:caret-left" />
+          </button>
+          <button
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-30 bg-white/80 text-gray-900 rounded-full w-12 h-12 flex items-center justify-center text-3xl shadow-xl border border-gray-300 hover:bg-white"
+            onClick={() => emblaApi && emblaApi.scrollNext()}
+            aria-label="Next"
+            style={{ pointerEvents: 'auto' }}
+            disabled={!canScrollNext}
+          >
+            <span className="i-ph:caret-right" />
+          </button>
+          {/* Embla Carousel Track */}
+          <div ref={emblaRef} className="overflow-hidden">
+            <div className="flex gap-8 py-2 px-8">
+              {artworks.map((artwork, idx) => (
+                <div
+                  key={idx}
+                  className="gallery-card flex-shrink-0 w-72 md:w-96 rounded-xl shadow-lg bg-gradient-to-br from-white/10 via-purple-200/5 to-purple-400/10 backdrop-blur-md border border-purple-400/20 overflow-hidden relative"
+                  style={{ scrollSnapAlign: 'center' }}
+                  onMouseEnter={() => setHoveredCard(idx)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
+                  <img
+                    src={artwork.image}
+                    alt={artwork.title}
+                    className="w-full h-56 md:h-64 object-cover rounded-xl"
+                    loading="lazy"
+                  />
+                  {/* Caption Overlay: only on hover, only on this card, only on md+ */}
+                  <div className={`hidden md:block absolute bottom-3 left-3 bg-black/60 px-3 py-1 rounded text-xs font-mono uppercase tracking-widest text-purple-100 transition-opacity duration-300 pointer-events-none ${hoveredCard === idx ? 'opacity-100' : 'opacity-0'}`}>
+                    {artwork.description}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

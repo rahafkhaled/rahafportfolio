@@ -14,7 +14,11 @@ function WindowTemplate({ children }: WindowTemplateProps) {
         backgroundPosition: "center"
       }}
     >
-      <div className="flex flex-col h-full p-6">{children}</div>
+      <div className="flex flex-col h-full p-6 overflow-y-auto">{children}
+        <footer className="w-full text-center py-4 text-purple-300 text-sm opacity-70">
+          &copy; {new Date().getFullYear()} Rahaf Abutarbush. All rights reserved.
+        </footer>
+      </div>
     </div>
   );
 }

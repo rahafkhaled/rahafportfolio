@@ -70,7 +70,7 @@ export default function ControlCenterMenu({
       className="w-80 h-96 max-w-full shadow-menu p-2.5 text-c-black bg-c-100/70"
       pos="fixed top-9.5 right-0 sm:right-1.5"
       border="~ menu rounded-2xl"
-      grid="~ cols-4 rows-5 gap-2"
+      grid="~ cols-4 rows-4 gap-2"
       ref={controlCenterRef}
     >
       <div className="cc-grid row-span-2 col-span-2 p-2 flex flex-col justify-around">
@@ -144,18 +144,6 @@ export default function ControlCenterMenu({
       <div className="cc-grid col-span-4 px-2.5 py-2 space-y-1 flex flex-col justify-around">
         <span className="font-medium ml-0.5">Sound</span>
         <SliderComponent icon="i-ion:volume-high" value={volume} setValue={setVolume} />
-      </div>
-      <div className="cc-grid col-span-4 hstack space-x-2.5" p="y-2 l-2 r-4">
-        <img className="w-12 rounded-lg" src={music.cover} alt="cover art" />
-        <div flex-1>
-          <div className="font-medium">{music.title}</div>
-          <div className="cc-text">{music.artist}</div>
-        </div>
-        {playing ? (
-          <span className="i-bi:pause-fill text-2xl" onClick={() => toggleAudio(false)} />
-        ) : (
-          <span className="i-bi:play-fill text-2xl" onClick={() => toggleAudio(true)} />
-        )}
       </div>
     </div>
   );

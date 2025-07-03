@@ -50,61 +50,39 @@ const Projects: React.FC = () => {
 
   return (
     <WindowTemplate>
-      <div className="h-full overflow-y-auto p-6 bg-transparent">
-        <motion.h1 
-          className="text-3xl font-bold mb-8 text-white"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Featured Projects
-        </motion.h1>
-        
-        <div className="grid grid-cols-1 gap-8">
+      <div className="h-full overflow-y-auto custom-scrollbar p-6 bg-transparent">
+        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-white">Featured Projects</h1>
+        <div className="flex flex-col gap-8">
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
-              className="bg-black/30 backdrop-blur-md rounded-lg overflow-hidden border border-white/20"
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              whileHover={{ scale: 1.02 }}
+              className="flex flex-col sm:flex-row items-start gap-6 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg p-6 border border-white/10 transition-all duration-300 hover:shadow-2xl hover:border-purple-400/40 group"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <div className="p-6">
-                <div className="flex items-start gap-4">
-                  <motion.div 
-                    className="text-4xl"
-                    whileHover={{ scale: 1.2 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {project.icon}
-                  </motion.div>
-                  
-                  <div className="flex-1">
-                    <motion.h2 
-                      className="text-2xl font-bold mb-2 text-white"
-                      whileHover={{ scale: 1.05 }}
+              {/* Icon/Emoji */}
+              <motion.div
+                className="block sm:hidden text-4xl flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-full bg-white/20 group-hover:bg-purple-400/20 transition-all duration-300"
+                whileHover={{ scale: 1.15, rotate: 8 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              >
+                {project.icon}
+              </motion.div>
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <h2 className="text-xl md:text-2xl font-bold text-white mb-1 truncate">{project.title}</h2>
+                <p className="text-purple-200/80 mb-3 text-base md:text-lg font-light truncate">{project.description}</p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {project.tech.map(tech => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 border border-white/10 rounded-full text-sm text-white bg-white/5 transition-all duration-200 hover:shadow-[0_0_8px_2px_rgba(168,85,247,0.25)] hover:border-purple-400/40 cursor-default"
                     >
-                      {project.title}
-                    </motion.h2>
-                    
-                    <p className="text-gray-300 mb-4">
-                      {project.description}
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-2">
-                      {project.tech.map(tech => (
-                        <motion.span
-                          key={tech}
-                          className="px-3 py-1 bg-white/10 text-white rounded-full text-sm"
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          {tech}
-                        </motion.span>
-                      ))}
-                    </div>
-                  </div>
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </div>
             </motion.div>
