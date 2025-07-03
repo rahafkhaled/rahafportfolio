@@ -261,7 +261,7 @@ export default function Desktop(props: MacActions) {
         }
 
         // If it's About, pass the openApp function
-        if (app.id === 'about') {
+        if (app.id === "about") {
           return (
             <AppWindow key={`desktop-app-${app.id}`} {...props}>
               {React.cloneElement(app.content as React.ReactElement, { openApp })}
@@ -286,7 +286,7 @@ export default function Desktop(props: MacActions) {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => setState({ ...state, showNotif: true }), 25000);
+    const timer = setTimeout(() => setState({ ...state, showNotif: true }), 150000);
     return () => clearTimeout(timer);
   }, []);
 

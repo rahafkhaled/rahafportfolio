@@ -167,13 +167,12 @@ const TopBar = (props: TopBarProps) => {
       } text-sm text-white bg-gray-700/10 backdrop-blur-2xl shadow transition`}
     >
       <div className="hstack space-x-1">
-        <TopBarItem
-          className="px-2"
-          forceHover={state.showAppleMenu}
-          onClick={toggleAppleMenu}
-          ref={appleBtnRef}
-        >
-          <img src="/img/ui/rk-logo.png" alt="RK Logo" style={{ height: 20, width: 24, objectFit: 'contain', display: 'block' }} />
+        <TopBarItem className="px-2">
+          <img
+            src="/img/ui/rk-logo.png"
+            alt="RK Logo"
+            style={{ height: 20, width: 24, objectFit: "contain", display: "block" }}
+          />
         </TopBarItem>
         <TopBarItem
           className="font-semibold px-2"
@@ -213,9 +212,9 @@ const TopBar = (props: TopBarProps) => {
             <span className="i-material-symbols:wifi-off text-lg" />
           )}
         </TopBarItem>
-        <TopBarItem ref={spotlightBtnRef} onClick={props.toggleSpotlight}>
+        {/* <TopBarItem ref={spotlightBtnRef} onClick={props.toggleSpotlight}>
           <span className="i-bx:search text-[17px]" />
-        </TopBarItem>
+        </TopBarItem> */}
         <TopBarItem
           forceHover={state.showControlCenter}
           onClick={toggleControlCenter}
