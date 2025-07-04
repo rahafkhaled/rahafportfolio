@@ -25,6 +25,7 @@ const AppleNotification: React.FC<AppleNotificationProps> = ({
 
   return (
     <AnimatePresence>
+      
       {show && (
         <motion.div
           initial={{ opacity: 0, y: -40, x: 300 }}
