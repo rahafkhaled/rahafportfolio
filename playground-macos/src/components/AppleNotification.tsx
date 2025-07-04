@@ -24,6 +24,7 @@ const AppleNotification: React.FC<AppleNotificationProps> = ({
   const isPhone = window.innerWidth <= 768;
 
   return (
+
     
     <AnimatePresence>
 
