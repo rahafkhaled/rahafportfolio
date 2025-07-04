@@ -31,8 +31,7 @@ const AppleNotification: React.FC<AppleNotificationProps> = ({
         onClick={onClick}
       >
         <div
-          className="relative flex items-center min-w-[340px] max-w-[400px] px-7 py-4 bg-white/10 backdrop-blur-lg border border-purple-400/20 rounded-2xl shadow-lg hover:bg-white/20 transition-all duration-300 group"
-        >
+          className="relative flex items-center w-[400px] px-7 py-4 bg-white/10 backdrop-blur-lg border border-purple-400/20 rounded-2xl shadow-lg hover:bg-white/20 transition-all duration-300 group"        >
           <button
             onClick={(e) => {
               e.stopPropagation();
