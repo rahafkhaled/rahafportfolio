@@ -335,6 +335,7 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="space-y-4"
                 >
+                  
                   <p className="text-base md:text-lg font-normal leading-relaxed text-purple-100/90 px-4 md:px-0">
                     I have always been all about innovation that is lead by instincts, the
                     intersection of technology and human experience. <br></br>
