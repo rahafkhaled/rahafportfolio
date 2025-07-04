@@ -25,15 +25,15 @@ const files: File[] = [
     icon: "img/icons/folder.svg",
     type: "text",
     appId: "about", // changed from terminal to about
-    position: { x: 40, y: 40 }
+    position: { x: 20, y: 40 }
   },
   {
-    id: "Events & Engagements",
-    title: "Events & Engagements",
+    id: "Events Gallery",
+    title: "Events Gallery",
     icon: "img/icons/folder.svg",
     type: "folder",
     appId: "artwork-gallery",
-    position: { x: 40, y: 340 }
+    position: { x: 20, y: 340 }
   },
   {
     id: "news",
@@ -41,7 +41,7 @@ const files: File[] = [
     icon: "img/icons/folder.svg",
     type: "folder",
     appId: "news",
-    position: { x: 40, y: 200 }
+    position: { x: 20, y: 200 }
   },
   {
     id: "resume",
@@ -50,7 +50,7 @@ const files: File[] = [
     type: "pdf",
     appId: "preview",
     link: "img/ui/Rahaf-Abutarbush-Resume.pdf",
-    position: { x: 40, y: 540 }
+    position: { x: 20, y: 540 }
   }
   // Add more files as needed
 ];

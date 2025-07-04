@@ -45,19 +45,25 @@ export default function Desktop(props: MacActions) {
     hideDockAndTopbar: false,
     spotlight: false,
     previewURL: ""
-  } as Omit<DesktopState, 'showNotif'>);
+  } as Omit<DesktopState, "showNotif">);
+
+  // Check if screen is phone-sized (mobile)
+  const isPhone = window.innerWidth <= 768;
 
   // Notifications array for stacking
-  const [notifications, setNotifications] = useState<{
-    id: string;
-    type: string;
-    title: string;
-    message: string;
-    icon: string;
-    onClick: () => void;
-  }[]>([]);
+  const [notifications, setNotifications] = useState<
+    {
+      id: string;
+      type: string;
+      title: string;
+      message: string;
+      icon: string;
+      onClick: () => void;
+    }[]
+  >([]);
   // Helper to remove notification by id
-  const closeNotification = (id: string) => setNotifications((prev) => prev.filter(n => n.id !== id));
+  const closeNotification = (id: string) =>
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
 
   const [spotlightBtnRef, setSpotlightBtnRef] =
     useState<React.RefObject<HTMLDivElement> | null>(null);
@@ -103,9 +109,20 @@ export default function Desktop(props: MacActions) {
   useEffect(() => {
     // Only run once on initial render when apps are loaded
     if (Object.keys(state.showApps).length > 0 && state.currentTitle === "Finder") {
-      openApp("about");
+      if (isPhone) {
+        // On phone, only show About Me
+        openApp("about");
+        // Close all other apps
+        apps.forEach((app) => {
+          if (app.id !== "about") {
+            closeApp(app.id);
+          }
+        });
+      } else {
+        openApp("about");
+      }
     }
-  }, [state.showApps]);
+  }, [state.showApps, isPhone]);
 
   const toggleLaunchpad = (target: boolean): void => {
     const r = document.querySelector(`#launchpad`) as HTMLElement;
@@ -227,6 +244,11 @@ export default function Desktop(props: MacActions) {
       currentTitle: currentApp.title
     });
 
+    // On phone, automatically maximize the About Me app
+    if (isPhone && id === "about") {
+      setAppMax(id, true);
+    }
+
     const minApps = state.minApps;
     if (minApps[id]) {
       const r = document.querySelector(`#window-${id}`) as HTMLElement;
@@ -271,7 +293,7 @@ export default function Desktop(props: MacActions) {
         }
 
         // If it's About, pass the openApp function
-        if (app.id === 'about') {
+        if (app.id === "about") {
           return (
             <AppWindow key={`desktop-app-${app.id}`} {...props}>
               {React.cloneElement(app.content as React.ReactElement, { openApp })}
@@ -298,46 +320,71 @@ export default function Desktop(props: MacActions) {
     // First notification after 2.5s
     const timer1 = setTimeout(() => {
       setNotifications((prev) => {
-        if (prev.some(n => n.type === 'welcome')) return prev;
+        if (prev.some((n) => n.type === "welcome")) return prev;
         return [
           ...prev,
           {
-            id: 'welcome',
-            type: 'welcome',
-            title: 'Welcome to my portfolio...',
-            message: 'Feel free to look around my desktop :)',
-            icon: 'img/ui/rk-logo.png',
-            onClick: () => {},
+            id: "welcome",
+            type: "welcome",
+            title: "Welcome to my portfolio...",
+            message: "Feel free to look around my desktop :)",
+            icon: "img/ui/rk-logo.png",
+            onClick: () => {}
           }
         ];
       });
     }, 2500);
+
+    // Mobile-specific notification after 5 seconds
+    const timerMobile = setTimeout(() => {
+      if (isPhone) {
+        setNotifications((prev) => {
+          if (prev.some((n) => n.type === "mobile")) return prev;
+          return [
+            ...prev,
+            {
+              id: "mobile",
+              type: "mobile",
+              title: "Mobile Experience",
+              message: "Check out the desktop version for the full macOS experience!",
+              icon: "img/ui/rk-logo.png",
+              onClick: () => {}
+            }
+          ];
+        });
+      }
+    }, 5000);
+
     // Second notification after 15 seconds
     const timer2 = setTimeout(() => {
       setNotifications((prev) => {
-        if (prev.some(n => n.type === 'thought')) return prev;
+        if (prev.some((n) => n.type === "thought")) return prev;
         return [
           ...prev,
           {
-            id: 'thought',
-            type: 'thought',
-            title: 'Thought Leadership Release',
-            message: 'Check out my latest report on Emerging Tech in the Middle East!',
-            icon: 'img/ui/rk-logo.png',
+            id: "thought",
+            type: "thought",
+            title: "Thought Leadership Release",
+            message: "Check out my latest report on Emerging Tech in the Middle East!",
+            icon: "img/ui/rk-logo.png",
             onClick: () => {
-              window.open("https://www.pwc.com/m1/en/publications/2025/docs/emerging-technology-trends-in-the-middle-east-2025.pdf", "_blank");
-              closeNotification('thought');
-            },
+              window.open(
+                "https://www.pwc.com/m1/en/publications/2025/docs/emerging-technology-trends-in-the-middle-east-2025.pdf",
+                "_blank"
+              );
+              closeNotification("thought");
+            }
           }
         ];
       });
     }, 15000);
     return () => {
       clearTimeout(timer1);
+      clearTimeout(timerMobile);
       clearTimeout(timer2);
       setNotifications([]); // Clear notifications on unmount
     };
-  }, []);
+  }, [isPhone]);
 
   return (
     <div
@@ -364,28 +411,29 @@ export default function Desktop(props: MacActions) {
         <FileIcons openApp={openApp} />
       </div>
       {/* Render each notification in its own fixed position, dynamically offset */}
-      {notifications
-        .sort((a, b) => {
-          // Welcome always first, then thought
-          if (a.type === 'welcome') return -1;
-          if (b.type === 'welcome') return 1;
-          return 0;
-        })
-        .map((notif, idx) => (
-          <div
-            key={notif.id}
-            style={{ top: 40 + idx * 95, right: 24, zIndex: 50, position: 'fixed' }}
-          >
-            <AppleNotification
-              show={true}
-              onClose={() => closeNotification(notif.id)}
-              onClick={notif.onClick}
-              title={notif.title}
-              message={notif.message}
-              icon={notif.icon}
-            />
-          </div>
-        ))}
+      {!isPhone &&
+        notifications
+          .sort((a, b) => {
+            // Welcome always first, then thought
+            if (a.type === "welcome") return -1;
+            if (b.type === "welcome") return 1;
+            return 0;
+          })
+          .map((notif, idx) => (
+            <div
+              key={notif.id}
+              style={{ top: 40 + idx * 95, right: 24, zIndex: 50, position: "fixed" }}
+            >
+              <AppleNotification
+                show={true}
+                onClose={() => closeNotification(notif.id)}
+                onClick={notif.onClick}
+                title={notif.title}
+                message={notif.message}
+                icon={notif.icon}
+              />
+            </div>
+          ))}
 
       {/* Spotlight */}
       {state.spotlight && (

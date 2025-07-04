@@ -11,25 +11,29 @@ const searchIndex = [
   },
   {
     title: "Expertise: Design Thinking",
-    description: "I lead ideation sessions that push technology beyond the buzzwords. It's not just about using the latest tools, it's about applying them with intent.",
+    description:
+      "I lead ideation sessions that push technology beyond the buzzwords. It's not just about using the latest tools, it's about applying them with intent.",
     section: "Expertise",
     appId: "about"
   },
   {
     title: "Expertise: Product management",
-    description: "I thrive in leading product strategy and management in fast-moving spaces like emerging tech, where success isn't about racing to keep up, it's about building with purpose.",
+    description:
+      "I thrive in leading product strategy and management in fast-moving spaces like emerging tech, where success isn't about racing to keep up, it's about building with purpose.",
     section: "Expertise",
     appId: "about"
   },
   {
     title: "Expertise: Public speaking",
-    description: "I've always been drawn to what makes someone pay attention, or remember something after the meeting is over. Storytelling is about clarity and answering the core question: 'What's in it for us?'",
+    description:
+      "I've always been drawn to what makes someone pay attention, or remember something after the meeting is over. Storytelling is about clarity and answering the core question: 'What's in it for us?'",
     section: "Expertise",
     appId: "about"
   },
   // News (from News.tsx)
   {
-    title: "PwC Middle East in Qatar, Microsoft host conversation on gender balance in technology industry",
+    title:
+      "PwC Middle East in Qatar, Microsoft host conversation on gender balance in technology industry",
     description: "The Peninsula Qatar, 2024",
     section: "News",
     appId: "news"
@@ -77,51 +81,56 @@ const searchIndex = [
     appId: "news"
   },
   {
-    title: "On UN Arabic Language Day, Top CMU-Q Team Reflects on Growth of Arabic Debate",
+    title:
+      "On UN Arabic Language Day, Top CMU-Q Team Reflects on Growth of Arabic Debate",
     description: "CMU-Q News, 2022",
     section: "News",
     appId: "news"
   },
-  // ArtworkGallery (Events & Engagements)
+  // ArtworkGallery (Events Gallery)
   {
     title: "LEAP 2024 - KSA",
-    description: "Future of XR - LEAP 2024 - KSA",
-    section: "Events & Engagements",
+    description: "Future of XR - LEAP 2024 - KSA - Events Gallery",
+    section: "Events Gallery",
     appId: "artwork-gallery"
   },
   {
     title: "Women in STEM Panel",
-    description: "Panel for women pursuing careers in STEM - Carnegie Mellon 2023 - Qatar",
-    section: "Events & Engagements",
+    description:
+      "Panel for women pursuing careers in STEM - Carnegie Mellon 2023 - Qatar - Events Gallery",
+    section: "Events Gallery",
     appId: "artwork-gallery"
   },
   {
     title: "Women in Tech",
-    description: "PwC X Microsoft Women in Tech - PwC 2024 - Qatar",
-    section: "Events & Engagements",
+    description: "PwC X Microsoft Women in Tech - PwC 2024 - Qatar - Events Gallery",
+    section: "Events Gallery",
     appId: "artwork-gallery"
   },
   {
     title: "Ru'ya",
-    description: "Showcasing prototypes and innovations - Ru'ya 2024 - UAE",
-    section: "Events & Engagements",
+    description:
+      "Showcasing prototypes and innovations - Ru'ya 2024 - UAE - Events Gallery",
+    section: "Events Gallery",
     appId: "artwork-gallery"
   },
   {
     title: "IDFE DEALS",
-    description: "Demonstrating Soft Skill VR training - IDFE 2023 - Spain",
-    section: "Events & Engagements",
+    description:
+      "Demonstrating Soft Skill VR training - IDFE 2023 - Spain - Events Gallery",
+    section: "Events Gallery",
     appId: "artwork-gallery"
   },
   {
     title: "Emerging Tech Lab",
-    description: "Lab Tour & Presentations - PwC Emerging Tech Lab 2022 - Qatar/UAE",
-    section: "Events & Engagements",
+    description:
+      "Lab Tour & Presentations - PwC Emerging Tech Lab 2022 - Qatar/UAE - Events Gallery",
+    section: "Events Gallery",
     appId: "artwork-gallery"
   },
   {
     title: "Resume",
-    description: "Rahaf Abutarbush Resume",
+    description: "Rahaf Abutarbush Resume - Resume",
     section: "Resume",
     appId: "preview",
     url: "img/ui/Rahaf-Abutarbush-Resume.pdf"
@@ -135,4 +144,4 @@ const searchIndex = [
   }
 ];
 
-export default searchIndex; 
+export default searchIndex;

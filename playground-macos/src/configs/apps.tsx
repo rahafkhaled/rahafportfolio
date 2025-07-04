@@ -50,7 +50,7 @@ const apps: AppsData[] = [
   },
   {
     id: "artwork-gallery",
-    title: "Events & Engagements",
+    title: "Events Gallery",
     desktop: true,
     width: 1200,
     height: 800,
