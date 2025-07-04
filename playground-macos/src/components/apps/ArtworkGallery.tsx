@@ -6,10 +6,6 @@ import type { AppsData } from "~/types/index";
 import { useMeasure } from "react-use";
 import { animate } from "framer-motion";
 import WindowTemplate from "~/components/WindowTemplate";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
 import useEmblaCarousel from 'embla-carousel-react';
 
 // Add the ArtworkGallery component
