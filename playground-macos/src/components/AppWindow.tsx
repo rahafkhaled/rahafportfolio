@@ -103,27 +103,93 @@ const TrafficLights = ({ id, close, aspectRatio, max, setMax, setMin }: TrafficP
   );
 };
 
-|const Window = (props: WindowProps) => {
+const Window = (props: WindowProps) => {
   const dockSize = useStore((state) => state.dockSize);
   const { winWidth, winHeight } = useWindowSize();
 
-  const initWidth = Math.min(winWidth, props.width || 640);
-  const initHeight = Math.min(winHeight, props.height || 400);
+  // Check if this is About Me app on phone
+  const isPhone = window.innerWidth <= 768;
+  const isAboutOnPhone = isPhone && props.id === "about";
+
+  // Calculate responsive dimensions based on screen size
+  const getResponsiveDimensions = () => {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // If it's About Me on phone, make it fullscreen
+    if (isAboutOnPhone) {
+      return {
+        width: screenWidth,
+        height: screenHeight
+      };
+    }
+
+    // Base dimensions that scale with screen size
+    let baseWidth = Math.min(screenWidth * 0.8, props.width || 640);
+    let baseHeight = Math.min(screenHeight * 0.97, props.height || 400);
+
+    // Ensure minimum sizes
+    baseWidth = Math.max(baseWidth, props.minWidth || 200);
+    baseHeight = Math.max(baseHeight, props.minHeight || 150);
+
+    // Ensure maximum sizes don't exceed screen bounds
+    baseWidth = Math.min(baseWidth, screenWidth - 100);
+    baseHeight = Math.min(baseHeight, screenHeight - 150);
+
+    return { width: baseWidth, height: baseHeight };
+  };
+
+  const responsiveDimensions = getResponsiveDimensions();
+  const initWidth = responsiveDimensions.width;
+  const initHeight = responsiveDimensions.height;
+
+  // Calculate responsive positioning
+  const getResponsivePosition = () => {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // If it's About Me on phone, position it at the very top
+    if (isAboutOnPhone) {
+      return {
+        x: screenWidth, // because of boundary
+        y: -minMarginY // because of boundary
+      };
+    }
+
+    // Center the window with some offset for visual appeal
+    const centerX = screenWidth + (screenWidth - initWidth) / 2 + (props.x || 0) + 60; // shift right by 60px
+    const centerY =
+      (screenHeight - initHeight - dockSize - minMarginY) / 2 + (props.y || 0);
+
+    // Ensure window doesn't go off-screen
+    const maxX = screenWidth * 2 - initWidth - minMarginX;
+    const maxY = screenHeight - initHeight - dockSize - minMarginY;
+
+    return {
+      x: Math.min(maxX, Math.max(winWidth + minMarginX, centerX)),
+      y: Math.min(maxY, Math.max(minMarginY, centerY))
+    };
+  };
+
+  const responsivePosition = getResponsivePosition();
 
   const [state, setState] = useState<WindowState>({
     width: initWidth,
     height: initHeight,
-    // "+ winWidth" because of the boundary for windows
-    x: winWidth + (winWidth - initWidth) / 2 + (props.x || 0),
-    // "- minMarginY" because of the boundary for windows
-    y: (winHeight - initHeight - dockSize - minMarginY) / 2 + (props.y || 0)
+    x: responsivePosition.x,
+    y: responsivePosition.y
   });
 
+  // Update dimensions and position when screen size changes
   useEffect(() => {
+    const newDimensions = getResponsiveDimensions();
+    const newPosition = getResponsivePosition();
+
     setState({
-      ...state,
-      width: Math.min(winWidth, state.width),
-      height: Math.min(winHeight, state.height)
+      width: Math.min(winWidth, newDimensions.width),
+      height: Math.min(winHeight, newDimensions.height),
+      x: newPosition.x,
+      y: newPosition.y
     });
   }, [winWidth, winHeight]);
 
@@ -181,8 +247,8 @@ const TrafficLights = ({ id, close, aspectRatio, max, setMax, setMin }: TrafficP
       minWidth={props.minWidth ? props.minWidth : 200}
       minHeight={props.minHeight ? props.minHeight : 150}
       dragHandleClassName="window-bar"
-      disableDragging={props.max}
-      enableResizing={!props.max}
+      disableDragging={props.max || isAboutOnPhone}
+      enableResizing={!props.max && !isAboutOnPhone}
       lockAspectRatio={props.aspectRatio}
       lockAspectRatioExtraHeight={props.aspectRatio ? appBarHeight : undefined}
       style={{
