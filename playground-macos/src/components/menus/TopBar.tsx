@@ -170,7 +170,6 @@ const TopBar = (props: TopBarProps) => {
         <TopBarItem
           className="px-2"
           forceHover={state.showAppleMenu}
-          onClick={toggleAppleMenu}
           ref={appleBtnRef}
         >
           <img src="/img/ui/rk-logo.png" alt="RK Logo" style={{ height: 20, width: 24, objectFit: 'contain', display: 'block' }} />

@@ -285,23 +285,23 @@ function ArtworkGallery() {
             <div className="flex gap-8 py-2 px-8">
               {artworks.map((artwork, idx) => (
                 <div
-                  key={idx}
+                    key={idx}
                   className="gallery-card flex-shrink-0 w-72 md:w-96 rounded-xl shadow-lg bg-gradient-to-br from-white/10 via-purple-200/5 to-purple-400/10 backdrop-blur-md border border-purple-400/20 overflow-hidden relative"
                   style={{ scrollSnapAlign: 'center' }}
                   onMouseEnter={() => setHoveredCard(idx)}
                   onMouseLeave={() => setHoveredCard(null)}
                 >
-                  <img
-                    src={artwork.image}
-                    alt={artwork.title}
+                        <img 
+                          src={artwork.image} 
+                          alt={artwork.title}
                     className="w-full h-56 md:h-64 object-cover rounded-xl"
-                    loading="lazy"
-                  />
+                          loading="lazy"
+                        />
                   {/* Caption Overlay: only on hover, only on this card, only on md+ */}
                   <div className={`hidden md:block absolute bottom-3 left-3 bg-black/60 px-3 py-1 rounded text-xs font-mono uppercase tracking-widest text-purple-100 transition-opacity duration-300 pointer-events-none ${hoveredCard === idx ? 'opacity-100' : 'opacity-0'}`}>
-                    {artwork.description}
-                  </div>
-                </div>
+                          {artwork.description}
+            </div>
+          </div>
               ))}
             </div>
           </div>

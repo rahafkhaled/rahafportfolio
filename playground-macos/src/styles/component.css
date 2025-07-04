@@ -7,11 +7,11 @@
 /* --------- spotlight --------- */
 
 .spotlight {
-  @apply fixed z-20 h-max top-1/4 -mt-16 w-165 -ml-82.5 left-1/2 rounded-lg backdrop-blur-2xl shadow-2xl shadow-black/40 bg-c-100/80 border border-menu;
+  @apply fixed z-20 h-max top-1/4 -mt-16 w-165 -ml-82.5 left-1/2 rounded-lg backdrop-blur-2xl shadow-2xl ;
 }
 
 .spotlight input::placeholder {
-  @apply text-c-black/40;
+  @apply text-c-white/40;
 }
 
 .spotlight .spotlight-type {

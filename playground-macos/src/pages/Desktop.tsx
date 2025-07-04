@@ -31,7 +31,6 @@ interface DesktopState {
   hideDockAndTopbar: boolean;
   spotlight: boolean;
   previewURL?: string;
-  showNotif: boolean;
 }
 
 export default function Desktop(props: MacActions) {
@@ -45,9 +44,20 @@ export default function Desktop(props: MacActions) {
     currentTitle: "Finder",
     hideDockAndTopbar: false,
     spotlight: false,
-    previewURL: "",
-    showNotif: false
-  } as DesktopState);
+    previewURL: ""
+  } as Omit<DesktopState, 'showNotif'>);
+
+  // Notifications array for stacking
+  const [notifications, setNotifications] = useState<{
+    id: string;
+    type: string;
+    title: string;
+    message: string;
+    icon: string;
+    onClick: () => void;
+  }[]>([]);
+  // Helper to remove notification by id
+  const closeNotification = (id: string) => setNotifications((prev) => prev.filter(n => n.id !== id));
 
   const [spotlightBtnRef, setSpotlightBtnRef] =
     useState<React.RefObject<HTMLDivElement> | null>(null);
@@ -281,13 +291,52 @@ export default function Desktop(props: MacActions) {
   };
 
   const openResume = () => {
-    setState({ ...state, showNotif: false });
     openApp("preview", "img/ui/Rahaf-Abutarbush-Resume.pdf");
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => setState({ ...state, showNotif: true }), 25000);
-    return () => clearTimeout(timer);
+    // First notification after 2.5s
+    const timer1 = setTimeout(() => {
+      setNotifications((prev) => {
+        if (prev.some(n => n.type === 'welcome')) return prev;
+        return [
+          ...prev,
+          {
+            id: 'welcome',
+            type: 'welcome',
+            title: 'Welcome to my portfolio...',
+            message: 'Feel free to look around my desktop :)',
+            icon: 'img/ui/rk-logo.png',
+            onClick: () => {},
+          }
+        ];
+      });
+    }, 2500);
+    // Second notification after 15 seconds
+    const timer2 = setTimeout(() => {
+      setNotifications((prev) => {
+        if (prev.some(n => n.type === 'thought')) return prev;
+        return [
+          ...prev,
+          {
+            id: 'thought',
+            type: 'thought',
+            title: 'Thought Leadership Release',
+            message: 'Check out my latest report on Emerging Tech in the Middle East!',
+            icon: 'img/ui/rk-logo.png',
+            onClick: () => {
+              window.open("https://www.pwc.com/m1/en/publications/2025/docs/emerging-technology-trends-in-the-middle-east-2025.pdf", "_blank");
+              closeNotification('thought');
+            },
+          }
+        ];
+      });
+    }, 15000);
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      setNotifications([]); // Clear notifications on unmount
+    };
   }, []);
 
   return (
@@ -313,15 +362,30 @@ export default function Desktop(props: MacActions) {
       <div className="window-bound absolute z-10" style={{ top: minMarginY }}>
         {renderAppWindows()}
         <FileIcons openApp={openApp} />
-        <AppleNotification
-          show={state.showNotif}
-          onClick={openResume}
-          onClose={() => setState({ ...state, showNotif: false })}
-          title="Thought Leadership"
-          message="Time to log your 3:10 AM medications"
-          icon="img/icons/typora.png"
-        />
       </div>
+      {/* Render each notification in its own fixed position, dynamically offset */}
+      {notifications
+        .sort((a, b) => {
+          // Welcome always first, then thought
+          if (a.type === 'welcome') return -1;
+          if (b.type === 'welcome') return 1;
+          return 0;
+        })
+        .map((notif, idx) => (
+          <div
+            key={notif.id}
+            style={{ top: 40 + idx * 95, right: 24, zIndex: 50, position: 'fixed' }}
+          >
+            <AppleNotification
+              show={true}
+              onClose={() => closeNotification(notif.id)}
+              onClick={notif.onClick}
+              title={notif.title}
+              message={notif.message}
+              icon={notif.icon}
+            />
+          </div>
+        ))}
 
       {/* Spotlight */}
       {state.spotlight && (

@@ -63,26 +63,26 @@ const Projects: React.FC = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               {/* Icon/Emoji */}
-              <motion.div
+                  <motion.div 
                 className="block sm:hidden text-4xl flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-full bg-white/20 group-hover:bg-purple-400/20 transition-all duration-300"
                 whileHover={{ scale: 1.15, rotate: 8 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              >
-                {project.icon}
-              </motion.div>
+                  >
+                    {project.icon}
+                  </motion.div>
               {/* Content */}
               <div className="flex-1 min-w-0">
                 <h2 className="text-xl md:text-2xl font-bold text-white mb-1 truncate">{project.title}</h2>
                 <p className="text-purple-200/80 mb-3 text-base md:text-lg font-light truncate">{project.description}</p>
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {project.tech.map(tech => (
+                      {project.tech.map(tech => (
                     <span
-                      key={tech}
+                          key={tech}
                       className="px-3 py-1 border border-white/10 rounded-full text-sm text-white bg-white/5 transition-all duration-200 hover:shadow-[0_0_8px_2px_rgba(168,85,247,0.25)] hover:border-purple-400/40 cursor-default"
-                    >
-                      {tech}
+                        >
+                          {tech}
                     </span>
-                  ))}
+                      ))}
                 </div>
               </div>
             </motion.div>

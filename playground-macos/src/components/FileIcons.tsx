@@ -33,7 +33,7 @@ const files: File[] = [
     icon: "img/icons/folder.svg",
     type: "folder",
     appId: "artwork-gallery",
-    position: { x: 200, y: 40 }
+    position: { x: 40, y: 340 }
   },
   {
     id: "news",
@@ -50,7 +50,7 @@ const files: File[] = [
     type: "pdf",
     appId: "preview",
     link: "img/ui/Rahaf-Abutarbush-Resume.pdf",
-    position: { x: 40, y: 640 }
+    position: { x: 40, y: 540 }
   }
   // Add more files as needed
 ];
