@@ -23,6 +23,7 @@
     "@milkdown/react": "^7.3.6",
     "@rooks/use-raf": "^4.11.2",
     "date-fns": "^3.6.0",
+    "embla-carousel-react": "^8.6.0",
     "framer-motion": "^11.1.7",
     "katex": "^0.16.10",
     "react": "^18.3.1",
