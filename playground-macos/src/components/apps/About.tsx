@@ -551,7 +551,7 @@ const About: React.FC<AboutProps> = ({ openApp }) => {
                 />
               </motion.a>
               <motion.a
-                href="https://substack.com/@rahaf906630/posts"
+                href="https://rahaf906630.substack.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.15, boxShadow: "0 0 24px #a855f7" }}
