@@ -20,20 +20,13 @@ function WindowTemplate({ children }: WindowTemplateProps) {
       }}
     >
       <div
-        className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overflow-x-hidden touch-pan-y custom-scrollbar ${
+        className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overflow-x-hidden touch-pan-y custom-scrollbar text-[15px] leading-snug md:text-base md:leading-normal ${
           isMobile
-            ? "px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2"
+            ? "px-3 pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-1.5"
             : "p-3"
         }`}
       >
         {children}
-        <footer
-          className={`w-full shrink-0 text-center text-purple-300 opacity-70 ${
-            isMobile ? "mt-4 pb-1 pt-2 text-xs" : "pt-3 text-sm"
-          }`}
-        >
-          &copy; {new Date().getFullYear()} Rahaf Abutarbush. All rights reserved.
-        </footer>
       </div>
     </div>
   );

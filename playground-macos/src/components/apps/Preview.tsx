@@ -1,19 +1,18 @@
 import React from "react";
-import { useWindowSize } from "~/hooks";
-import { MOBILE_BREAKPOINT, resolvePublicAsset } from "~/utils";
+import { resolvePublicAsset } from "~/utils";
 import WindowTemplate from "../WindowTemplate";
 
 interface PreviewProps {
   url?: string;
 }
 
+/** Match About resume embed: minimal PDF chrome, fit page width. */
+const PDF_VIEW_FRAG = "toolbar=0&navpanes=0&scrollbar=0&view=FitH";
+
 const Preview: React.FC<PreviewProps> = ({ url }) => {
-  const { winWidth } = useWindowSize();
-  const isMobile = winWidth <= MOBILE_BREAKPOINT;
   const src = resolvePublicAsset(url);
 
-  const iframeSrc =
-    src && !isMobile ? `${src}#zoom=150&navpanes=0&view=FitH&quality=2` : src ?? undefined;
+  const iframeSrc = src ? `${src}#${PDF_VIEW_FRAG}` : undefined;
 
   return (
     <WindowTemplate>

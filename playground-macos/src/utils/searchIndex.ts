@@ -17,14 +17,14 @@ const searchIndex = [
     appId: "about"
   },
   {
-    title: "Expertise: Product management",
+    title: "Expertise: Product Management",
     description:
       "I thrive in leading product strategy and management in fast-moving spaces like emerging tech, where success isn't about racing to keep up, it's about building with purpose.",
     section: "Expertise",
     appId: "about"
   },
   {
-    title: "Expertise: Public speaking",
+    title: "Expertise: Public Speaking",
     description:
       "I've always been drawn to what makes someone pay attention, or remember something after the meeting is over. Storytelling is about clarity and answering the core question: 'What's in it for us?'",
     section: "Expertise",

@@ -267,7 +267,7 @@ const Window = (props: WindowProps) => {
       dragElastic={0}
     >
       <div
-        className="window-bar relative flex min-h-[44px] shrink-0 items-center justify-center py-1 text-center text-white md:h-6 md:min-h-0 md:py-0 bg-[#1a1625]/80 dark:bg-[#1a1625]/80 backdrop-blur-lg"
+        className="window-bar relative flex min-h-[40px] shrink-0 items-center justify-center py-0.5 text-center text-[13px] text-white md:h-6 md:min-h-0 md:py-0 md:text-sm bg-[#1a1625]/80 dark:bg-[#1a1625]/80 backdrop-blur-lg"
         onDoubleClick={() => !disableMax && props.setMax(props.id)}
       >
         <TrafficLights

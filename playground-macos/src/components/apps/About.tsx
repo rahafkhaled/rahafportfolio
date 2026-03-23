@@ -11,8 +11,24 @@ import WindowTemplate from "../WindowTemplate";
 import ArtworkGallery from "./ArtworkGallery";
 import News from "./News";
 import Contact from "./Contact";
-import { useWindowSize } from "~/hooks";
-import { MOBILE_BREAKPOINT, openPublicAssetInNewTab, resolvePublicAsset } from "~/utils";
+import {
+  NavIconAbout,
+  NavIconContact,
+  NavIconGallery,
+  NavIconNews,
+  NavIconReleases,
+  NavIconResume
+} from "../PortfolioMobileNavIcons";
+import { openPublicAssetInNewTab, resolvePublicAsset } from "~/utils";
+import {
+  portfolioBodyEmphasisClassName,
+  portfolioBodyTextClassName,
+  portfolioCompactSectionHeadingClassName,
+  portfolioCompactSectionHeadingStyle,
+  portfolioDisplayCardTitleClassName,
+  portfolioPillButtonClassName,
+  portfolioSectionHeadingStyle,
+} from "~/utils/portfolioStyles";
 
 interface AboutProps {
   /** Full-page phone layout: no fake window chrome (see Desktop). */
@@ -20,16 +36,28 @@ interface AboutProps {
 }
 
 const NAV_ABOUT = "About";
-const NAV_REPORT = "Report";
+const NAV_LATEST_RELEASES = "Latest Releases";
 const NAV_EVENTS = "Events";
 const NAV_PRESS = "Press";
 const NAV_RESUME = "Resume";
 const NAV_CONTACT = "Contact";
 const LETS_CONNECT_HEADING = "Let's Connect";
+/** Keep out of raw JSX text: attributify-jsx treats `tab` as an attribute. */
+const RESUME_PREVIEW_BLURB = "Preview below or open the PDF in a new tab.";
+/** Optional: add `public/img/ui/Rahaf-Abutarbush-Resume-preview.png` (first-page screenshot) for a clean preview without the PDF viewer UI. */
+const RESUME_PREVIEW_SCREENSHOT = "/img/ui/Rahaf-Abutarbush-Resume-preview.png";
+/** PDF viewer: no toolbar/sidebars; fit page width so the full resume reads as a preview. */
+const RESUME_PDF_VIEW_FRAG = "toolbar=0&navpanes=0&scrollbar=0&view=FitH";
+
+/** Split `px` so attributify-jsx does not corrupt box-shadow strings in JSX props. */
+const MOBILE_NAV_HOVER_SHADOW_ACTIVE =
+  "0 0 16" + "px rgba(168, 85, 247, 0.35)";
+const MOBILE_NAV_HOVER_SHADOW_INACTIVE =
+  "0 0 14" + "px rgba(168, 85, 247, 0.22)";
 
 const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
-  const { winWidth } = useWindowSize();
   const [activeSection, setActiveSection] = useState("hero");
+  const [resumePreviewImageFailed, setResumePreviewImageFailed] = useState(false);
 
   // Create a ref for the scrollable container
   const contentRef = useRef<HTMLDivElement>(null);
@@ -126,10 +154,10 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
   const scrollParallaxSlow = useTransform(scrollYProgress, [0, 1], [0, 60]);
 
   const resumePdf = resolvePublicAsset("/img/ui/Rahaf-Abutarbush-Resume.pdf");
-  const resumeIframeSrc =
-    resumePdf && winWidth > MOBILE_BREAKPOINT
-      ? `${resumePdf}#zoom=150&navpanes=0&view=FitH&quality=2`
-      : resumePdf ?? undefined;
+  const resumePreviewImageSrc = resolvePublicAsset(RESUME_PREVIEW_SCREENSHOT);
+  const resumePdfEmbedSrc = resumePdf
+    ? `${resumePdf}#${RESUME_PDF_VIEW_FRAG}`
+    : undefined;
 
   const services: {
     title: string;
@@ -147,13 +175,13 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
       img: "/img/gallery/Ru'ya 4.jpg"
     },
     {
-      title: "Product management",
+      title: "Product Management",
       description:
         "I thrive in leading product strategy and management in fast-moving spaces like emerging tech, where success isn't about racing to keep up, it's about building with purpose.",
       img: "/img/gallery/metaverse_assembly.jpeg"
     },
     {
-      title: "Public speaking",
+      title: "Public Speaking",
       description:
         "I've always been drawn to what makes someone pay attention, or remember something after the meeting is over. Storytelling is about clarity and answering the core question: 'What's in it for us?'",
       img: "/img/gallery/cmu_talking.jpeg",
@@ -180,14 +208,43 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
   const largeStars = generateStars(10);
 
   const navStars = generateStars(8);
+  const mobileNavStars = generateStars(8);
+
+  /** Built as string concat so attributify-jsx does not mangle `sm:text-center`. */
+  const heroStackClass =
+    "mx-auto flex w-full flex-col md:max-w-none md:gap-8 " +
+    (standaloneMobile
+      ? "max-w-[22rem] gap-5 text-left sm:max-w-md sm:gap-6 sm:text-center"
+      : "max-w-md items-center gap-6 text-center sm:gap-7");
+  const heroH1Class =
+    "text-balance font-normal leading-[1.12] tracking-[-0.02em] text-[#f4f0ff] " +
+    (standaloneMobile
+      ? "text-[clamp(1.5rem,5.5vw,2.25rem)] sm:text-[clamp(1.875rem,6vw,2.75rem)] md:text-[clamp(2rem,8vw,3.75rem)] text-left sm:text-center"
+      : "text-[clamp(1.875rem,6vw,2.75rem)] md:text-[clamp(2rem,8vw,3.75rem)] text-center");
+
+  const navItemClass = (sectionId: string) =>
+    [
+      "shrink-0 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors md:px-6 md:py-3 md:text-lg",
+      activeSection === sectionId ? "text-white" : "text-gray-400 hover:text-white"
+    ].join(" ");
+
+  const mobileNavEntries = [
+    ["hero", heroRef, NAV_ABOUT, NavIconAbout] as const,
+    ["release", releaseRef, "Releases", NavIconReleases] as const,
+    ["gallery", galleryRef, NAV_EVENTS, NavIconGallery] as const,
+    ["news", newsRef, NAV_PRESS, NavIconNews] as const,
+    ["resume", resumeRef, NAV_RESUME, NavIconResume] as const,
+    ["contact", contactRef, NAV_CONTACT, NavIconContact] as const
+  ] as const;
 
   const scrollInner = (
+    <>
       <div
         ref={contentRef}
         id={standaloneMobile ? "portfolio-scroll-root" : undefined}
-        className={`w-full relative scroll-smooth bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950 ${
+        className={`relative w-full scroll-smooth bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950 ${
           standaloneMobile
-            ? "h-full min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-y-contain touch-pan-y custom-scrollbar pt-[env(safe-area-inset-top,0px)] pb-[max(1.25rem,env(safe-area-inset-bottom))]"
+            ? "h-full min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-y-contain touch-pan-y custom-scrollbar pt-[env(safe-area-inset-top,0px)] pb-[calc(4.35rem+env(safe-area-inset-bottom,0px))]"
             : "min-h-0"
         }`}
         style={{
@@ -211,100 +268,70 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
         >
           <div className="absolute -right-[10%] bottom-0 h-48 w-[80%] rounded-full bg-gradient-to-tl from-pink-600/25 to-transparent blur-3xl" />
         </motion.div>
-        {/* macOS-style Navigation Bar */}
-        <motion.nav
-          className={`sticky top-0 z-50 flex justify-center w-full bg-black/70 backdrop-blur-md border-b border-white/10 relative overflow-visible ${
-            standaloneMobile ? "py-4" : "py-6"
-          }`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          {/* Sparkly stars overlay for nav bar */}
-          <div
-            className={`absolute inset-0 pointer-events-none z-0 ${standaloneMobile ? "hidden" : ""}`}
+        {/* Desktop: sticky nav + stars. Phone: bottom tab bar instead (see fragment below). */}
+        {!standaloneMobile && (
+          <motion.nav
+            className="sticky top-0 z-50 flex w-full justify-center overflow-visible border-b border-white/10 bg-black/70 py-6 backdrop-blur-md relative"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
           >
-            {navStars.map((star) => (
-              <motion.div
-                key={`nav-star-${star.id}`}
-                className="absolute rounded-full bg-white"
-                style={{
-                  width: star.size + 0.5,
-                  height: star.size + 0.5,
-                  left: `${star.x}%`,
-                  top: `${star.y}%`,
-                  opacity: star.alpha,
-                  filter: "drop-shadow(0 0 6px #a855f7)"
-                }}
-                animate={{
-                  opacity: [star.alpha, star.alpha * 0.6, star.alpha],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{
-                  duration: star.duration * 1.2,
-                  repeat: Infinity,
-                  repeatType: "reverse"
-                }}
-              />
-            ))}
-          </div>
-          <div className="scrollbar-none z-10 flex max-w-full justify-start gap-1 overflow-x-auto overscroll-x-contain px-2 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-2 md:flex-wrap md:justify-center md:gap-16 md:px-4 [&::-webkit-scrollbar]:hidden">
-            <motion.button
-              onClick={() => scrollToSection(heroRef)}
-              className={`shrink-0 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors md:px-6 md:py-3 md:text-lg ${activeSection === "hero" ? "text-white" : "text-gray-400 hover:text-white"}`}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.96 }}
-            >
-              {NAV_ABOUT}
-            </motion.button>
-            <motion.button
-              onClick={() => scrollToSection(releaseRef)}
-              className={`shrink-0 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors md:px-6 md:py-3 md:text-lg ${activeSection === "release" ? "text-white" : "text-gray-400 hover:text-white"}`}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.96 }}
-            >
-              {NAV_REPORT}
-            </motion.button>
-            <motion.button
-              onClick={() => scrollToSection(galleryRef)}
-              className={`shrink-0 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors md:px-6 md:py-3 md:text-lg ${activeSection === "gallery" ? "text-white" : "text-gray-400 hover:text-white"}`}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.96 }}
-            >
-              {NAV_EVENTS}
-            </motion.button>
-            <motion.button
-              onClick={() => scrollToSection(newsRef)}
-              className={`shrink-0 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors md:px-6 md:py-3 md:text-lg ${activeSection === "news" ? "text-white" : "text-gray-400 hover:text-white"}`}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.96 }}
-            >
-              {NAV_PRESS}
-            </motion.button>
-            <motion.button
-              onClick={() => scrollToSection(resumeRef)}
-              className={`shrink-0 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors md:px-6 md:py-3 md:text-lg ${activeSection === "resume" ? "text-white" : "text-gray-400 hover:text-white"}`}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.96 }}
-            >
-              {NAV_RESUME}
-            </motion.button>
-            <motion.button
-              onClick={() => scrollToSection(contactRef)}
-              className={`shrink-0 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors md:px-6 md:py-3 md:text-lg ${activeSection === "contact" ? "text-white" : "text-gray-400 hover:text-white"}`}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.96 }}
-            >
-              {NAV_CONTACT}
-            </motion.button>
-          </div>
-        </motion.nav>
+            <div className="pointer-events-none absolute inset-0 z-0">
+              {navStars.map((star) => (
+                <motion.div
+                  key={`nav-star-${star.id}`}
+                  className="absolute rounded-full bg-white"
+                  style={{
+                    width: star.size + 0.5,
+                    height: star.size + 0.5,
+                    left: `${star.x}%`,
+                    top: `${star.y}%`,
+                    opacity: star.alpha,
+                    filter: "drop-shadow(0 0 6px #a855f7)"
+                  }}
+                  animate={{
+                    opacity: [star.alpha, star.alpha * 0.6, star.alpha],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{
+                    duration: star.duration * 1.2,
+                    repeat: Infinity,
+                    repeatType: "reverse"
+                  }}
+                />
+              ))}
+            </div>
+            <div className="scrollbar-none z-10 flex max-w-full justify-start gap-1 overflow-x-auto overscroll-x-contain px-2 pb-1 pt-0.5 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-2 md:flex-wrap md:justify-center md:gap-16 md:px-4 md:pb-1 [&::-webkit-scrollbar]:hidden">
+              {(
+                [
+                  ["hero", heroRef, NAV_ABOUT] as const,
+                  ["release", releaseRef, NAV_LATEST_RELEASES] as const,
+                  ["gallery", galleryRef, NAV_EVENTS] as const,
+                  ["news", newsRef, NAV_PRESS] as const,
+                  ["resume", resumeRef, NAV_RESUME] as const,
+                  ["contact", contactRef, NAV_CONTACT] as const
+                ] as const
+              ).map(([id, ref, label]) => (
+                <motion.button
+                  key={id}
+                  type="button"
+                  onClick={() => scrollToSection(ref)}
+                  className={navItemClass(id)}
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  {label}
+                </motion.button>
+              ))}
+            </div>
+          </motion.nav>
+        )}
 
         {/* Hero Section */}
         <section
           ref={heroRef}
           className={`relative z-[2] flex items-center justify-center text-white px-4 md:px-4 ${
-            standaloneMobile ? "py-12 sm:py-14 md:py-20" : "py-12 md:py-20"
+            standaloneMobile ? "py-8 sm:py-12 md:py-20" : "py-10 md:py-20"
           }`}
         >
           {/* Background gradient overlay */}
@@ -319,15 +346,15 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
           {/* Content container */}
           <div className="relative flex w-full items-center justify-center">
             <div className="container mx-auto max-w-2xl px-4 sm:px-6 md:max-w-none md:px-8">
-              <div className="mx-auto flex w-full max-w-md flex-col items-center gap-6 text-center sm:gap-7 md:max-w-none md:gap-8">
+              <div className={heroStackClass}>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
-                  className="w-full space-y-4 sm:space-y-5"
+                  className={`w-full ${standaloneMobile ? "space-y-3 sm:space-y-5" : "space-y-4 sm:space-y-5"}`}
                 >
                   <h1
-                    className="text-balance text-[clamp(1.875rem,6vw,2.75rem)] font-normal leading-[1.15] tracking-[-0.02em] text-[#f4f0ff] md:text-[clamp(2rem,8vw,3.75rem)]"
+                    className={heroH1Class}
                     style={{
                       textShadow: `
       0 0 6px rgba(180, 140, 255, 0.3),
@@ -339,23 +366,11 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
                     Rahaf Abutarbush
                   </h1>
 
-                  {/* Phone: soft pills; scannable, no awkward ▪ wraps */}
-                  <div className="flex flex-wrap items-center justify-center gap-2 sm:hidden">
-                    {(
-                      [
-                        "Emerging Technology",
-                        "Instinct-led Innovation",
-                        "Market Relevance"
-                      ] as const
-                    ).map((label) => (
-                      <span
-                        key={label}
-                        className="inline-flex rounded-full border border-purple-400/20 bg-purple-950/35 px-3 py-1.5 text-[11px] font-medium leading-none tracking-wide text-purple-100/95 shadow-[0_1px_0_rgba(255,255,255,0.06)_inset] backdrop-blur-sm"
-                      >
-                        {label}
-                      </span>
-                    ))}
-                  </div>
+                  {/* Phone: compact tagline */}
+                  <p className="text-balance text-[11px] font-medium uppercase tracking-[0.12em] text-purple-300/80 sm:hidden">
+                    Emerging Technology <span className="text-purple-500/60">·</span> Instinct-led
+                    Innovation <span className="text-purple-500/60">·</span> Market Relevance
+                  </p>
                   {/* sm+: original inline row */}
                   <div
                     className="hidden flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:flex"
@@ -393,7 +408,7 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
                   </div>
 
                   <div
-                    className="mx-auto h-px w-14 bg-gradient-to-r from-transparent via-purple-400/45 to-transparent sm:w-20 md:hidden"
+                    className="h-px w-10 bg-gradient-to-r from-transparent via-purple-400/40 to-transparent sm:mx-auto sm:w-14 md:hidden"
                     aria-hidden
                   />
                 </motion.div>
@@ -403,34 +418,62 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="w-full md:max-w-none"
                 >
-                  <p className="text-balance px-0.5 text-center text-[0.9375rem] font-normal leading-[1.7] text-purple-100/[0.88] sm:text-base md:mx-auto md:max-w-3xl md:px-0 md:text-lg md:leading-relaxed">
-                    I have always been all about innovation that is led by instincts, the
-                    intersection of technology and human experience.{" "}
-                    <span className="md:hidden"> </span>
-                    <span className="hidden md:inline">
-                      <br />
-                    </span>
-                    The real challenge isn't how fast technology moves, it's cutting
-                    through the noise to find what's relevant, impactful, and{" "}
-                    <span className="md:hidden"> </span>
-                    <span className="hidden md:inline">
-                      <br />
-                    </span>
-                    answering the fundamental question:
-                    <br className="hidden md:block" />
-                    <span className="md:hidden block h-2" />
-                    <span>
-                      {"What's in it for us?".split("").map((char, i) => (
-                        <span
-                          key={i}
-                          className="shine-letter text-white"
-                          style={{ animationDelay: `${i * 0.07}s` }}
-                        >
-                          {char === " " ? "\u00A0" : char}
+                  {standaloneMobile ? (
+                    <div
+                      className={`flex flex-col gap-3.5 sm:hidden ${portfolioBodyTextClassName}`}
+                    >
+                      <p className="text-balance">
+                        I have always been all about innovation that is led by instincts, the
+                        intersection of technology and human experience.
+                      </p>
+                      <p className="text-balance">
+                        The real challenge isn&apos;t how fast technology moves, it&apos;s cutting
+                        through the noise to find what&apos;s relevant, impactful, and answering the
+                        fundamental question:{" "}
+                        <span className="mt-1.5 block font-medium text-white/95">
+                          {"What's in it for us?".split("").map((char, i) => (
+                            <span
+                              key={i}
+                              className="shine-letter"
+                              style={{ animationDelay: `${i * 0.07}s` }}
+                            >
+                              {char === " " ? "\u00A0" : char}
+                            </span>
+                          ))}
                         </span>
-                      ))}
-                    </span>
-                  </p>
+                      </p>
+                    </div>
+                  ) : null}
+                  <div
+                    className={`${standaloneMobile ? "hidden sm:block" : "block"} text-balance px-0.5 text-center ${portfolioBodyTextClassName} md:mx-auto md:max-w-3xl md:px-0`}
+                  >
+                    <p>
+                      I have always been all about innovation that is led by instincts, the
+                      intersection of technology and human experience.{" "}
+                      <span className="hidden md:inline">
+                        <br />
+                      </span>
+                      The real challenge isn&apos;t how fast technology moves, it&apos;s cutting
+                      through the noise to find what&apos;s relevant, impactful, and{" "}
+                      <span className="hidden md:inline">
+                        <br />
+                      </span>
+                      answering the fundamental question:
+                      <br className="hidden md:block" />
+                      <span className="md:hidden"> </span>
+                      <span>
+                        {"What's in it for us?".split("").map((char, i) => (
+                          <span
+                            key={i}
+                            className="shine-letter text-white"
+                            style={{ animationDelay: `${i * 0.07}s` }}
+                          >
+                            {char === " " ? "\u00A0" : char}
+                          </span>
+                        ))}
+                      </span>
+                    </p>
+                  </div>
                 </motion.div>
               </div>
             </div>
@@ -440,27 +483,16 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
         {/* Services Section */}
         <section
           ref={servicesRef}
-          className="relative z-[2] py-4 px-4 md:px-8 text-white mb-10 md:mb-12"
+          className="relative z-[2] mb-8 px-3 py-3 text-white md:mb-12 md:px-8 md:py-4"
         >
           <div className="container mx-auto">
             <h2
-              className="mb-4 md:mb-5"
-              style={{
-                color: "#f4f0ff",
-                textShadow: `
-                0 0 6px rgba(180, 140, 255, 0.3),
-                0 0 12px rgba(180, 140, 255, 0.25),
-                0 0 24px rgba(180, 140, 255, 0.2)
-              `,
-                fontWeight: 400,
-                letterSpacing: "-0.01em",
-                fontSize: "clamp(1.5rem, 6vw, 2rem)",
-                textAlign: "center"
-              }}
+              className={portfolioCompactSectionHeadingClassName}
+              style={portfolioCompactSectionHeadingStyle}
             >
               Expertise
             </h2>
-            <div className="mx-auto grid max-w-5xl grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-5">
+            <div className="mx-auto grid max-w-5xl grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-3 lg:gap-5">
               {services.map((service, index) => (
                 <motion.div
                   key={index}
@@ -468,32 +500,29 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className={`bg-white/10 shadow-lg backdrop-blur-lg rounded-xl border border-purple-400/20 relative overflow-hidden group hover:bg-white/20 transition-all duration-300 p-3.5 sm:p-4 md:p-5 ${
+                  className={`relative overflow-hidden rounded-lg border border-purple-400/12 bg-white/[0.04] shadow-sm backdrop-blur-sm transition-all duration-300 group hover:border-purple-400/18 hover:bg-white/[0.08] p-2 sm:p-3 md:p-4 ${
                     index === 2 ? "col-span-2 max-w-lg justify-self-center lg:col-span-1 lg:max-w-none" : ""
                   }`}
                   whileHover={{
-                    y: -4,
+                    y: -2,
                     boxShadow:
-                      "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+                      "0 8px 20px -6px rgba(0, 0, 0, 0.25), 0 2px 8px -2px rgba(0, 0, 0, 0.12)"
                   }}
                 >
                   <h3
-                    className="text-base sm:text-lg md:text-xl font-semibold mb-2 text-center leading-tight"
-                    style={{
-                      color: "#f4f0ff",
-                      textShadow: `
-                      0 0 6px rgba(180, 140, 255, 0.3),
-                      0 0 12px rgba(180, 140, 255, 0.25),
-                      0 0 24px rgba(180, 140, 255, 0.2)
-                    `
-                    }}
+                    className={portfolioDisplayCardTitleClassName}
+                    style={portfolioSectionHeadingStyle}
                   >
-                    {service.title}
+                    {service.title.split(" ").map((word, i) => (
+                      <span key={i} className="block">
+                        {word}
+                      </span>
+                    ))}
                   </h3>
                   <img
                     src={service.img}
                     alt={service.title}
-                    className={`mb-2.5 w-full object-cover rounded-lg shadow ${
+                    className={`mb-2 w-full object-cover rounded-md shadow-sm ${
                       service.imgHeightClass ?? "h-24 sm:h-28 md:h-32"
                     }`}
                     style={
@@ -502,9 +531,7 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
                         : undefined
                     }
                   />
-                  <p className="text-purple-200/85 text-xs sm:text-sm md:text-base leading-snug md:leading-relaxed">
-                    {service.description}
-                  </p>
+                  <p className={portfolioBodyTextClassName}>{service.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -514,20 +541,12 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
         {/* Latest Release Section */}
         <section
           ref={releaseRef}
-          className="relative z-[2] mb-10 px-3 py-5 text-white sm:px-4 md:mb-14 md:px-6 md:py-12"
+          className="relative z-[2] mb-8 px-3 py-6 text-white sm:px-4 md:mb-12 md:px-6 md:py-10"
         >
           <div className="container mx-auto flex flex-col items-center justify-center text-center">
             <h2
-              className="mb-3 text-center text-lg font-normal tracking-tight sm:mb-4 sm:text-2xl md:mb-5 md:text-3xl lg:text-4xl"
-              style={{
-                color: "#f4f0ff",
-                textShadow: `
-                  0 0 6px rgba(180, 140, 255, 0.3),
-                  0 0 12px rgba(180, 140, 255, 0.25),
-                  0 0 24px rgba(180, 140, 255, 0.2)
-                `,
-                letterSpacing: "-0.01em"
-              }}
+              className={portfolioCompactSectionHeadingClassName}
+              style={portfolioCompactSectionHeadingStyle}
             >
               Latest Release
             </h2>
@@ -557,13 +576,13 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
                     >
                       Emerging Technology Trends in the Middle East 2025
                     </h3>
-                    <p className="mb-4 text-xs leading-snug text-purple-100 sm:text-sm md:mb-8 md:text-lg md:leading-relaxed">
+                    <p className={`mb-4 md:mb-8 ${portfolioBodyTextClassName}`}>
                       The research and writing I did for the Emerging Technology Trends in
                       the Middle East 2025 report sharpened how I think about tech's
                       velocity in the Middle East. Not just{" "}
-                      <span className="font-semibold text-purple-200">where</span> it's
+                      <span className={portfolioBodyEmphasisClassName}>where</span> it's
                       heading, but what it demands from strategy today. It pushed{" "}
-                      <span className="font-semibold text-purple-200">me</span> to think
+                      <span className={portfolioBodyEmphasisClassName}>me</span> to think
                       critically about how trends like AI, immersive tech, and quantum
                       translate into tangible strategies for governments and businesses
                       navigating real transformation.
@@ -574,8 +593,8 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
                       href="https://www.pwc.com/m1/en/publications/2025/docs/emerging-technology-trends-in-the-middle-east-2025.pdf"
                       target="_blank"
                       rel="noopener noreferrer"
-                      whileHover={{ scale: 1.08, boxShadow: "0 0 24px #a855f7" }}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-purple-400/40 bg-white/10 px-4 py-2 text-xs font-semibold text-purple-200 shadow-lg transition-all hover:bg-white/20 sm:gap-2 sm:px-5 sm:text-sm md:px-8 md:py-3 md:text-base"
+                      whileHover={{ scale: 1.04, boxShadow: "0 0 24px rgba(168,85,247,0.35)" }}
+                      className={`${portfolioPillButtonClassName} gap-1.5 text-xs sm:text-sm md:text-base`}
                     >
                       <span className="i-fa-solid:download text-sm sm:text-base md:text-lg" />
                       Download Report
@@ -597,23 +616,18 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
 
         <section
           ref={resumeRef}
-          className="relative z-[2] scroll-mt-4 px-4 py-10 md:px-8 md:py-14"
+          className="relative z-[2] scroll-mt-4 px-3 py-8 md:px-8 md:py-12"
         >
           <h2
-            className="mb-2 text-center text-[clamp(1.5rem,6vw,2rem)] font-normal tracking-tight"
-            style={{
-              color: "#f4f0ff",
-              textShadow: `
-                0 0 6px rgba(180, 140, 255, 0.3),
-                0 0 12px rgba(180, 140, 255, 0.25),
-                0 0 24px rgba(180, 140, 255, 0.2)
-              `
-            }}
+            className={portfolioCompactSectionHeadingClassName}
+            style={portfolioCompactSectionHeadingStyle}
           >
             Resume
           </h2>
-          <p className="mx-auto mb-6 max-w-xl text-center text-sm text-purple-200/65 md:text-base">
-            Preview below or open the PDF in a new tab.
+          <p
+            className={`mx-auto mb-4 max-w-xl text-center ${portfolioBodyTextClassName} md:mb-6`}
+          >
+            {RESUME_PREVIEW_BLURB}
           </p>
           <div className="mx-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-purple-400/25 bg-[#0f0c16] shadow-[0_20px_50px_rgba(0,0,0,0.55)] ring-1 ring-white/[0.06]">
             <div className="flex items-center gap-3 border-b border-white/10 bg-black/35 px-3 py-2.5 backdrop-blur-sm sm:px-4">
@@ -634,14 +648,25 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
               </button>
             </div>
             <div className="bg-[#1a1625] p-1 sm:p-2">
-              {resumeIframeSrc ? (
+              {resumePreviewImageSrc && !resumePreviewImageFailed ? (
+                <div className="flex max-h-[min(72vh,820px)] min-h-[200px] items-start justify-center overflow-auto rounded-lg bg-[#1e1a28] sm:max-h-[min(75vh,880px)]">
+                  <img
+                    src={resumePreviewImageSrc}
+                    alt="Resume preview"
+                    className="h-auto w-full max-w-3xl object-contain object-top"
+                    onError={() => setResumePreviewImageFailed(true)}
+                  />
+                </div>
+              ) : resumePdfEmbedSrc ? (
                 <iframe
-                  src={resumeIframeSrc}
+                  src={resumePdfEmbedSrc}
                   title="Resume PDF"
-                  className="h-[min(72vh,820px)] w-full rounded-lg border-0 bg-neutral-900 sm:h-[min(75vh,880px)]"
+                  className="h-[min(72vh,820px)] w-full rounded-lg border-0 bg-[#2a2635] sm:h-[min(75vh,880px)]"
                 />
               ) : (
-                <p className="py-12 text-center text-sm text-purple-200/50">Resume unavailable.</p>
+                <p className={`py-12 text-center ${portfolioBodyTextClassName} text-purple-100/70`}>
+                  Resume unavailable.
+                </p>
               )}
             </div>
           </div>
@@ -650,23 +675,12 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
         {/* Contact Section */}
         <section
           ref={contactRef}
-          className="relative z-[2] pt-6 md:pt-8 pb-10 md:pb-14 px-4 md:px-8 text-white"
+          className="relative z-[2] px-3 pb-8 pt-5 text-white md:px-8 md:pb-12 md:pt-8"
         >
           <div className="container mx-auto flex flex-col items-center justify-center text-center">
             <h2
-              className="mb-4"
-              style={{
-                color: "#f4f0ff",
-                textShadow: `
-                  0 0 6px rgba(180, 140, 255, 0.3),
-                  0 0 12px rgba(180, 140, 255, 0.25),
-                  0 0 24px rgba(180, 140, 255, 0.2)
-                `,
-                fontWeight: 400,
-                letterSpacing: "-0.01em",
-                fontSize: "clamp(1.5rem, 6vw, 2rem)",
-                textAlign: "center"
-              }}
+              className={portfolioCompactSectionHeadingClassName}
+              style={portfolioCompactSectionHeadingStyle}
             >
               {LETS_CONNECT_HEADING}
             </h2>
@@ -674,7 +688,7 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="text-purple-200/80 mb-4 max-w-2xl mx-auto text-base md:text-lg font-light"
+              className={`mb-4 max-w-2xl mx-auto ${portfolioBodyTextClassName}`}
             ></motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -687,9 +701,9 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.15, boxShadow: "0 0 24px #a855f7" }}
-                className="size-12 md:size-14 flex items-center justify-center rounded-full bg-white/10 border border-purple-400/40 text-purple-200 hover:bg-white/20 transition-all shadow-lg backdrop-blur-lg relative"
+                className="relative flex size-12 items-center justify-center rounded-full border border-purple-400/40 bg-white/10 text-purple-200 shadow-lg backdrop-blur-lg transition-all hover:bg-white/20 md:size-14"
               >
-                <span className="i-fa-brands:linkedin text-xl md:text-2xl z-10" />
+                <span className="i-fa-brands:linkedin z-10 text-xl md:text-2xl" />
                 <span
                   className="absolute inset-0 rounded-full pointer-events-none"
                   style={{ boxShadow: "0 0 12px 2px #a855f744", opacity: 0.5 }}
@@ -698,9 +712,9 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
               <motion.a
                 href="mailto:rahaf.k.abutarbush@gmail.com"
                 whileHover={{ scale: 1.15, boxShadow: "0 0 24px #a855f7" }}
-                className="size-12 md:size-14 flex items-center justify-center rounded-full bg-white/10 border border-purple-400/40 text-purple-200 hover:bg-white/20 transition-all shadow-lg backdrop-blur-lg relative"
+                className="relative flex size-12 items-center justify-center rounded-full border border-purple-400/40 bg-white/10 text-purple-200 shadow-lg backdrop-blur-lg transition-all hover:bg-white/20 md:size-14"
               >
-                <span className="i-fa-solid:envelope text-xl md:text-2xl z-10" />
+                <span className="i-fa-solid:envelope z-10 text-xl md:text-2xl" />
                 <span
                   className="absolute inset-0 rounded-full pointer-events-none"
                   style={{ boxShadow: "0 0 12px 2px #a855f744", opacity: 0.5 }}
@@ -713,12 +727,98 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
           </div>
         </section>
       </div>
+
+      {standaloneMobile && (
+        <nav
+          aria-label="Portfolio sections"
+          className="pointer-events-none fixed bottom-0 left-0 right-0 z-[60] overflow-hidden border-t border-white/10 bg-black/70 pb-[max(0.2rem,env(safe-area-inset-bottom,0px))] pt-1 shadow-[0_-6px_28px_rgba(0,0,0,0.5)] backdrop-blur-md"
+        >
+          {/* Same star treatment as desktop sticky nav (`navStars`). */}
+          <div className="pointer-events-none absolute inset-0 z-0">
+            {mobileNavStars.map((star) => (
+              <motion.div
+                key={`mobile-nav-star-${star.id}`}
+                className="absolute rounded-full bg-white"
+                style={{
+                  width: star.size + 0.5,
+                  height: star.size + 0.5,
+                  left: `${star.x}%`,
+                  top: `${star.y}%`,
+                  opacity: star.alpha,
+                  filter: "drop-shadow(0 0 6px #a855f7)"
+                }}
+                animate={{
+                  opacity: [star.alpha, star.alpha * 0.6, star.alpha],
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{
+                  duration: star.duration * 1.2,
+                  repeat: Infinity,
+                  repeatType: "reverse"
+                }}
+              />
+            ))}
+          </div>
+          <div className="pointer-events-auto relative z-10 mx-auto grid w-full max-w-lg grid-cols-6 gap-0 px-0.5">
+            {mobileNavEntries.map(([id, ref, shortLabel, Icon]) => {
+              const active = activeSection === id;
+              return (
+                <motion.button
+                  key={id}
+                  type="button"
+                  onClick={() => scrollToSection(ref)}
+                  whileHover={
+                    active
+                      ? { scale: 1.02, boxShadow: MOBILE_NAV_HOVER_SHADOW_ACTIVE }
+                      : { scale: 1.03, boxShadow: MOBILE_NAV_HOVER_SHADOW_INACTIVE }
+                  }
+                  whileTap={{ scale: 0.98 }}
+                  className={
+                    "relative flex min-h-0 min-w-0 flex-col items-center justify-center gap-0 rounded-lg px-0.5 py-1 transition-colors duration-200 " +
+                    (active
+                      ? "text-white"
+                      : "text-purple-400/50 hover:text-purple-200/90 active:text-purple-100")
+                  }
+                >
+                  <span
+                    className={
+                      "mb-0.5 flex h-7 w-7 items-center justify-center rounded-lg transition-colors " +
+                      (active
+                        ? "bg-white/[0.08] ring-1 ring-purple-400/25"
+                        : "bg-transparent hover:bg-white/[0.04]")
+                    }
+                    aria-hidden
+                  >
+                    <Icon
+                      className={
+                        "h-[1.05rem] w-[1.05rem] shrink-0 " +
+                        (active
+                          ? "text-purple-100 drop-shadow-[0_0_8px_rgba(168,85,247,0.45)]"
+                          : "text-purple-400/70")
+                      }
+                    />
+                  </span>
+                  <span
+                    className={
+                      "max-w-full truncate text-[7px] font-medium uppercase tracking-[0.06em] " +
+                      (active ? "text-purple-100/95" : "text-purple-500/55")
+                    }
+                  >
+                    {shortLabel}
+                  </span>
+                </motion.button>
+              );
+            })}
+          </div>
+        </nav>
+      )}
+    </>
   );
 
   return (
     <>
       {standaloneMobile ? (
-        <div className="flex h-full min-h-0 w-full flex-col overflow-hidden bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950">
+        <div className="relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950">
           {scrollInner}
         </div>
       ) : (

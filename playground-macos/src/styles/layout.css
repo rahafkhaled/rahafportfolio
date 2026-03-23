@@ -14,3 +14,15 @@ body,
   min-height: -webkit-fill-available;
   overflow: hidden;
 }
+
+/* Slightly tighter base type on narrow viewports; tap feedback */
+@media (max-width: 768px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    font-size: 15px;
+  }
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}

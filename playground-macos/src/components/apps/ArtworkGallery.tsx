@@ -7,11 +7,26 @@ import { useMeasure } from "react-use";
 import { animate } from "framer-motion";
 import WindowTemplate from "~/components/WindowTemplate";
 import useEmblaCarousel from "embla-carousel-react";
+import {
+  portfolioControlButtonClassName,
+  portfolioSectionHeadingClassName,
+  portfolioSectionHeadingStyle,
+  portfolioSectionSubtextClassName
+} from "~/utils/portfolioStyles";
 
 interface ArtworkGalleryProps {
   /** Render without window chrome (inline on About page). */
   embedded?: boolean;
 }
+
+type GalleryArtwork = {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  /** ISO YYYY-MM-DD for ordering (newest first). */
+  sortDate: string;
+};
 
 function ArtworkGallery({ embedded }: ArtworkGalleryProps) {
   const [ref, { width }] = useMeasure();
@@ -21,6 +36,171 @@ function ArtworkGallery({ embedded }: ArtworkGalleryProps) {
   const [isPaused, setIsPaused] = useState(false);
   const controls = useRef<any>(null);
   const hoverTimeout = useRef<any>(null);
+
+  const artworkItems: GalleryArtwork[] = [
+    // LEAP 2024 Images
+    {
+      id: 1,
+      title: "LEAP 2024",
+      description: "LEAP 2024 - KSA",
+      image: "img/gallery/leap 242.jpg",
+      sortDate: "2024-03-04"
+    },
+    {
+      id: 2,
+      title: "LEAP 2024",
+      description: "Future of XR - LEAP 2024 - KSA",
+      image: "img/gallery/leap247.jpg",
+      sortDate: "2024-03-04"
+    },
+    {
+      id: 3,
+      title: "LEAP 2024",
+      description: "Future of XR - LEAP 2024 - KSA",
+      image: "img/gallery/leap 245.jpg",
+      sortDate: "2024-03-04"
+    },
+    // Women in Tech Events
+    {
+      id: 4,
+      title: "Women in STEM Panel",
+      description:
+        "Panel for women pursuing careers in STEM - Carnegie Mellon 2023 - Qatar",
+      image: "img/gallery/women-in-stem-1.jpg",
+      sortDate: "2023-11-08"
+    },
+    {
+      id: 5,
+      title: "Women in STEM Panel",
+      description:
+        "Panel for women pursuing careers in STEM - Carnegie Mellon 2023 - Qatar",
+      image: "img/gallery/women_in_stem-2.jpg",
+      sortDate: "2023-11-08"
+    },
+    {
+      id: 6,
+      title: "Women in Tech",
+      description: "PwC X Microsoft Women in Tech - PwC 2024 - Qatar",
+      image: "img/gallery/women in tech1.JPG",
+      sortDate: "2024-02-15"
+    },
+    {
+      id: 7,
+      title: "Women in Tech",
+      description: "PwC X Microsoft Women in Tech - PwC 2024 - Qatar",
+      image: "img/gallery/women in tech7.JPG",
+      sortDate: "2024-02-15"
+    },
+    // Ru'ya Event Series
+    {
+      id: 8,
+      title: "Ru'ya",
+      description: "Showcasing prototypes and innovations - Ru'ya 2024 - UAE",
+      image: "img/gallery/Ru'ya 3.jpg",
+      sortDate: "2024-10-01"
+    },
+    {
+      id: 9,
+      title: "Ru'ya",
+      description: "Showcasing prototypes and innovations - Ru'ya 2024 - UAE",
+      image: "img/gallery/Ru'ya 4.jpg",
+      sortDate: "2024-10-01"
+    },
+    {
+      id: 10,
+      title: "Ru'ya",
+      description: "Showcasing prototypes and innovations - Ru'ya 2024 - UAE",
+      image: "img/gallery/Ru'ya 5.jpg",
+      sortDate: "2024-10-01"
+    },
+    // IDFE Series
+    {
+      id: 11,
+      title: "IDFE DEALS",
+      description: "Demonstrating Soft Skill VR training - IDFE 2023 - Spain",
+      image: "img/gallery/IDFE 8.png",
+      sortDate: "2023-10-12"
+    },
+    {
+      id: 12,
+      title: "IDFE DEALS",
+      description: "Demonstrating Soft Skill VR training - IDFE 2023 - Spain",
+      image: "img/gallery/IDFE 1.png",
+      sortDate: "2023-10-12"
+    },
+    {
+      id: 13,
+      title: "IDFE DEALS",
+      description: "Demonstrating Soft Skill VR training - IDFE 2023 - Spain",
+      image: "img/gallery/IDFE.png",
+      sortDate: "2023-10-12"
+    },
+    {
+      id: 14,
+      title: "IDFE DEALS",
+      description: "Presenting on emerging technologies - IDFE 2023 - Spain",
+      image: "img/gallery/IDFE .png",
+      sortDate: "2023-10-12"
+    },
+    {
+      id: 15,
+      title: "IDFE DEALS",
+      description: "Presenting on emerging technologies - IDFE 2023 - Spain",
+      image: "img/gallery/IDFE 4.png",
+      sortDate: "2023-10-12"
+    },
+    // Lab Visits
+    {
+      id: 16,
+      title: "Emerging Tech Lab",
+      description: "Lab Tour & Presentations - PwC Emerging Tech Lab 2022 - Qatar",
+      image: "img/gallery/IMG_0432.JPG",
+      sortDate: "2022-06-01"
+    },
+    {
+      id: 17,
+      title: "Emerging Tech Lab",
+      description: "Lab Tour & Presentations - PwC Emerging Tech Lab 2022 - UAE",
+      image: "img/gallery/lab visit.JPG",
+      sortDate: "2022-06-01"
+    },
+    {
+      id: 18,
+      title: "Emerging Tech Lab",
+      description: "Lab Tour & Presentations - PwC Emerging Tech Lab 2022 - UAE",
+      image: "img/gallery/lab visits.JPG",
+      sortDate: "2022-06-01"
+    },
+    // MWC & Web Summit
+    {
+      id: 19,
+      title: "MWC",
+      description: "Connecting with industry - Mobile World Congress 2025",
+      image: "img/gallery/MWC.jpeg",
+      sortDate: "2025-03-04"
+    },
+    {
+      id: 20,
+      title: "MWC25",
+      description:
+        "Presenting emerging technology prototypes - Mobile World Congress 2025",
+      image: "img/gallery/MWC2.png",
+      sortDate: "2025-03-04"
+    },
+    {
+      id: 21,
+      title: "Web Summit",
+      description:
+        "Keynote on the future of AI - Web Summit 2026 ",
+      image: "img/gallery/websummit_speech.JPG",
+      sortDate: "2026-11-04"
+    }
+  ];
+
+  const artworks = [...artworkItems].sort((a, b) => {
+    const byDate = b.sortDate.localeCompare(a.sortDate);
+    return byDate !== 0 ? byDate : b.id - a.id;
+  });
 
   const startAnimation = () => {
     if (!width || isPaused) return;
@@ -94,145 +274,6 @@ function ArtworkGallery({ embedded }: ArtworkGalleryProps) {
     setTimeout(startAnimation, 1000);
   };
 
-  const artworks = [
-    // LEAP 2024 Images
-    {
-      id: 1,
-      title: "LEAP 2024",
-      description: "LEAP 2024 - KSA",
-      image: "img/gallery/leap 242.jpg"
-    },
-    {
-      id: 2,
-      title: "LEAP 2024",
-      description: "Future of XR - LEAP 2024 - KSA",
-      image: "img/gallery/leap247.jpg"
-    },
-    {
-      id: 3,
-      title: "LEAP 2024",
-      description: "Future of XR - LEAP 2024 - KSA",
-      image: "img/gallery/leap 245.jpg"
-    },
-    // Women in Tech Events
-    {
-      id: 4,
-      title: "Women in STEM Panel",
-      description:
-        "Panel for women pursuing careers in STEM - Carnegie Mellon 2023 - Qatar",
-      image: "img/gallery/women-in-stem-1.jpg"
-    },
-    {
-      id: 5,
-      title: "Women in STEM Panel",
-      description:
-        "Panel for women pursuing careers in STEM - Carnegie Mellon 2023 - Qatar",
-      image: "img/gallery/women_in_stem-2.jpg"
-    },
-    {
-      id: 6,
-      title: "Women in Tech",
-      description: "PwC X Microsoft Women in Tech - PwC 2024 - Qatar",
-      image: "img/gallery/women in tech1.JPG"
-    },
-    {
-      id: 7,
-      title: "Women in Tech",
-      description: "PwC X Microsoft Women in Tech - PwC 2024 - Qatar",
-      image: "img/gallery/women in tech7.JPG"
-    },
-    // Ru'ya Event Series
-    {
-      id: 8,
-      title: "Ru'ya",
-      description: "Showcasing prototypes and innovations - Ru'ya 2024 - UAE",
-      image: "img/gallery/Ru'ya 3.jpg"
-    },
-    {
-      id: 9,
-      title: "Ru'ya",
-      description: "Showcasing prototypes and innovations - Ru'ya 2024 - UAE",
-      image: "img/gallery/Ru'ya 4.jpg"
-    },
-    {
-      id: 10,
-      title: "Ru'ya",
-      description: "Showcasing prototypes and innovations - Ru'ya 2024 - UAE",
-      image: "img/gallery/Ru'ya 5.jpg"
-    },
-    // IDFE Series
-    {
-      id: 11,
-      title: "IDFE DEALS",
-      description: "Demonstrating Soft Skill VR training - IDFE 2023 - Spain",
-      image: "img/gallery/IDFE 8.png"
-    },
-    {
-      id: 12,
-      title: "IDFE DEALS",
-      description: "Demonstrating Soft Skill VR training - IDFE 2023 - Spain",
-      image: "img/gallery/IDFE 1.png"
-    },
-    {
-      id: 13,
-      title: "IDFE DEALS",
-      description: "Demonstrating Soft Skill VR training - IDFE 2023 - Spain",
-      image: "img/gallery/IDFE.png"
-    },
-    {
-      id: 14,
-      title: "IDFE DEALS",
-      description: "Presenting on emerging technologies - IDFE 2023 - Spain",
-      image: "img/gallery/IDFE .png"
-    },
-    {
-      id: 15,
-      title: "IDFE DEALS",
-      description: "Presenting on emerging technologies - IDFE 2023 - Spain",
-      image: "img/gallery/IDFE 4.png"
-    },
-    // Lab Visits
-    {
-      id: 16,
-      title: "Emerging Tech Lab",
-      description: "Lab Tour & Presentations - PwC Emerging Tech Lab 2022 - Qatar",
-      image: "img/gallery/IMG_0432.JPG"
-    },
-    {
-      id: 17,
-      title: "Emerging Tech Lab",
-      description: "Lab Tour & Presentations - PwC Emerging Tech Lab 2022 - UAE",
-      image: "img/gallery/lab visit.JPG"
-    },
-    {
-      id: 18,
-      title: "Emerging Tech Lab",
-      description: "Lab Tour & Presentations - PwC Emerging Tech Lab 2022 - UAE",
-      image: "img/gallery/lab visits.JPG"
-    },
-    // MWC & Web Summit
-    {
-      id: 19,
-      title: "MWC",
-      description: "Connecting with industry - Mobile World Congress 2025",
-      image: "img/gallery/MWC.jpeg"
-    },
-    {
-      id: 20,
-      title: "MWC25",
-      description:
-        "Presenting emerging technology prototypes - Mobile World Congress 2025",
-      image: "img/gallery/MWC2.png"
-    },
-    {
-      id: 21,
-      title: "Web Summit",
-      description:
-        "Keynote on the future of AI - Web Summit 2026 ",
-      image: "img/gallery/websummit_speech.JPG"
-    }
-  ];
-
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: "center",
@@ -245,25 +286,13 @@ function ArtworkGallery({ embedded }: ArtworkGalleryProps) {
   }, [emblaApi, artworks.length]);
 
   const body = (
-      <div className="flex min-h-0 w-full flex-col items-center bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950 p-3 pb-[max(1rem,env(safe-area-inset-bottom))] md:p-6">
+      <div className="flex min-h-0 w-full flex-col items-center bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950 px-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 md:p-6 md:pb-[max(1rem,env(safe-area-inset-bottom))]">
         {/* Header */}
-        <div className="mb-2 flex flex-col items-center md:mb-6">
-          <h2
-            className="mb-1 text-center text-2xl font-bold md:mb-2 md:text-3xl lg:text-4xl"
-            style={{
-              color: "#f4f0ff",
-              textShadow: `
-                0 0 6px rgba(180, 140, 255, 0.5),
-                0 0 12px rgba(180, 140, 255, 0.35),
-                0 0 24px rgba(180, 140, 255, 0.25)
-              `,
-              fontWeight: 400,
-              letterSpacing: "-0.01em"
-            }}
-          >
+        <div className="mb-1.5 flex flex-col items-center md:mb-6">
+          <h2 className={portfolioSectionHeadingClassName} style={portfolioSectionHeadingStyle}>
             Events Gallery
           </h2>
-          <p className="max-w-2xl px-2 text-center text-sm leading-snug text-purple-200/80 md:px-4 md:text-base md:leading-normal">
+          <p className={portfolioSectionSubtextClassName}>
             Speaking at events, leading discussions, and sharing insights on AI,
             innovation, and the future of technology.
           </p>
@@ -299,7 +328,7 @@ function ArtworkGallery({ embedded }: ArtworkGalleryProps) {
           </div>
           <button
             type="button"
-            className="absolute left-1 top-1/2 z-[50] flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white/90 text-xl text-gray-900 shadow-xl hover:bg-white md:left-2 md:h-12 md:w-12 md:text-3xl"
+            className={`${portfolioControlButtonClassName} absolute left-1 top-1/2 z-[50] h-8 w-8 -translate-y-1/2 text-lg md:left-2 md:h-12 md:w-12 md:text-3xl`}
             onClick={() => emblaApi?.scrollPrev()}
             aria-label="Previous"
           >
@@ -307,7 +336,7 @@ function ArtworkGallery({ embedded }: ArtworkGalleryProps) {
           </button>
           <button
             type="button"
-            className="absolute right-1 top-1/2 z-[50] flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white/90 text-xl text-gray-900 shadow-xl hover:bg-white md:right-2 md:h-12 md:w-12 md:text-3xl"
+            className={`${portfolioControlButtonClassName} absolute right-1 top-1/2 z-[50] h-8 w-8 -translate-y-1/2 text-lg md:right-2 md:h-12 md:w-12 md:text-3xl`}
             onClick={() => emblaApi?.scrollNext()}
             aria-label="Next"
           >

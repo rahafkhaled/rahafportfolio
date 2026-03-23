@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import WindowTemplate from '../WindowTemplate';
+import React, { useState } from "react";
+import WindowTemplate from "../WindowTemplate";
+import { portfolioPillButtonClassName } from "~/utils/portfolioStyles";
 
 interface ContactProps {
   embedded?: boolean;
@@ -37,7 +38,11 @@ const Contact: React.FC<ContactProps> = ({ embedded }) => {
   };
 
   const inner = (
-      <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col items-center justify-start px-2 py-6 md:justify-center md:p-8">
+      <div
+        className={`flex min-h-0 min-w-0 w-full flex-1 flex-col items-center justify-start px-2 md:justify-center md:p-8 ${
+          embedded ? "py-3" : "py-6"
+        }`}
+      >
         {submitted ? (
           <div
             style={{
@@ -110,17 +115,10 @@ const Contact: React.FC<ContactProps> = ({ embedded }) => {
               {error && <div className="text-sm text-red-600">{error}</div>}
               <button
                 type="submit"
-                className="min-h-[48px] rounded border-none bg-gray-600/80 px-6 py-3 text-base font-semibold transition-colors hover:bg-gray-700/90"
-                style={{
-                  color: '#f4f0ff',
-                  textShadow: `
-                    0 0 6px rgba(200,160,255,0.1),
-                    0 0 12px rgba(200,160,255,0.1)
-                  `
-                }}
+                className={`${portfolioPillButtonClassName} w-full`}
                 disabled={loading}
               >
-                {loading ? 'Sending...' : 'Send'}
+                {loading ? "Sending..." : "Send"}
               </button>
             </form>
           </>

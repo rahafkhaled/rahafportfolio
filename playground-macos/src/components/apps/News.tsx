@@ -1,11 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import WindowTemplate from "../WindowTemplate";
+import {
+  portfolioControlButtonClassName,
+  portfolioSectionHeadingClassName,
+  portfolioSectionHeadingStyle,
+  portfolioSectionSubtextClassName
+} from "~/utils/portfolioStyles";
 
 interface NewsArticle {
   title: string;
   source: string;
+  /** Display year (short). */
   date: string;
+  /** ISO YYYY-MM-DD for ordering newest → oldest. */
+  sortDate: string;
   link: string;
   category: string;
   image: string;
@@ -30,6 +39,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
       title: "PwC Middle East in Qatar, Microsoft host conversation on gender balance in technology industry",
       source: "The Peninsula Qatar",
       date: "2024",
+      sortDate: "2024-02-29",
       link: "https://thepeninsulaqatar.com/article/29/02/2024/pwc-middle-east-in-qatar-microsoft-host-conversation-on-gender-balance-in-technology-industry",
       category: "Industry Leadership",
       image: "img/news/pwc x microsoft.png",
@@ -39,6 +49,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
       title: "New virtual economy: What does the rise of the metaverse mean?",
       source: "Euronews",
       date: "2022",
+      sortDate: "2022-08-17",
       link: "https://www.euronews.com/business/2022/08/17/new-virtual-economy-what-does-the-rise-of-the-metaverse-mean",
       category: "Media Feature",
       image: "img/news/EURONEWS.png",
@@ -48,6 +59,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
       title: "Students Present Demos for Tech Startup Launchpad Course",
       source: "CMU-Q News",
       date: "2024",
+      sortDate: "2024-10-01",
       link: "https://www.qatar.cmu.edu/news/students-present-demos-for-tech-startup-launchpad-course/",
       category: "Innovation",
       image: "img/news/Tech startup launchpad.jpg",
@@ -57,6 +69,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
       title: "Carnegie Mellon Qatar Celebrates Student Success",
       source: "Gulf Times",
       date: "2022",
+      sortDate: "2022-05-20",
       link: "https://www.gulf-times.com/story/703440/carnegie-mellon-qatar-celebrates-student-success",
       category: "Achievement",
       image: "img/news/Student Success.jpg",
@@ -66,6 +79,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
       title: "Carnegie Mellon Celebrates Women in STEM Fields",
       source: "CMU-Q News",
       date: "2024",
+      sortDate: "2024-03-08",
       link: "https://www.qatar.cmu.edu/news/carnegie-mellon-celebrates-women-in-stem-fields/",
       category: "Women in Tech",
       image: "img/news/women_in_stem.jpg",
@@ -75,6 +89,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
       title: "Carnegie Mellon Students Win National Debate Contest",
       source: "The Peninsula Qatar",
       date: "2022",
+      sortDate: "2022-04-28",
       link: "https://thepeninsulaqatar.com/article/28/04/2022/carnegie-mellon-students-win-national-debate-contest",
       category: "Achievement",
       image: "img/news/national debate champions.jpg",
@@ -84,6 +99,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
       title: "CMU-Q team wins Arabic University debate championship",
       source: "Qatar Tribune",
       date: "2022",
+      sortDate: "2022-07-01",
       link: "https://www.qatar-tribune.com/article/215327/NATION/CMU-Q-team-wins-Arabic-University-debate-championship",
       category: "Achievement",
       image: "img/news/arabic debate champions.png",
@@ -93,6 +109,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
       title: "CMU-Q student club overcomes obstacles to host TEDx event",
       source: "CMU-Q News",
       date: "2021",
+      sortDate: "2021-11-15",
       link: "https://www.qatar.cmu.edu/news/cmu-q-student-club-overcomes-obstacles-to-host-tedx-event/",
       category: "Leadership",
       image: "img/news/tedx.png",
@@ -102,6 +119,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
       title: "On UN Arabic Language Day, Top CMU-Q Team Reflects on Growth of Arabic Debate",
       source: "CMU-Q News",
       date: "2022",
+      sortDate: "2022-12-18",
       link: "https://www.qatar.cmu.edu/news/on-un-arabic-language-day-top-cmu-q-team-reflects-on-growth-of-arabic-debate/",
       category: "Feature",
       image: "img/news/UN arabic language day.jpg",
@@ -109,7 +127,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
     }
   ];
 
-  const sortedArticles = [...newsArticles].sort((a, b) => Number(b.date) - Number(a.date));
+  const sortedArticles = [...newsArticles].sort((a, b) => b.sortDate.localeCompare(a.sortDate));
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -129,22 +147,11 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
 
   const body = (
     <div className="bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950">
-      <div className="px-3 pb-1 pt-4 md:px-8 md:pb-2 md:pt-8">
-        <h2
-          className="mb-1.5 text-center text-xl font-normal md:mb-2 md:text-3xl lg:text-4xl"
-          style={{
-            color: "#f4f0ff",
-            textShadow: `
-              0 0 6px rgba(180, 140, 255, 0.5),
-              0 0 12px rgba(180, 140, 255, 0.35),
-              0 0 24px rgba(180, 140, 255, 0.25)
-            `,
-            letterSpacing: "-0.01em"
-          }}
-        >
+      <div className="px-2 pb-1 pt-3 md:px-8 md:pb-2 md:pt-8">
+        <h2 className={portfolioSectionHeadingClassName} style={portfolioSectionHeadingStyle}>
           In The News
         </h2>
-        <p className="mx-auto mt-1.5 max-w-2xl text-center text-xs font-light text-purple-200/75 md:mt-2 md:text-base">
+        <p className={`${portfolioSectionSubtextClassName} mt-1.5 text-xs md:mt-2`}>
           Press and media: swipe or use the controls to browse stories.
         </p>
       </div>
@@ -161,7 +168,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
                   href={article.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group mx-auto flex max-w-3xl flex-col gap-3 rounded-xl border border-cyan-500/25 bg-gradient-to-br from-slate-950/95 via-[#1a1030]/90 to-slate-950/95 p-4 shadow-[0_8px_40px_rgba(0,0,0,0.45)] ring-1 ring-white/5 transition hover:border-cyan-400/40 hover:ring-cyan-500/20 md:flex-row md:items-stretch md:gap-8 md:rounded-2xl md:p-8"
+                  className="group mx-auto flex max-w-3xl flex-col gap-3 rounded-xl border border-purple-500/25 bg-gradient-to-br from-slate-950/95 via-[#1a1030]/90 to-slate-950/95 p-4 shadow-[0_8px_40px_rgba(0,0,0,0.45)] ring-1 ring-white/5 transition hover:border-purple-400/45 hover:ring-purple-500/20 md:flex-row md:items-stretch md:gap-8 md:rounded-2xl md:p-8"
                 >
                   <div className="relative w-full shrink-0 overflow-hidden rounded-lg border border-white/10 md:w-[42%] md:rounded-xl">
                     <div className="h-[clamp(132px,38vw,196px)] w-full md:h-full md:min-h-[200px]">
@@ -174,7 +181,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
                     </div>
                   </div>
                   <div className="flex min-w-0 flex-1 flex-col justify-center text-left">
-                    <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-cyan-300/85 md:mb-2 md:text-[11px] md:tracking-[0.2em]">
+                    <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-purple-300/90 md:mb-2 md:text-[11px] md:tracking-[0.2em]">
                       {article.category}
                     </p>
                     <h3 className="mb-3 text-base font-semibold leading-snug text-white md:mb-4 md:text-xl lg:text-2xl">
@@ -185,7 +192,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
                       <span className="text-purple-300/50">·</span>
                       <time className="tabular-nums text-purple-200/60">{article.date}</time>
                     </div>
-                    <p className="mt-2 text-[11px] text-cyan-200/50 group-hover:text-cyan-200/70 md:mt-3 md:text-xs">
+                    <p className="mt-2 text-[11px] text-purple-300/55 group-hover:text-purple-200/75 md:mt-3 md:text-xs">
                       Read article →
                     </p>
                   </div>
@@ -203,7 +210,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
                 type="button"
                 className={`h-2 rounded-full transition-all ${
                   i === selectedIndex
-                    ? "w-8 bg-cyan-400/90 shadow-[0_0_12px_rgba(34,211,238,0.5)]"
+                    ? "w-8 bg-purple-400/90 shadow-[0_0_12px_rgba(168,85,247,0.45)]"
                     : "w-2 bg-white/20 hover:bg-white/35"
                 }`}
                 aria-label={`Go to article ${i + 1}`}
@@ -214,7 +221,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
           <div className="flex items-center justify-center gap-3">
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/35 bg-cyan-950/40 px-3 py-1.5 text-xs font-medium text-cyan-100/90 shadow-[0_0_24px_rgba(34,211,238,0.12)] transition hover:border-cyan-300/50 hover:bg-cyan-900/30 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
+              className={`${portfolioControlButtonClassName} gap-1.5 px-3 py-1.5 text-xs font-medium sm:gap-2 sm:px-4 sm:py-2 sm:text-sm`}
               onClick={() => emblaApi?.scrollPrev()}
               aria-label="Previous article"
             >
@@ -223,7 +230,7 @@ const News: React.FC<NewsProps> = ({ embedded }) => {
             </button>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/35 bg-cyan-950/40 px-3 py-1.5 text-xs font-medium text-cyan-100/90 shadow-[0_0_24px_rgba(34,211,238,0.12)] transition hover:border-cyan-300/50 hover:bg-cyan-900/30 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
+              className={`${portfolioControlButtonClassName} gap-1.5 px-3 py-1.5 text-xs font-medium sm:gap-2 sm:px-4 sm:py-2 sm:text-sm`}
               onClick={() => emblaApi?.scrollNext()}
               aria-label="Next article"
             >
