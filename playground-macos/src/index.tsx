@@ -39,12 +39,14 @@ export default function App() {
     return <Boot restart={restart} sleep={sleep} setBooting={setBooting} />;
   } else {
     return (
-      <Desktop
-        setLogin={() => {}} // Dummy function since login is removed
-        shutMac={shutMac}
-        sleepMac={sleepMac}
-        restartMac={restartMac}
-      />
+      <div className="h-full min-h-[100dvh] w-full">
+        <Desktop
+          setLogin={() => {}} // Dummy function since login is removed
+          shutMac={shutMac}
+          sleepMac={sleepMac}
+          restartMac={restartMac}
+        />
+      </div>
     );
   }
 }

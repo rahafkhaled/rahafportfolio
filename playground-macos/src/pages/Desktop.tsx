@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { apps, wallpapers } from "~/configs";
-import { minMarginY } from "~/utils";
+import { minMarginY, MOBILE_BREAKPOINT } from "~/utils";
+import { useWindowSize } from "~/hooks";
 import type { MacActions } from "~/types";
 import { useStore } from "~/stores";
 import TopBar from "~/components/menus/TopBar";
@@ -9,6 +10,7 @@ import Spotlight from "~/components/Spotlight";
 import Launchpad from "~/components/Launchpad";
 import Dock from "~/components/dock/Dock";
 import FileIcons from "~/components/FileIcons";
+import About from "~/components/apps/About";
 import Preview from "~/components/apps/Preview";
 import AppleNotification from "~/components/AppleNotification";
 
@@ -47,9 +49,9 @@ export default function Desktop(props: MacActions) {
     previewURL: ""
   } as Omit<DesktopState, "showNotif">);
 
-  // Check if screen is phone-sized (mobile)
-  const isPhone = window.innerWidth <= 768;
-
+  const { winWidth } = useWindowSize();
+  const isPhone = winWidth <= MOBILE_BREAKPOINT;
+  const didBootOpenAbout = useRef(false);
   // Notifications array for stacking
   const [notifications, setNotifications] = useState<
     {
@@ -105,35 +107,27 @@ export default function Desktop(props: MacActions) {
     getAppsData();
   }, []);
 
-  // Auto-open About Me on launch
+  // Auto-open About on launch (desktop only; phone uses a single-page shell, no app windows)
   useEffect(() => {
-    // Only run once on initial render when apps are loaded
-    if (Object.keys(state.showApps).length > 0 && state.currentTitle === "Finder") {
-      if (isPhone) {
-        // On phone, only show About Me
-        openApp("about");
-        // Close all other apps
-        apps.forEach((app) => {
-          if (app.id !== "about") {
-            closeApp(app.id);
-          }
-        });
-      } else {
-        openApp("about");
-      }
-    }
-  }, [state.showApps, isPhone]);
+    if (isPhone) return;
+    if (Object.keys(state.showApps).length === 0 || state.currentTitle !== "Finder") return;
+    if (didBootOpenAbout.current) return;
+    didBootOpenAbout.current = true;
+    openApp("about");
+  }, [state.showApps, state.currentTitle, isPhone]);
 
   const toggleLaunchpad = (target: boolean): void => {
-    const r = document.querySelector(`#launchpad`) as HTMLElement;
-    if (target) {
-      r.style.transform = "scale(1)";
-      r.style.transition = "ease-in 0.2s";
-    } else {
-      r.style.transform = "scale(1.1)";
-      r.style.transition = "ease-out 0.2s";
+    const r = document.querySelector("#launchpad") as HTMLElement | null;
+    // Opening: Launchpad isn't mounted yet; #launchpad doesn't exist until after setState.
+    if (r) {
+      if (target) {
+        r.style.transform = "scale(1)";
+        r.style.transition = "ease-in 0.2s";
+      } else {
+        r.style.transform = "scale(1.1)";
+        r.style.transition = "ease-out 0.2s";
+      }
     }
-
     setState({ ...state, showLaunchpad: target });
   };
 
@@ -157,23 +151,23 @@ export default function Desktop(props: MacActions) {
   };
 
   const setAppMax = (id: string, target?: boolean): void => {
-    const maxApps = state.maxApps;
-    if (target === undefined) target = !maxApps[id];
-    maxApps[id] = target;
-    setState({
-      ...state,
-      maxApps: maxApps,
-      hideDockAndTopbar: target
+    setState((prev) => {
+      const nextTarget = target === undefined ? !prev.maxApps[id] : target;
+      return {
+        ...prev,
+        maxApps: { ...prev.maxApps, [id]: nextTarget },
+        hideDockAndTopbar: nextTarget
+      };
     });
   };
 
   const setAppMin = (id: string, target?: boolean): void => {
-    const minApps = state.minApps;
-    if (target === undefined) target = !minApps[id];
-    minApps[id] = target;
-    setState({
-      ...state,
-      minApps: minApps
+    setState((prev) => {
+      const nextTarget = target === undefined ? !prev.minApps[id] : target;
+      return {
+        ...prev,
+        minApps: { ...prev.minApps, [id]: nextTarget }
+      };
     });
   };
 
@@ -199,20 +193,18 @@ export default function Desktop(props: MacActions) {
   };
 
   const closeApp = (id: string): void => {
-    setAppMax(id, false);
-    const showApps = state.showApps;
-    showApps[id] = false;
-    setState({
-      ...state,
-      showApps: showApps,
+    setState((prev) => ({
+      ...prev,
+      maxApps: { ...prev.maxApps, [id]: false },
+      showApps: { ...prev.showApps, [id]: false },
       hideDockAndTopbar: false
-    });
+    }));
   };
 
   const openApp = (id: string, url?: string): void => {
-    const showApps = state.showApps;
+    const showApps = { ...state.showApps };
     showApps[id] = true;
-    const appsZ = state.appsZ;
+    const appsZ = { ...state.appsZ };
     const maxZ = state.maxZ + 1;
     appsZ[id] = maxZ;
 
@@ -223,33 +215,7 @@ export default function Desktop(props: MacActions) {
       throw new TypeError(`App ${id} is undefined.`);
     }
 
-    // If it's Preview and we have a URL, set it in the state
-    if (id === "preview" && url) {
-      setState({
-        ...state,
-        showApps,
-        appsZ,
-        maxZ,
-        currentTitle: currentApp.title,
-        previewURL: url
-      });
-      return;
-    }
-
-    setState({
-      ...state,
-      showApps,
-      appsZ,
-      maxZ,
-      currentTitle: currentApp.title
-    });
-
-    // On phone, automatically maximize the About Me app
-    if (isPhone && id === "about") {
-      setAppMax(id, true);
-    }
-
-    const minApps = state.minApps;
+    let minApps = { ...state.minApps };
     if (minApps[id]) {
       const r = document.querySelector(`#window-${id}`) as HTMLElement;
       r.style.transform = `translate(${r.style.getPropertyValue(
@@ -257,13 +223,54 @@ export default function Desktop(props: MacActions) {
       )}, ${r.style.getPropertyValue("--window-transform-y")}) scale(1)`;
       r.style.transition = "ease-in 0.3s";
       minApps[id] = false;
-      setState({ ...state, minApps });
+    }
+
+    const next: DesktopState = {
+      ...state,
+      showApps,
+      appsZ,
+      maxZ,
+      minApps,
+      currentTitle: currentApp.title,
+      ...(id === "preview" && url ? { previewURL: url } : {})
+    };
+
+    if (id === "preview" && url) {
+      if (isPhone) {
+        const maxApps = { ...state.maxApps };
+        apps.forEach((a) => {
+          maxApps[a.id] = a.id === id;
+        });
+        setState({ ...next, maxApps, hideDockAndTopbar: true });
+      } else {
+        setState(next);
+      }
+      return;
+    }
+
+    // Phone: fullscreen the opened app in one setState (avoids stale max state on mobile).
+    if (isPhone) {
+      const maxApps = { ...state.maxApps };
+      apps.forEach((a) => {
+        maxApps[a.id] = a.id === id;
+      });
+      setState({
+        ...next,
+        maxApps,
+        hideDockAndTopbar: true
+      });
+    } else {
+      setState(next);
     }
   };
 
   const renderAppWindows = () => {
+    if (isPhone) return null;
     return apps.map((app) => {
       if (app.desktop && state.showApps[app.id]) {
+        if (isPhone && app.id === "about") {
+          return <div key={`desktop-app-${app.id}`} />;
+        }
         const props = {
           id: app.id,
           title: app.title,
@@ -283,7 +290,6 @@ export default function Desktop(props: MacActions) {
           focus: openApp
         };
 
-        // If it's Preview, pass the URL from the state
         if (app.id === "preview") {
           return (
             <AppWindow key={`desktop-app-${app.id}`} {...props}>
@@ -292,11 +298,10 @@ export default function Desktop(props: MacActions) {
           );
         }
 
-        // If it's About, pass the openApp function
         if (app.id === "about") {
           return (
             <AppWindow key={`desktop-app-${app.id}`} {...props}>
-              {React.cloneElement(app.content as React.ReactElement, { openApp })}
+              {app.content}
             </AppWindow>
           );
         }
@@ -310,10 +315,6 @@ export default function Desktop(props: MacActions) {
         return <div key={`desktop-app-${app.id}`} />;
       }
     });
-  };
-
-  const openResume = () => {
-    openApp("preview", "img/ui/Rahaf-Abutarbush-Resume.pdf");
   };
 
   useEffect(() => {
@@ -387,14 +388,18 @@ export default function Desktop(props: MacActions) {
   }, [isPhone]);
 
   return (
-    <div
-      className="size-full overflow-hidden bg-center bg-cover"
-      style={{
-        backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`,
-        filter: `brightness( ${(brightness as number) * 0.7 + 50}% )`
-      }}
-    >
-      {/* Top Menu Bar */}
+    <div className="relative flex h-full min-h-[100dvh] w-full flex-col overflow-hidden">
+      {/* Brightness on a layer that does not wrap interactive UI; filter on a parent breaks clicks/taps in WebKit */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 bg-center bg-cover"
+        aria-hidden
+        style={{
+          backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`,
+          filter: `brightness( ${(brightness as number) * 0.7 + 50}% )`
+        }}
+      />
+      <div className="relative z-10 flex h-full w-full min-h-[100dvh] flex-1 flex-col">
+      {/* Desktop menu bar; hidden on phone; portfolio shell is full-viewport below */}
       <TopBar
         title={state.currentTitle}
         setLogin={props.setLogin}
@@ -405,11 +410,21 @@ export default function Desktop(props: MacActions) {
         hide={state.hideDockAndTopbar}
         setSpotlightBtnRef={setSpotlightBtnRef}
       />
-      {/* App Windows Layer */}
-      <div className="window-bound absolute z-10" style={{ top: minMarginY }}>
-        {renderAppWindows()}
-        <FileIcons openApp={openApp} />
-      </div>
+      {/* Phone: full-viewport portfolio; scroll root adds safe-area padding for notch */}
+      {isPhone && (
+        <div className="fixed inset-x-0 top-0 bottom-0 z-[15] flex flex-col overflow-hidden bg-gray-950">
+          <div className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden">
+            <About standaloneMobile />
+          </div>
+        </div>
+      )}
+      {/* App windows + desktop icons; not used on phone (single-page portfolio shell) */}
+      {!isPhone && (
+        <div className="window-bound absolute z-10" style={{ top: minMarginY }}>
+          <FileIcons openApp={openApp} />
+          {renderAppWindows()}
+        </div>
+      )}
       {/* Render each notification in its own fixed position, dynamically offset */}
       {!isPhone &&
         notifications
@@ -435,8 +450,8 @@ export default function Desktop(props: MacActions) {
             </div>
           ))}
 
-      {/* Spotlight */}
-      {state.spotlight && (
+      {/* Spotlight / Launchpad: desktop only (phone is one page, no app switching) */}
+      {state.spotlight && !isPhone && (
         <Spotlight
           openApp={openApp}
           toggleLaunchpad={toggleLaunchpad}
@@ -444,8 +459,7 @@ export default function Desktop(props: MacActions) {
           btnRef={spotlightBtnRef as React.RefObject<HTMLDivElement>}
         />
       )}
-      {/* Launchpad */}
-      <Launchpad show={state.showLaunchpad} toggleLaunchpad={toggleLaunchpad} />
+      {state.showLaunchpad && !isPhone && <Launchpad toggleLaunchpad={toggleLaunchpad} />}
       {/* Dock 
       <Dock
         open={openApp}
@@ -455,6 +469,7 @@ export default function Desktop(props: MacActions) {
         hide={state.hideDockAndTopbar}
       />
       */}
+      </div>
     </div>
   );
 }

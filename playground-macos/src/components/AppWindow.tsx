@@ -1,6 +1,6 @@
 import React from "react";
 import { Rnd } from "react-rnd";
-import { minMarginX, minMarginY, appBarHeight } from "~/utils";
+import { minMarginX, minMarginY, appBarHeight, MOBILE_BREAKPOINT } from "~/utils";
 
 const FullIcon = ({ size }: { size: number }) => (
   <svg
@@ -107,17 +107,16 @@ const Window = (props: WindowProps) => {
   const dockSize = useStore((state) => state.dockSize);
   const { winWidth, winHeight } = useWindowSize();
 
-  // Check if this is About Me app on phone
-  const isPhone = window.innerWidth <= 768;
-  const isAboutOnPhone = isPhone && props.id === "about";
+  const isPhone = winWidth <= MOBILE_BREAKPOINT;
+  /** Narrow screens: one fullscreen app at a time (see Desktop openApp). */
+  const isMobileLayout = isPhone && props.max;
 
   // Calculate responsive dimensions based on screen size
   const getResponsiveDimensions = () => {
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
+    const screenWidth = winWidth;
+    const screenHeight = winHeight;
 
-    // If it's About Me on phone, make it fullscreen
-    if (isAboutOnPhone) {
+    if (isMobileLayout) {
       return {
         width: screenWidth,
         height: screenHeight
@@ -145,11 +144,10 @@ const Window = (props: WindowProps) => {
 
   // Calculate responsive positioning
   const getResponsivePosition = () => {
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
+    const screenWidth = winWidth;
+    const screenHeight = winHeight;
 
-    // If it's About Me on phone, position it at the very top
-    if (isAboutOnPhone) {
+    if (isMobileLayout) {
       return {
         x: screenWidth, // because of boundary
         y: -minMarginY // because of boundary
@@ -191,7 +189,7 @@ const Window = (props: WindowProps) => {
       x: newPosition.x,
       y: newPosition.y
     });
-  }, [winWidth, winHeight]);
+  }, [winWidth, winHeight, props.max]);
 
   const round = props.max ? "rounded-none" : "rounded-lg";
   const minimized = props.min
@@ -247,17 +245,20 @@ const Window = (props: WindowProps) => {
       minWidth={props.minWidth ? props.minWidth : 200}
       minHeight={props.minHeight ? props.minHeight : 150}
       dragHandleClassName="window-bar"
-      disableDragging={props.max || isAboutOnPhone}
-      enableResizing={!props.max && !isAboutOnPhone}
+      disableDragging={props.max || isMobileLayout}
+      enableResizing={!props.max && !isMobileLayout}
       lockAspectRatio={props.aspectRatio}
       lockAspectRatioExtraHeight={props.aspectRatio ? appBarHeight : undefined}
       style={{
         zIndex: props.z,
-        willChange: "transform"
-        // transform: "translate3d(0,0,0)"
+        willChange: "transform",
+        // react-rnd merges display:inline-block last; that overrides Tailwind `flex` and breaks flex-1 / scroll. Force column flex on the window shell.
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden"
       }}
       onMouseDown={() => props.focus(props.id)}
-      className={`overflow-hidden ${round} ${border} shadow-lg shadow-black/50 bg-gray-800/30 backdrop-blur-sm ${minimized}`}
+      className={`flex h-full min-h-0 flex-col overflow-hidden ${round} ${border} shadow-lg shadow-black/50 bg-gray-800/30 backdrop-blur-sm ${minimized}`}
       id={`window-${props.id}`}
       dragGrid={[1, 1]}
       dragAxis="both"
@@ -266,7 +267,7 @@ const Window = (props: WindowProps) => {
       dragElastic={0}
     >
       <div
-        className="window-bar relative h-6 text-center text-white bg-[#1a1625]/80 dark:bg-[#1a1625]/80 backdrop-blur-lg"
+        className="window-bar relative flex min-h-[44px] shrink-0 items-center justify-center py-1 text-center text-white md:h-6 md:min-h-0 md:py-0 bg-[#1a1625]/80 dark:bg-[#1a1625]/80 backdrop-blur-lg"
         onDoubleClick={() => !disableMax && props.setMax(props.id)}
       >
         <TrafficLights
@@ -279,8 +280,9 @@ const Window = (props: WindowProps) => {
         />
         <span className="font-semibold text-white">{props.title}</span>
       </div>
-      <div className="innner-window w-full overflow-y-hidden">{children}</div>
-      <footer className="w-full text-center py-4 text-purple-300 text-sm opacity-70">
+      {/* overflow-hidden: single scroll inside WindowTemplate / app body; avoids nested overflow-y-auto + broken % heights */}
+      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden">{children}</div>
+      <footer className="hidden shrink-0 py-3 text-center text-sm text-purple-300 opacity-70 md:block md:py-4">
         &copy; {new Date().getFullYear()} Rahaf Abutarbush. All rights reserved.
       </footer>
     </Rnd>

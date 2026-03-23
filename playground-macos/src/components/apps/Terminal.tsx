@@ -88,11 +88,11 @@ const HowDare = ({ setRMRF }: { setRMRF: (value: boolean) => void }) => {
 const Terminal: React.FC = () => {
   return (
     <WindowTemplate>
-      <div className="h-full w-full bg-black text-white font-mono p-4 overflow-y-auto">
-        <div className="space-y-4">
+      <div className="w-full bg-black p-4 pb-[max(1rem,env(safe-area-inset-bottom))] font-mono text-[15px] leading-relaxed text-white md:text-sm">
+        <div className="space-y-5 md:space-y-4">
           <div>
             <span className="text-green-500">➜</span> <span className="text-blue-400">whoami</span>
-            <p className="mt-2 leading-relaxed">
+            <p className="mt-2">
               Hi! I'm Rahaf, an Emerging Tech Innovation Lead based in the Middle East, passionate about bridging technology and user experience.
             </p>
           </div>

@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import WindowTemplate from '../WindowTemplate';
 
-const Contact: React.FC = () => {
+interface ContactProps {
+  embedded?: boolean;
+}
+
+const Contact: React.FC<ContactProps> = ({ embedded }) => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,9 +36,8 @@ const Contact: React.FC = () => {
     }
   };
 
-  return (
-    <WindowTemplate>
-      <div className="h-full w-full flex flex-col items-center justify-center p-8">
+  const inner = (
+      <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col items-center justify-start px-2 py-6 md:justify-center md:p-8">
         {submitted ? (
           <div
             style={{
@@ -61,6 +64,7 @@ const Contact: React.FC = () => {
           </div>
         ) : (
           <>
+            {!embedded && (
             <h2
               style={{
                 color: '#f4f0ff',
@@ -75,35 +79,38 @@ const Contact: React.FC = () => {
             >
               Contact Me
             </h2>
+            )}
             <form
               onSubmit={handleSubmit}
-              className="flex flex-col gap-4 w-full max-w-md"
+              className="flex w-full max-w-md flex-col gap-4 touch-manipulation"
             >
               <input
                 type="text"
                 name="name"
                 placeholder="Your Name"
-                className="p-3 rounded border border-purple-200 focus:border-purple-400 outline-none bg-white/90 text-gray-900"
+                className="min-h-[48px] rounded border border-purple-200 bg-white/90 p-3 text-base text-gray-900 outline-none focus:border-purple-400"
                 required
+                autoComplete="name"
               />
               <input
                 type="email"
                 name="email"
                 placeholder="Your Email"
-                className="p-3 rounded border border-purple-200 focus:border-purple-400 outline-none bg-white/90 text-gray-900"
+                className="min-h-[48px] rounded border border-purple-200 bg-white/90 p-3 text-base text-gray-900 outline-none focus:border-purple-400"
                 required
+                autoComplete="email"
               />
               <textarea
                 name="message"
                 placeholder="Your Message"
-                rows={5}
-                className="p-3 rounded border border-purple-200 focus:border-purple-400 outline-none bg-white/90 text-gray-900"
+                rows={6}
+                className="min-h-[140px] rounded border border-purple-200 bg-white/90 p-3 text-base text-gray-900 outline-none focus:border-purple-400"
                 required
               />
-              {error && <div className="text-red-600 text-sm">{error}</div>}
+              {error && <div className="text-sm text-red-600">{error}</div>}
               <button
                 type="submit"
-                className="font-semibold py-2 px-6 rounded transition-colors bg-gray-600/80 hover:bg-gray-700/90 border-none"
+                className="min-h-[48px] rounded border-none bg-gray-600/80 px-6 py-3 text-base font-semibold transition-colors hover:bg-gray-700/90"
                 style={{
                   color: '#f4f0ff',
                   textShadow: `
@@ -119,8 +126,10 @@ const Contact: React.FC = () => {
           </>
         )}
       </div>
-    </WindowTemplate>
   );
+
+  if (embedded) return inner;
+  return <WindowTemplate>{inner}</WindowTemplate>;
 };
 
 export default Contact; 

@@ -73,12 +73,12 @@ const NavPage = ({ width, setGoURL }: NavProps) => {
 
   return (
     <div
-      className="w-full safari-content overflow-y-scroll bg-center bg-cover text-c-black"
+      className="safari-content w-full min-h-0 flex-1 overflow-y-auto bg-center bg-cover text-c-black"
       style={{
         backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`
       }}
     >
-      <div className="w-full min-h-full pt-8 bg-c-100/80 backdrop-blur-2xl">
+      <div className="min-h-full w-full bg-c-100/80 pt-6 backdrop-blur-2xl md:pt-8">
         {/* Favorites */}
         <NavSection section={websites.favorites} setGoURL={setGoURL} width={width} />
 
@@ -114,12 +114,12 @@ const NoInternetPage = () => {
 
   return (
     <div
-      className="w-full safari-content bg-blue-50 overflow-y-scroll bg-center bg-cover"
+      className="safari-content flex min-h-0 flex-1 flex-col overflow-y-auto bg-blue-50 bg-center bg-cover"
       style={{
         backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`
       }}
     >
-      <div className="w-full h-full pb-10 backdrop-blur-2xl flex-center text-c-600 bg-c-100/80">
+      <div className="flex-center flex min-h-0 flex-1 flex-col bg-c-100/80 pb-10 text-c-600 backdrop-blur-2xl">
         <div className="text-center">
           <div className="text-2xl font-bold">You Are Not Connected to the Internet</div>
           <div className="pt-4 text-sm">
@@ -173,9 +173,9 @@ const Safari = ({ width }: SafariProps) => {
   const hideLast = (width as number) < 640 ? "hidden" : "flex";
 
   return (
-    <div className="w-full h-full">
+    <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col">
       {/* browser topbar */}
-      <div className={`h-10 grid ${grid} items-center bg-c-white`}>
+      <div className={`grid shrink-0 ${grid} h-12 items-center bg-c-white md:h-10`}>
         <div className="flex px-2">
           <button
             className={`safari-btn w-7 ${buttonColor}`}
@@ -199,7 +199,7 @@ const Safari = ({ width }: SafariProps) => {
             value={state.currentURL}
             onChange={(e) => setState({ ...state, currentURL: e.target.value })}
             onKeyPress={pressURL}
-            className="h-6 w-full p-2 rounded font-normal no-outline text-sm text-center text-c-500 bg-c-200"
+            className="h-9 w-full min-h-[44px] rounded bg-c-200 p-2 text-center text-base font-normal text-c-500 no-outline md:h-6 md:min-h-0 md:text-sm"
             border="2 transparent focus:blue-400 dark:focus:blue-500"
             placeholder="Search or enter website name"
           />
@@ -219,11 +219,13 @@ const Safari = ({ width }: SafariProps) => {
         state.goURL === "" ? (
           <NavPage setGoURL={setGoURL} width={width as number} />
         ) : (
-          <iframe
-            title={"Safari clone browser"}
-            src={state.goURL}
-            className="safari-content w-full bg-white"
-          />
+          <div className="flex min-h-0 flex-1 flex-col bg-white">
+            <iframe
+              title={"Safari clone browser"}
+              src={state.goURL}
+              className="h-full min-h-[55vh] w-full flex-1 border-0 bg-white md:min-h-0"
+            />
+          </div>
         )
       ) : (
         <NoInternetPage />

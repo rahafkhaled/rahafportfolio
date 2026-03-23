@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import React, { useRef, useState, useEffect, LegacyRef, useCallback } from "react";
+import React, { useRef, useState, useEffect, LegacyRef } from "react";
 import { appBarHeight } from "~/utils";
 import type { AppsData } from "~/types/index";
 
@@ -8,8 +8,12 @@ import { animate } from "framer-motion";
 import WindowTemplate from "~/components/WindowTemplate";
 import useEmblaCarousel from "embla-carousel-react";
 
-// Add the ArtworkGallery component
-function ArtworkGallery() {
+interface ArtworkGalleryProps {
+  /** Render without window chrome (inline on About page). */
+  embedded?: boolean;
+}
+
+function ArtworkGallery({ embedded }: ArtworkGalleryProps) {
   const [ref, { width }] = useMeasure();
   const xTranslation = useMotionValue(0);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -205,6 +209,27 @@ function ArtworkGallery() {
       title: "Emerging Tech Lab",
       description: "Lab Tour & Presentations - PwC Emerging Tech Lab 2022 - UAE",
       image: "img/gallery/lab visits.JPG"
+    },
+    // MWC & Web Summit
+    {
+      id: 19,
+      title: "MWC",
+      description: "Connecting with industry - Mobile World Congress 2025",
+      image: "img/gallery/MWC.jpeg"
+    },
+    {
+      id: 20,
+      title: "MWC25",
+      description:
+        "Presenting emerging technology prototypes - Mobile World Congress 2025",
+      image: "img/gallery/MWC2.png"
+    },
+    {
+      id: 21,
+      title: "Web Summit",
+      description:
+        "Keynote on the future of AI - Web Summit 2026",
+      image: "img/gallery/websummit_speech.JPG"
     }
   ];
 
@@ -214,30 +239,17 @@ function ArtworkGallery() {
     skipSnaps: false,
     dragFree: false
   });
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(false);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
-  }, [emblaApi]);
-
   useEffect(() => {
     if (!emblaApi) return;
-    emblaApi.on("select", onSelect);
-    onSelect();
-  }, [emblaApi, onSelect]);
+    emblaApi.reInit();
+  }, [emblaApi, artworks.length]);
 
-  return (
-    <WindowTemplate>
-      <div className="h-full w-full p-4 md:p-6 overflow-y-auto custom-scrollbar flex flex-col justify-center items-center bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950">
+  const body = (
+      <div className="flex min-h-0 w-full flex-col items-center bg-gradient-to-br from-gray-950 via-gray-900 to-purple-950 p-3 pb-[max(1rem,env(safe-area-inset-bottom))] md:p-6">
         {/* Header */}
-        <div className="flex flex-col items-center mb-6 md:mb-8">
+        <div className="mb-2 flex flex-col items-center md:mb-6">
           <h2
-            className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-2"
+            className="mb-1 text-center text-2xl font-bold md:mb-2 md:text-3xl lg:text-4xl"
             style={{
               color: "#f4f0ff",
               textShadow: `
@@ -251,39 +263,20 @@ function ArtworkGallery() {
           >
             Events Gallery
           </h2>
-          <p className="text-sm md:text-base text-purple-200/80 text-center mt-2 max-w-2xl mb-2 px-4">
+          <p className="max-w-2xl px-2 text-center text-sm leading-snug text-purple-200/80 md:px-4 md:text-base md:leading-normal">
             Speaking at events, leading discussions, and sharing insights on AI,
             innovation, and the future of technology.
           </p>
         </div>
-        {/* Embla Carousel */}
-        <div className="relative w-full max-w-5xl mx-auto h-full flex justify-center items-center">
-          {/* Arrows */}
-          <button
-            className="absolute left-1 md:left-2 top-1/2 -translate-y-1/2 z-30 bg-white/80 text-gray-900 rounded-full w-8 h-8 md:w-12 md:h-12 flex items-center justify-center text-xl md:text-3xl shadow-xl border border-gray-300 hover:bg-white"
-            onClick={() => emblaApi && emblaApi.scrollPrev()}
-            aria-label="Previous"
-            style={{ pointerEvents: "auto" }}
-            disabled={!canScrollPrev}
-          >
-            <span className="i-ph:caret-left" />
-          </button>
-          <button
-            className="absolute right-1 md:right-2 top-1/2 -translate-y-1/2 z-30 bg-white/80 text-gray-900 rounded-full w-8 h-8 md:w-12 md:h-12 flex items-center justify-center text-xl md:text-3xl shadow-xl border border-gray-300 hover:bg-white"
-            onClick={() => emblaApi && emblaApi.scrollNext()}
-            aria-label="Next"
-            style={{ pointerEvents: "auto" }}
-            disabled={!canScrollNext}
-          >
-            <span className="i-ph:caret-right" />
-          </button>
-          {/* Embla Carousel Track */}
-          <div ref={emblaRef} className="overflow-hidden">
-            <div className="flex gap-4 md:gap-8 py-2 px-4 md:px-8">
+        {/* Embla Carousel: no flex-1 / min-h on mobile (avoids huge gap under header) */}
+        <div className="relative mx-auto flex w-full max-w-5xl flex-col justify-start md:min-h-0 md:flex-1 md:justify-center">
+          {/* Embla viewport first so arrow buttons (below) paint on top and receive taps */}
+          <div ref={emblaRef} className="relative z-0 overflow-hidden">
+            <div className="flex gap-4 px-2 py-1 md:gap-8 md:px-8 md:py-3">
               {artworks.map((artwork, idx) => (
                 <div
                   key={idx}
-                  className="gallery-card flex-shrink-0 w-64 md:w-72 lg:w-96 rounded-xl shadow-lg bg-gradient-to-br from-white/10 via-purple-200/5 to-purple-400/10 backdrop-blur-md border border-purple-400/20 overflow-hidden relative"
+                  className="gallery-card relative w-[min(88vw,22rem)] shrink-0 overflow-hidden rounded-xl border border-purple-400/20 bg-gradient-to-br from-white/10 via-purple-200/5 to-purple-400/10 shadow-lg backdrop-blur-md sm:w-72 lg:w-96"
                   style={{ scrollSnapAlign: "center" }}
                   onMouseEnter={() => setHoveredCard(idx)}
                   onMouseLeave={() => setHoveredCard(null)}
@@ -291,12 +284,12 @@ function ArtworkGallery() {
                   <img
                     src={artwork.image}
                     alt={artwork.title}
-                    className="w-full h-40 md:h-56 lg:h-64 object-cover rounded-xl"
+                    className="h-44 w-full rounded-xl object-cover sm:h-56 lg:h-64"
                     loading="lazy"
                   />
                   {/* Caption Overlay: always visible on mobile, hover only on desktop */}
                   <div
-                    className={`absolute bottom-3 left-3 bg-black/60 px-2 md:px-3 py-1 rounded text-xs font-mono uppercase tracking-widest text-purple-100 transition-opacity duration-300 pointer-events-none ${hoveredCard === idx ? "opacity-100" : "md:opacity-0 opacity-100"}`}
+                    className={`pointer-events-none absolute bottom-3 left-3 rounded bg-black/60 px-2 py-1 text-xs font-mono uppercase tracking-widest text-purple-100 transition-opacity duration-300 md:px-3 ${hoveredCard === idx ? "opacity-100" : "opacity-100 md:opacity-0"}`}
                   >
                     {artwork.description}
                   </div>
@@ -304,10 +297,28 @@ function ArtworkGallery() {
               ))}
             </div>
           </div>
+          <button
+            type="button"
+            className="absolute left-1 top-1/2 z-[50] flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white/90 text-xl text-gray-900 shadow-xl hover:bg-white md:left-2 md:h-12 md:w-12 md:text-3xl"
+            onClick={() => emblaApi?.scrollPrev()}
+            aria-label="Previous"
+          >
+            <span className="i-ph:caret-left pointer-events-none" />
+          </button>
+          <button
+            type="button"
+            className="absolute right-1 top-1/2 z-[50] flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white/90 text-xl text-gray-900 shadow-xl hover:bg-white md:right-2 md:h-12 md:w-12 md:text-3xl"
+            onClick={() => emblaApi?.scrollNext()}
+            aria-label="Next"
+          >
+            <span className="i-ph:caret-right pointer-events-none" />
+          </button>
         </div>
       </div>
-    </WindowTemplate>
   );
+
+  if (embedded) return body;
+  return <WindowTemplate>{body}</WindowTemplate>;
 }
 
 export default ArtworkGallery;

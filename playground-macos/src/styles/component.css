@@ -33,11 +33,14 @@
 }
 
 .innner-window {
-  height: calc(100% - 1.5rem);
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .safari-content {
-  height: calc(100% - 2rem);
+  flex: 1 1 0%;
+  min-height: 0;
 }
 
 .traffic-lights .icon {

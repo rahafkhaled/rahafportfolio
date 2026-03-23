@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Rnd } from "react-rnd";
 import { useStore } from "~/stores";
 import { useWindowSize } from "~/hooks";
-import { minMarginX, minMarginY } from "~/utils";
+import { minMarginX, minMarginY, MOBILE_BREAKPOINT } from "~/utils";
 
 interface FileIconProps {
   id: string;
@@ -24,6 +24,7 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
   const dockSize = useStore((state) => state.dockSize);
   const [isDragging, setIsDragging] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const dragMovedRef = useRef(false);
 
   const [state, setState] = useState<IconState>({
     x: x,
@@ -33,6 +34,8 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
   useEffect(() => {
     setState({ x, y });
   }, [x, y]);
+
+  const isMobileLayout = winWidth <= MOBILE_BREAKPOINT;
 
   const getIconSrc = () => {
     if (isHovered) {
@@ -46,6 +49,7 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
 
   return (
     <Rnd
+      disableDragging={isMobileLayout}
       default={{
         x: state.x,
         y: state.y,
@@ -59,7 +63,13 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
           Math.max(0, state.y)
         )
       }}
-      onDragStart={() => setIsDragging(true)}
+      onDragStart={() => {
+        setIsDragging(true);
+        dragMovedRef.current = false;
+      }}
+      onDrag={(e, d) => {
+        if (Math.abs(d.deltaX) > 2 || Math.abs(d.deltaY) > 2) dragMovedRef.current = true;
+      }}
       onDragStop={(e, d) => {
         setIsDragging(false);
         setState({ x: d.x, y: d.y });
@@ -77,12 +87,16 @@ const FileIcon: React.FC<FileIconProps> = ({ id, title, icon, x = 0, y = 0, onOp
       <div
         className={`flex flex-col items-center w-full h-full p-1 rounded-lg 
           ${!isDragging ? "hover:bg-white/10" : "bg-white/10"} 
-          transition-colors duration-200 ease-out cursor-move`}
+          transition-colors duration-200 ease-out cursor-pointer touch-manipulation`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onDoubleClick={(e) => {
+        onPointerDown={() => {
+          dragMovedRef.current = false;
+        }}
+        onClick={(e) => {
           e.stopPropagation();
-          if (!isDragging) onOpen();
+          if (dragMovedRef.current) return;
+          onOpen();
         }}
       >
         <img

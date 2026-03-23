@@ -1,6 +1,6 @@
 import React from "react";
 import { format } from "date-fns";
-import { isFullScreen } from "~/utils";
+import { isFullScreen, MOBILE_BREAKPOINT } from "~/utils";
 import { music } from "~/configs";
 import type { MacActions } from "~/types";
 
@@ -15,7 +15,7 @@ interface TopBarItemProps {
 
 const TopBarItem = forwardRef(
   (props: TopBarItemProps, ref: React.ForwardedRef<HTMLDivElement>) => {
-    const hide = props.hideOnMobile ? "hidden sm:inline-flex" : "inline-flex";
+    const hide = props.hideOnMobile ? "hidden md:inline-flex" : "inline-flex";
     const bg = props.forceHover
       ? "bg-gray-100/30 dark:bg-gray-400/40"
       : "hover:(bg-gray-100/30 dark:bg-gray-400/40)";
@@ -82,6 +82,7 @@ const TopBar = (props: TopBarProps) => {
     autoReplay: true
   });
   const { winWidth, winHeight } = useWindowSize();
+  const isPhone = winWidth <= MOBILE_BREAKPOINT;
 
   const { volume, wifi } = useStore((state) => ({
     volume: state.volume,
@@ -160,32 +161,75 @@ const TopBar = (props: TopBarProps) => {
     props.sleepMac(e);
   };
 
+  /* Phone: single-page portfolio uses full viewport; no duplicate status row (avoids gap + wallpaper showing through) */
+  if (isPhone) {
+    return null;
+  }
+
   return (
     <div
-      className={`w-full h-8 px-2 fixed top-0 hstack justify-between ${
+      className={`fixed left-0 right-0 top-0 w-full transition ${
         props.hide ? "z-0" : "z-20"
-      } text-sm text-white bg-gray-700/10 backdrop-blur-2xl shadow transition`}
+      } h-8 hstack justify-between bg-gray-700/10 px-2 text-sm text-white shadow backdrop-blur-2xl`}
     >
-      <div className="hstack space-x-1">
-        <TopBarItem
-          className="px-2"
-          forceHover={state.showAppleMenu}
-          ref={appleBtnRef}
-        >
-          <img src="/img/ui/rk-logo.png" alt="RK Logo" style={{ height: 20, width: 24, objectFit: 'contain', display: 'block' }} />
-        </TopBarItem>
-        <TopBarItem
-          className="font-semibold px-2"
-          onMouseEnter={() => {
-            if (state.showAppleMenu) toggleAppleMenu();
-          }}
-        >
-          {props.title}
-        </TopBarItem>
-      </div>
+      <>
+        <div className="hstack space-x-1">
+            <TopBarItem
+              className="px-2"
+              forceHover={state.showAppleMenu}
+              ref={appleBtnRef}
+            >
+              <img
+                src="/img/ui/rk-logo.png"
+                alt="RK Logo"
+                style={{ height: 20, width: 24, objectFit: "contain", display: "block" }}
+              />
+            </TopBarItem>
+            <TopBarItem
+              className="font-semibold px-2"
+              onMouseEnter={() => {
+                if (state.showAppleMenu) toggleAppleMenu();
+              }}
+            >
+              {props.title}
+            </TopBarItem>
+          </div>
 
-      {/* Open this when clicking on Apple logo */}
-      {state.showAppleMenu && (
+          <div className="hstack flex-row justify-end space-x-2">
+            <TopBarItem hideOnMobile={true}>
+              <Battery />
+            </TopBarItem>
+            <TopBarItem
+              hideOnMobile={true}
+              forceHover={state.showWifiMenu}
+              onClick={toggleWifiMenu}
+              ref={wifiBtnRef}
+            >
+              {wifi ? (
+                <span className="i-material-symbols:wifi text-lg" />
+              ) : (
+                <span className="i-material-symbols:wifi-off text-lg" />
+              )}
+            </TopBarItem>
+            <TopBarItem ref={spotlightBtnRef} onClick={props.toggleSpotlight}>
+              <span className="i-bx:search text-[17px]" />
+            </TopBarItem>
+            <TopBarItem
+              forceHover={state.showControlCenter}
+              onClick={toggleControlCenter}
+              ref={controlCenterBtnRef}
+            >
+              <CCMIcon size={16} />
+            </TopBarItem>
+
+            <TopBarItem>
+              <span>{format(state.date, "eee MMM d")}</span>
+              <span>{format(state.date, "h:mm aa")}</span>
+            </TopBarItem>
+          </div>
+      </>
+
+      {state.showAppleMenu && !isPhone && (
         <AppleMenu
           logout={logout}
           shut={shut}
@@ -196,55 +240,20 @@ const TopBar = (props: TopBarProps) => {
         />
       )}
 
-      <div className="hstack flex-row justify-end space-x-2">
-        <TopBarItem hideOnMobile={true}>
-          <Battery />
-        </TopBarItem>
-        <TopBarItem
-          hideOnMobile={true}
-          forceHover={state.showWifiMenu}
-          onClick={toggleWifiMenu}
-          ref={wifiBtnRef}
-        >
-          {wifi ? (
-            <span className="i-material-symbols:wifi text-lg" />
-          ) : (
-            <span className="i-material-symbols:wifi-off text-lg" />
-          )}
-        </TopBarItem>
-        <TopBarItem ref={spotlightBtnRef} onClick={props.toggleSpotlight}>
-          <span className="i-bx:search text-[17px]" />
-        </TopBarItem>
-        <TopBarItem
-          forceHover={state.showControlCenter}
-          onClick={toggleControlCenter}
-          ref={controlCenterBtnRef}
-        >
-          <CCMIcon size={16} />
-        </TopBarItem>
+      {!isPhone && state.showWifiMenu && (
+        <WifiMenu toggleWifiMenu={toggleWifiMenu} btnRef={wifiBtnRef} />
+      )}
 
-        {/* Open this when clicking on Wifi button */}
-        {state.showWifiMenu && (
-          <WifiMenu toggleWifiMenu={toggleWifiMenu} btnRef={wifiBtnRef} />
-        )}
-
-        {/* Open this when clicking on Control Center button */}
-        {state.showControlCenter && (
-          <ControlCenterMenu
-            playing={audioState.playing}
-            toggleAudio={controls.toggle}
-            setVolume={setAudioVolume}
-            setBrightness={setSiteBrightness}
-            toggleControlCenter={toggleControlCenter}
-            btnRef={controlCenterBtnRef}
-          />
-        )}
-
-        <TopBarItem>
-          <span>{format(state.date, "eee MMM d")}</span>
-          <span>{format(state.date, "h:mm aa")}</span>
-        </TopBarItem>
-      </div>
+      {!isPhone && state.showControlCenter && (
+        <ControlCenterMenu
+          playing={audioState.playing}
+          toggleAudio={controls.toggle}
+          setVolume={setAudioVolume}
+          setBrightness={setSiteBrightness}
+          toggleControlCenter={toggleControlCenter}
+          btnRef={controlCenterBtnRef}
+        />
+      )}
     </div>
   );
 };

@@ -1,13 +1,12 @@
 import { wallpapers, launchpadApps } from "~/configs";
 
 interface LaunchpadProps {
-  show: boolean;
   toggleLaunchpad: (target: boolean) => void;
 }
 
 const placeholderText = "Search";
 
-export default function Launchpad({ show, toggleLaunchpad }: LaunchpadProps) {
+export default function Launchpad({ toggleLaunchpad }: LaunchpadProps) {
   const dark = useStore((state) => state.dark);
 
   const [searchText, setSearchText] = useState("");
@@ -24,11 +23,9 @@ export default function Launchpad({ show, toggleLaunchpad }: LaunchpadProps) {
     return list;
   };
 
-  const close = show ? "" : "opacity-0 invisible transition-opacity duration-200";
-
   return (
     <div
-      className={`${close} z-30 transform scale-110 size-full fixed overflow-hidden bg-center bg-cover`}
+      className="z-30 transform scale-110 size-full fixed overflow-hidden bg-center bg-cover"
       id="launchpad"
       style={{
         backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`

@@ -1,6 +1,6 @@
 {
   "dependencies": {
     "embla-carousel-react": "^8.6.0",
-    "swiper": "^11.2.10"
+    "swiper": "^12.1.2"
   }
 }

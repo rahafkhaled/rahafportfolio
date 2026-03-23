@@ -41,8 +41,10 @@ const MilkdownEditor = () => {
 
 export default function Typora() {
   return (
-    <MilkdownProvider>
-      <MilkdownEditor />
-    </MilkdownProvider>
+    <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col">
+      <MilkdownProvider>
+        <MilkdownEditor />
+      </MilkdownProvider>
+    </div>
   );
 }

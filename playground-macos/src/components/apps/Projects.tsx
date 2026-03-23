@@ -50,13 +50,15 @@ const Projects: React.FC = () => {
 
   return (
     <WindowTemplate>
-      <div className="h-full overflow-y-auto custom-scrollbar p-6 bg-transparent">
-        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-white">Featured Projects</h1>
+      <div className="bg-transparent p-4 md:p-6">
+        <h1 className="mb-6 text-2xl font-bold text-white md:mb-8 md:text-3xl lg:text-4xl">
+          Featured Projects
+        </h1>
         <div className="flex flex-col gap-8">
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
-              className="flex flex-col sm:flex-row items-start gap-6 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg p-6 border border-white/10 transition-all duration-300 hover:shadow-2xl hover:border-purple-400/40 group"
+              className="group flex flex-col items-start gap-4 rounded-xl border border-white/10 bg-white/10 p-5 shadow-lg backdrop-blur-lg transition-all duration-300 hover:border-purple-400/40 hover:shadow-2xl sm:flex-row sm:gap-6 sm:p-6"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
@@ -72,8 +74,12 @@ const Projects: React.FC = () => {
                   </motion.div>
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <h2 className="text-xl md:text-2xl font-bold text-white mb-1 truncate">{project.title}</h2>
-                <p className="text-purple-200/80 mb-3 text-base md:text-lg font-light truncate">{project.description}</p>
+                <h2 className="mb-1 text-lg font-bold leading-snug text-white sm:text-xl md:text-2xl">
+                  {project.title}
+                </h2>
+                <p className="mb-3 text-base font-light leading-relaxed text-purple-200/80 md:text-lg">
+                  {project.description}
+                </p>
                 <div className="flex flex-wrap gap-2 mt-2">
                       {project.tech.map(tech => (
                     <span

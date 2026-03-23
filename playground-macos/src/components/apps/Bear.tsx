@@ -216,7 +216,7 @@ const Bear = () => {
   };
 
   return (
-    <div className="bear font-avenir flex h-full">
+    <div className="bear font-avenir flex min-h-0 min-w-0 w-full flex-1">
       <div className="w-44 overflow-auto bg-gray-700">
         <Sidebar cur={state.curSidebar} setMidBar={setMidBar} />
       </div>

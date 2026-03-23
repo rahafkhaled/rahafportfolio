@@ -62,17 +62,17 @@ const Sidebar = ({ state, onTake, onSave, onSelect }: SidebarProps) => {
   }));
 
   return (
-    <div className="absolute w-74 h-full z-1 left-0 top-0 flex flex-col bg-zinc-900/85 backdrop-blur-xl">
-      <div className="p-5 space-y-2.5 text-sm">
+    <div className="absolute left-0 top-0 z-1 flex h-full w-74 flex-col bg-zinc-900/85 backdrop-blur-xl max-md:max-h-[42%] max-md:w-full max-md:border-b max-md:border-zinc-700">
+      <div className="space-y-2.5 p-4 text-sm md:p-5">
         <button
-          className="flex-center space-x-1 w-full py-1 text-white bg-green-700 rounded-md"
+          className="flex-center min-h-[44px] w-full space-x-1 rounded-md bg-green-700 py-2 text-base text-white md:min-h-0 md:py-1 md:text-sm"
           onClick={onTake}
         >
           <span className="i-ion:ios-videocam text-base" />
           <span>{state.curImage ? "Retake" : "Take a Picture"}</span>
         </button>
         <button
-          className={`flex-center space-x-1 w-full py-1 text-white rounded-md bg-stone-500 ${
+          className={`flex-center min-h-[44px] w-full space-x-1 rounded-md bg-stone-500 py-2 text-base text-white md:min-h-0 md:py-1 md:text-sm ${
             !state.canSave && "opacity-60 cursor-not-allowed"
           }`}
           disabled={!state.canSave}
@@ -116,7 +116,7 @@ const FaceTime = () => {
   });
 
   return (
-    <div className="relative h-full">
+    <div className="relative flex min-h-0 min-w-0 w-full flex-1 flex-col">
       <Sidebar
         state={state}
         onTake={() => {
@@ -134,7 +134,7 @@ const FaceTime = () => {
         }}
       />
 
-      <div className="h-full bg-zinc-800">
+      <div className="min-h-0 flex-1 bg-zinc-800">
         {!state.curImage ? (
           <Webcam
             mirrored={true}

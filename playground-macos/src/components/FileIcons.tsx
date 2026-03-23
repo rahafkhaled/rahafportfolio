@@ -1,4 +1,7 @@
 import React from "react";
+import apps from "~/configs/apps";
+import { useWindowSize } from "~/hooks";
+import { MOBILE_BREAKPOINT, openPublicAssetInNewTab } from "~/utils";
 import FileIcon from "./FileIcon";
 
 interface File {
@@ -49,22 +52,29 @@ const files: File[] = [
     icon: "img/icons/resume1.png",
     type: "pdf",
     appId: "preview",
-    link: "img/ui/Rahaf-Abutarbush-Resume.pdf",
+    link: "/img/ui/Rahaf-Abutarbush-Resume.pdf",
     position: { x: 20, y: 540 }
   }
   // Add more files as needed
 ];
 
 const FileIcons: React.FC<FileIconsProps> = ({ openApp }) => {
+  const { winWidth } = useWindowSize();
+  const isMobile = winWidth <= MOBILE_BREAKPOINT;
+
   const handleOpen = (file: File) => {
-    if (file.appId) {
-      if (file.type === "pdf" && file.link) {
-        openApp(file.appId, file.link);
-      } else {
-        openApp(file.appId);
-      }
+    if (!file.appId) return;
+    if (file.type === "pdf" && file.link) {
+      openPublicAssetInNewTab(file.link);
+      return;
     }
+    openApp(file.appId);
   };
+
+  /* Phone home is the About page (see Desktop); no icon grid. */
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 z-0" style={{ pointerEvents: "auto" }}>

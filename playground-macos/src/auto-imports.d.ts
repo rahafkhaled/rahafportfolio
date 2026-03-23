@@ -24,6 +24,8 @@ declare global {
   const LibraryApp: typeof import('./components/apps/LibraryApp')['default']
   const MenuItem: typeof import('./components/menus/base')['MenuItem']
   const MenuItemGroup: typeof import('./components/menus/base')['MenuItemGroup']
+  const MobileBottomNav: typeof import('./components/MobileBottomNav')['default']
+  const MobileHomeGrid: typeof import('./components/MobileHomeGrid')['default']
   const News: typeof import('./components/apps/News')['default']
   const Preview: typeof import('./components/apps/Preview')['default']
   const Projects: typeof import('./components/apps/Projects')['default']
