@@ -228,7 +228,7 @@ function ArtworkGallery({ embedded }: ArtworkGalleryProps) {
       id: 21,
       title: "Web Summit",
       description:
-        "Keynote on the future of AI - Web Summit 2026",
+        "Keynote on the future of AI - Web Summit 2026 ",
       image: "img/gallery/websummit_speech.JPG"
     }
   ];
