@@ -42,6 +42,6 @@ export const portfolioSectionSubtextClassName =
 export const portfolioPillButtonClassName =
   "inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full border border-purple-400/40 bg-white/10 px-5 py-2.5 text-sm font-semibold text-purple-100 shadow-md backdrop-blur-sm transition-all hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-400/50 disabled:opacity-60 sm:min-h-[48px] sm:w-auto sm:px-6 sm:py-3 sm:text-base sm:shadow-lg";
 
-/** Compact controls (carousel prev/next). */
+/** Compact controls (carousel prev/next). Light icon color for dark portfolio backgrounds. */
 export const portfolioControlButtonClassName =
-  "inline-flex items-center justify-center rounded-full border border-purple-400/40 bg-white/15 text-purple-950 shadow-lg backdrop-blur-sm transition hover:bg-white/25";
+  "inline-flex items-center justify-center rounded-full border border-purple-400/40 bg-white/15 text-purple-100 shadow-lg backdrop-blur-sm transition hover:bg-white/25 hover:text-white";
