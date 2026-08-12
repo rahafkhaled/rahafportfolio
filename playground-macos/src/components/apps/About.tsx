@@ -42,8 +42,6 @@ const NAV_PRESS = "Press";
 const NAV_RESUME = "Resume";
 const NAV_CONTACT = "Contact";
 const LETS_CONNECT_HEADING = "Let's Connect";
-/** Keep out of raw JSX text: attributify-jsx treats `tab` as an attribute. */
-const RESUME_PREVIEW_BLURB = "Preview below or open the PDF in a new tab.";
 /** Optional: add `public/img/ui/Rahaf_Abutarbush-preview.png` (first-page screenshot) for a clean preview without the PDF viewer UI. */
 const RESUME_PREVIEW_SCREENSHOT = "/img/ui/Rahaf_Abutarbush-preview.png";
 const RESUME_DISPLAY_FILENAME = "Rahaf_Abutarbush.pdf";
@@ -625,11 +623,6 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
           >
             Resume
           </h2>
-          <p
-            className={`mx-auto mb-4 max-w-xl text-center ${portfolioBodyTextClassName} md:mb-6`}
-          >
-            {RESUME_PREVIEW_BLURB}
-          </p>
           <div className="mx-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-purple-400/25 bg-[#0f0c16] shadow-[0_20px_50px_rgba(0,0,0,0.55)] ring-1 ring-white/[0.06]">
             <div className="flex items-center gap-3 border-b border-white/10 bg-black/35 px-3 py-2.5 backdrop-blur-sm sm:px-4">
               <div className="flex shrink-0 gap-1.5" aria-hidden>
