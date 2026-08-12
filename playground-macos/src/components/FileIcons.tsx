@@ -1,7 +1,7 @@
 import React from "react";
 import apps from "~/configs/apps";
 import { useWindowSize } from "~/hooks";
-import { MOBILE_BREAKPOINT, openPublicAssetInNewTab } from "~/utils";
+import { MOBILE_BREAKPOINT, openPublicAssetInNewTab, RESUME_PDF_PATH } from "~/utils";
 import FileIcon from "./FileIcon";
 
 interface File {
@@ -52,7 +52,7 @@ const files: File[] = [
     icon: "img/icons/resume1.png",
     type: "pdf",
     appId: "preview",
-    link: "/img/ui/Rahaf-Abutarbush-Resume.pdf",
+    link: RESUME_PDF_PATH,
     position: { x: 20, y: 540 }
   }
   // Add more files as needed

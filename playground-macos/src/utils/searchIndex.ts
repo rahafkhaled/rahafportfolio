@@ -133,14 +133,14 @@ const searchIndex = [
     description: "Rahaf Abutarbush Resume - Resume",
     section: "Resume",
     appId: "preview",
-    url: "img/ui/Rahaf-Abutarbush-Resume.pdf"
+    url: "img/ui/Rahaf_Abutarbush.pdf"
   },
   {
     title: "CV",
     description: "Rahaf Abutarbush CV",
     section: "Resume",
     appId: "preview",
-    url: "img/ui/Rahaf-Abutarbush-Resume.pdf"
+    url: "img/ui/Rahaf_Abutarbush.pdf"
   }
 ];
 

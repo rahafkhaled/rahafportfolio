@@ -19,7 +19,7 @@ import {
   NavIconReleases,
   NavIconResume
 } from "../PortfolioMobileNavIcons";
-import { openPublicAssetInNewTab, resolvePublicAsset } from "~/utils";
+import { openPublicAssetInNewTab, resolvePublicAsset, RESUME_PDF_PATH } from "~/utils";
 import {
   portfolioBodyEmphasisClassName,
   portfolioBodyTextClassName,
@@ -44,8 +44,9 @@ const NAV_CONTACT = "Contact";
 const LETS_CONNECT_HEADING = "Let's Connect";
 /** Keep out of raw JSX text: attributify-jsx treats `tab` as an attribute. */
 const RESUME_PREVIEW_BLURB = "Preview below or open the PDF in a new tab.";
-/** Optional: add `public/img/ui/Rahaf-Abutarbush-Resume-preview.png` (first-page screenshot) for a clean preview without the PDF viewer UI. */
-const RESUME_PREVIEW_SCREENSHOT = "/img/ui/Rahaf-Abutarbush-Resume-preview.png";
+/** Optional: add `public/img/ui/Rahaf_Abutarbush-preview.png` (first-page screenshot) for a clean preview without the PDF viewer UI. */
+const RESUME_PREVIEW_SCREENSHOT = "/img/ui/Rahaf_Abutarbush-preview.png";
+const RESUME_DISPLAY_FILENAME = "Rahaf_Abutarbush.pdf";
 /** PDF viewer: no toolbar/sidebars; fit page width so the full resume reads as a preview. */
 const RESUME_PDF_VIEW_FRAG = "toolbar=0&navpanes=0&scrollbar=0&view=FitH";
 
@@ -153,7 +154,7 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
   const scrollParallaxY = useTransform(scrollYProgress, [0, 0.5, 1], [0, -40, -100]);
   const scrollParallaxSlow = useTransform(scrollYProgress, [0, 1], [0, 60]);
 
-  const resumePdf = resolvePublicAsset("/img/ui/Rahaf-Abutarbush-Resume.pdf");
+  const resumePdf = resolvePublicAsset(RESUME_PDF_PATH);
   const resumePreviewImageSrc = resolvePublicAsset(RESUME_PREVIEW_SCREENSHOT);
   const resumePdfEmbedSrc = resumePdf
     ? `${resumePdf}#${RESUME_PDF_VIEW_FRAG}`
@@ -637,11 +638,11 @@ const About: React.FC<AboutProps> = ({ standaloneMobile }) => {
                 <span className="size-2.5 rounded-full bg-[#28c840]/85" />
               </div>
               <span className="min-w-0 flex-1 truncate text-center text-[11px] font-medium text-white/45 sm:text-xs">
-                Rahaf-Abutarbush-Resume.pdf
+                {RESUME_DISPLAY_FILENAME}
               </span>
               <button
                 type="button"
-                onClick={() => openPublicAssetInNewTab("/img/ui/Rahaf-Abutarbush-Resume.pdf")}
+                onClick={() => openPublicAssetInNewTab(RESUME_PDF_PATH)}
                 className="shrink-0 rounded-lg border border-purple-400/30 bg-purple-500/15 px-2.5 py-1 text-[11px] font-semibold text-purple-100 transition hover:bg-purple-500/25 sm:px-3 sm:text-xs"
               >
                 Open
