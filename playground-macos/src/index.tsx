@@ -3,13 +3,23 @@ import { createRoot } from "react-dom/client";
 
 import Desktop from "~/pages/Desktop";
 import Boot from "~/pages/Boot";
+import Card from "~/pages/Card";
 
 import "@unocss/reset/tailwind.css";
 import "uno.css";
 import "katex/dist/katex.min.css";
 import "~/styles/index.css";
 
+function isCardRoute(): boolean {
+  const path = window.location.pathname.replace(/\/+$/, "") || "/";
+  return path === "/card" || path === "/nfc";
+}
+
 export default function App() {
+  if (isCardRoute()) {
+    return <Card />;
+  }
+
   const [booting, setBooting] = useState<boolean>(false);
   const [restart, setRestart] = useState<boolean>(false);
   const [sleep, setSleep] = useState<boolean>(false);
