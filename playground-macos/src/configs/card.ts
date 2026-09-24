@@ -6,7 +6,7 @@ export const nfcCardProfile = {
   email: "rahaf.k.abutarbush@gmail.com",
   workemail:"rahaf.abutarbush@pwc.com",
   linkedIn: "https://www.linkedin.com/in/rahaf-abutarbush/",
-  number:"+97455356635",
+  number:"+97450792213",
   /** Opens the main portfolio (macOS desktop on desktop, About on phone). */
   portfolioPath: "/",
   resumePath: RESUME_PDF_PATH,
@@ -28,6 +28,11 @@ export const nfcCardLinks: NfcCardLink[] = [
   { id: "linkedin", label: "LinkedIn", kind: "external", href: nfcCardProfile.linkedIn },
   { id: "email", label: "Email", kind: "mailto", href: `mailto:${nfcCardProfile.email}` },
   { id: "workemail", label: "Work Email", kind: "mailto", href: `mailto:${nfcCardProfile.workemail}` },
-  { id: "number", label: "Whatsapp Number", kind: "tel", href: `tel:${nfcCardProfile.number}` },
+  {
+    id: "number",
+    label: "Whatsapp Number",
+    kind: "external",
+    href: `https://wa.me/${nfcCardProfile.number.replace(/\D/g, "")}`
+  },
   { id: "portfolio", label: "My Website", kind: "internal", href: nfcCardProfile.portfolioPath },
 ];
