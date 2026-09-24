@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { nfcCardLinks, nfcCardProfile } from "~/configs/card";
 import {
-  PORTFOLIO_HEADING_SHADOW,
   portfolioBodyTextClassName,
-  portfolioPillButtonClassName
+  portfolioPillButtonClassName,
+  portfolioSectionHeadingStyle
 } from "~/utils/portfolioStyles";
 import { openPublicAssetInNewTab } from "~/utils";
 import { downloadVCard } from "~/utils/vcard";
@@ -69,11 +69,8 @@ export default function Card() {
             />
           </div>
           <h1
-            className="text-balance text-2xl font-normal tracking-tight sm:text-[1.65rem]"
-            style={{
-              color: "#f4f0ff",
-              textShadow: PORTFOLIO_HEADING_SHADOW
-            }}
+            className="text-balance text-center font-normal leading-[1.12] tracking-[-0.02em] text-[clamp(1.875rem,7vw,3rem)] sm:text-[clamp(2.25rem,8vw,3.5rem)]"
+            style={portfolioSectionHeadingStyle}
           >
             {nfcCardProfile.name}
           </h1>
@@ -107,9 +104,7 @@ export default function Card() {
           ))}
         </ul>
 
-        <p className="mt-8 text-center text-[11px] font-medium uppercase tracking-[0.2em] text-purple-400/50">
-          Tap to connect
-        </p>
+
       </motion.main>
     </div>
   );
