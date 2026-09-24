@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import WindowTemplate from "../WindowTemplate";
+import { CONTACT_FORM_URL } from "~/configs/contact";
 import { portfolioPillButtonClassName } from "~/utils/portfolioStyles";
 
 interface ContactProps {
@@ -17,21 +18,28 @@ const Contact: React.FC<ContactProps> = ({ embedded }) => {
     setLoading(true);
     const form = e.currentTarget;
     const data = new FormData(form);
+    const name = String(data.get("name") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim();
+    data.set("_replyto", email);
+    data.set("_subject", name ? `Portfolio message from ${name}` : "Portfolio contact form");
+    data.set("_captcha", "false");
+    data.set("_template", "table");
+
     try {
-      const res = await fetch('https://formspree.io/f/mnnvwgod', {
-        method: 'POST',
+      const res = await fetch(CONTACT_FORM_URL, {
+        method: "POST",
         body: data,
         headers: {
-          Accept: 'application/json',
-        },
+          Accept: "application/json"
+        }
       });
       if (res.ok) {
         setSubmitted(true);
       } else {
-        setError('Something went wrong. Please try again.');
+        setError("Something went wrong. Please try again.");
       }
     } catch {
-      setError('Something went wrong. Please try again.');
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

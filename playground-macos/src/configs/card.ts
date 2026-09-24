@@ -11,7 +11,7 @@ export const nfcCardProfile = {
   portfolioPath: "/",
   resumePath: RESUME_PDF_PATH,
   /** Shown on the generated vCard. */
-  vcardTitle: "Emerging Technology"
+  vcardTitle: "Rahaf Abutarbush"
 } as const;
 
 export type NfcCardLink = {

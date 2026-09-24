@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { nfcCardLinks, nfcCardProfile } from "~/configs/card";
 import {
-  portfolioBodyTextClassName,
   portfolioPillButtonClassName,
   portfolioSectionHeadingStyle
 } from "~/utils/portfolioStyles";
@@ -74,9 +73,6 @@ export default function Card() {
           >
             {nfcCardProfile.name}
           </h1>
-          <p className={`mt-3 max-w-xs text-balance ${portfolioBodyTextClassName}`}>
-            {nfcCardProfile.title}
-          </p>
         </div>
 
         <ul className="flex flex-col gap-3">
@@ -86,20 +82,29 @@ export default function Card() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.08 + index * 0.06 }}
+              className={link.primary ? "mb-1" : undefined}
             >
-              <button
-                type="button"
-                onClick={() => handleLinkClick(link)}
-                className={
-                  portfolioPillButtonClassName +
-                  " w-full " +
-                  (link.primary
-                    ? "border-purple-400/55 bg-white/15 shadow-[0_0_24px_rgba(168,85,247,0.25)]"
-                    : "")
-                }
-              >
-                {link.label}
-              </button>
+              {link.primary ? (
+                <button
+                  type="button"
+                  onClick={() => handleLinkClick(link)}
+                  className="relative w-full overflow-hidden rounded-full border-2 border-purple-300/75 bg-gradient-to-r from-purple-500/40 via-fuchsia-500/30 to-purple-600/40 px-5 py-3.5 text-base font-bold tracking-wide text-white shadow-[0_0_36px_rgba(168,85,247,0.5),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all hover:from-purple-500/55 hover:via-fuchsia-500/40 hover:to-purple-600/55 hover:shadow-[0_0_44px_rgba(192,132,252,0.6)] active:scale-[0.98]"
+                >
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/15 to-transparent"
+                  />
+                  <span className="relative">{link.label}</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleLinkClick(link)}
+                  className={portfolioPillButtonClassName + " w-full"}
+                >
+                  {link.label}
+                </button>
+              )}
             </motion.li>
           ))}
         </ul>
